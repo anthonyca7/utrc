@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('schoolstore')
+angular.module('webinterface')
 	.controller('headerController', ['$scope', '$location', 'Auth',
 	function($scope, $location, Auth){
 	  $scope.logout = function() {

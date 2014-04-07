@@ -5,14 +5,11 @@ var mongoose = require('mongoose'),
 
 User.find({}).remove(function() {
    User.create({
-       provider: 'local',
-       username: "anthonyca7",
-       name: "Anthony Cabrera",
-       email: "anthonyka7@gmail.com",
-       password: "anthony"
+       username: 'data-feed-admin',
+       password: 'admin'
    },
    function() {
-      console.log('finished populating users');
+      console.log('user added to the database');
     }
   );
 });

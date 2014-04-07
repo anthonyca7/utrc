@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('schoolstore')
+angular.module('webinterface')
   .controller('LoginCtrl', function ($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
@@ -14,8 +14,7 @@ angular.module('schoolstore')
           password: $scope.user.password
         })
         .then( function() {
-          // Logged in, redirect to home
-          $location.path('/');
+          $location.path('/data-interface');
         })
         .catch( function(err) {
           err = err.data;

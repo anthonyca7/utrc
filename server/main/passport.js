@@ -29,7 +29,7 @@ passport.use(new LocalStrategy(
       
       if (!user) {
         return done(null, false, {
-          message: 'This username is not registered.'
+          message: 'This username is not correct'
         });
       }
       if (!user.authenticate(password)) {

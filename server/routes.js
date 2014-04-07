@@ -7,18 +7,16 @@ var core       = require('./controllers/core'),
 
 
 module.exports = function(app) {  
-  app.post('/api/users', users.create);
-  app.put('/api/users', users.changePassword);
   app.get('/api/users/me', users.me);
-  app.get('/api/users/:id', users.show);
 
   app.post('/api/session', session.login);
   app.del('/api/session', session.logout);
-
-  app.get('/api/*', function(req, res) {
-    res.send(404);
-  });
   
   app.get('/partials/*', core.partials);
-  app.get('/*', middleware.setUserCookie, core.index); 
+  app.get('/login', middleware.setUserCookie, core.index); 
+  app.get('/data-interface', middleware.setUserCookie, core.index); 
+
+  app.get('*', function (req, res) {
+    res.send(400);
+  })
 }

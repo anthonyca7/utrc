@@ -1,4 +1,4 @@
-angular.module('schoolstore', [
+angular.module('webinterface', [
 	'ngCookies',
 	'ngResource', 
 	'ngRoute', 
@@ -8,12 +8,8 @@ angular.module('schoolstore', [
 		'$locationProvider', 
 		function($routeProvider, $locationProvider) {
 			$routeProvider
-			.when('/',{
+			.when('/data-interface',{
 				templateUrl: 'partials/main'
-			})
-			.when('/signup',{
-				templateUrl: 'partials/signup',
-				controller: 'SignupCtrl'
 			})
 			.when('/login', {
 				templateUrl: 'partials/login',
