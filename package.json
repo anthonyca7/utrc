@@ -1,0 +1,27 @@
+{
+  "name": "store",
+  "version": "0.0.1",
+  "description": "School stores web application",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "test": "grunt test",
+    "start": "node server.js"
+  },
+  "author": "Anthony Cabrera",
+  "license": "ISC",
+  "dependencies": {
+    "passport": "^0.2.0",
+    "express": "^3.5.1",
+    "passport-local": "^1.0.0",
+    "mongoose": "^3.8.8",
+    "connect-mongo": "~0.4.0",
+    "ejs": "~0.8.4"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-protractor-runner": "^0.2.4",
+    "protractor": "^0.20.1",
+    "connect-livereload": "~0.3.0"
+  }
+}
