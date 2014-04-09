@@ -1,2 +1,16 @@
-<h2>{{currentUser | json }}</h2>
+<div ng-controller="mainController">
+	<!-- <div ng-repeat="document in data">
+		{{document | json}}
+		<strong>==================================================================</strong>
+	</div> -->
+
+	<table class="table">
+		<tr>
+			<th ng-repeat="header in headers">{{header}}</th>
+		</tr>
+		<tr ng-repeat="row in table track by $index">
+			<td ng-repeat="data in row track by $index">{{data}}</td>
+		</tr>
+	</table>
+</div>
 

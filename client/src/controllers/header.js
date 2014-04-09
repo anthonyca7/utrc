@@ -6,7 +6,7 @@ angular.module('webinterface')
 	  $scope.logout = function() {
       Auth.logout()
       .then(function() {
-        $location.path('/');
+        $location.path('/login');
       });
     };
 
