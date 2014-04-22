@@ -24,8 +24,8 @@ function loadEvents() {
   	events.forEach(function (event) {
   		var tEvent = new Transcom({event: event});
   		tEvent.save(function(){
-  			rowsInserted++;
-  		});
+  		  rowsInserted++;
+      });
   	});
 
   	console.log(rowsInserted + " rows inserted for transcom events data");

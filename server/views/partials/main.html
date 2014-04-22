@@ -1,16 +1,28 @@
 <div ng-controller="mainController">
-	<!-- <div ng-repeat="document in data">
-		{{document | json}}
-		<strong>==================================================================</strong>
-	</div> -->
+	<div class="container">
+		<h2 class="title">{{title}}</h2>
 
-	<table class="table">
-		<tr>
-			<th ng-repeat="header in headers">{{header}}</th>
-		</tr>
-		<tr ng-repeat="row in table track by $index">
-			<td ng-repeat="data in row track by $index">{{data}}</td>
-		</tr>
-	</table>
+		<div class="row">
+			<div class="col-md-2">
+				<select class="form-control" ng-model="collection" ng-options="c.name for c in collections"></select>
+			</div>
+			<div class="col-md-2">
+				<input class="form-control" ng-model="limit" />
+			</div>
+			<div class="col.md-2">
+				<a class="btn btn-primary" ng-click="updateData()">Update</a>
+			</div>
+		</div>
+		<div class="table-container">
+			<table class="table table-bordered table-striped table-hover">
+				<tr>
+					<th ng-repeat="header in headers"><div style="width: {{header.width}}px">{{header.name}}</div></th>
+				</tr>
+				<tr ng-repeat="row in table track by $index">
+					<td ng-repeat="data in row track by $index">{{data}}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </div>
 

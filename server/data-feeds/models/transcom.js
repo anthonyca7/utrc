@@ -1,35 +1,30 @@
 var mongoose   = require('mongoose'),
-    Schema     = mongoose.Schema
+    Schema     = mongoose.Schema,
+    fs         = require('fs'),
     _          = require('lodash');
+
 
 var transcomSchema = Schema({
 	event: {
 		type:   Schema.Types.Mixed,
 		unique: true,
-        index: true
+        index: true,
+        validate: eventValidation
 	}
 });
 
-transcomSchema
-	.path('event')
-	.validate(function (event, respond) {
-		var keys = {},
-			self = this;
-		for (var key in event) {
-		  keys.key = event.key
+
+function eventValidation (event, respond) {
+	this.constructor.findOne({'event.EventID': event.EventID, 'event.LastUpdate': event.LastUpdate}, function(err, evt){
+		if (evt) {
+			respond(false);
 		}
-		this.constructor.findOne(keys, function(err, evt){
-			if (err) throw err;
-			if (evt) {
-				if(self.event.EventID === evt.event.EventID){
-					console.log(evt.event.EventID + "\n\n\n");
-					console.log(evt);
-					return respond(true);
-				}
-				return respond(false);
-			};
+		else{
 			respond(true);
-		});
+		}
 	});
+}
+
+
 
 mongoose.model('Transcom', transcomSchema);

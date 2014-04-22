@@ -31,8 +31,9 @@ require(config.mainDir + '/express')(app, config);
 
 require(config.serverDir + '/routes')(app);
 
-require(config.serverDir + '/data-feeds/transcom');
-
+if (!process.env.FEEDS) {
+	require(config.serverDir + '/data-feeds/transcom');
+}
 app.listen(config.port, function () {
   console.log('Express server listening at http://localhost:%d in %s mode', config.port, app.get('env'));
 });
