@@ -6,13 +6,11 @@ angular.module('webinterface')
 					value = value.toString();
 				}
 				return value;
-
 			},
 			dates: function(value){
 				var date = new Date(value);
-				if (angular.isDate(date)) {
-					value = $filter('date')(date, 'EEEE MM-dd-yyyy HH:mm:ss a');
-				}
+				value = $filter('date')(date, 'EEEE MM-dd-yyyy hh:mm:ss a');
+				value = (value==='Wednesday 12-31-1969 04:00:00 PM') ?null:value
 				return value;
 			}
 		};

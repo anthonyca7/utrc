@@ -2,9 +2,9 @@ angular.module('webinterface')
 	.controller('mainController', [
 		'$scope',
 		'$http',
-		'transcomWidth',
+		'$sce',
 		'TRANSCOM_SCHEMA',
-		function($scope, $http, transcomWidth, TRANSCOM_SCHEMA){
+		function($scope, $http, $sce, TRANSCOM_SCHEMA){
 			$scope.collections = [
 				{name: 'Transcom', event: 'Transcom'}
 			];
@@ -31,21 +31,40 @@ angular.module('webinterface')
 			$scope.populateHeaders = function () {
 				var headers = Object.keys(TRANSCOM_SCHEMA);
 				for (var i = 0; i < headers.length; i++) {
-					$scope.headers.push({name: headers[i], width: transcomWidth[i]});		
+					$scope.headers.push({name: headers[i], width: TRANSCOM_SCHEMA[headers[i]].width || 100});		
 				};
 
 			}
 
+			$scope.snippet =
+		      '<p style="color:blue">an &#40&#40html\n' +
+		      '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+		      'snippet</p>';
+		    $scope.deliberatelyTrustDangerousSnippet = function() {
+		      return $sce.trustAsHtml($scope.snippet);
+		    };
+
 			$scope.generateTable = function(data){
+				var tmp = {};
 				data.forEach(function(doc){
-					var tmp = [];
 					$scope.headers.forEach(function (column) {
 						var value          = doc['event'],
 						    fieldPath      = TRANSCOM_SCHEMA[column.name].path,
 						    fieldModifiers = TRANSCOM_SCHEMA[column.name].modifiers;
+						var newval;
 
 						for(field in fieldPath){
-							if (value[fieldPath[field]] != null) {
+							newval = value[fieldPath[field]];
+
+							if (angular.isArray(value)) {
+								value.forEach(function (obj) {
+									if (obj[fieldPath[field]] != null) {
+										value = obj[fieldPath[field]];
+									}
+								});
+							}
+							
+							else if (newval != null) {
 								value = value[fieldPath[field]];
 							}
 							else{
@@ -60,48 +79,18 @@ angular.module('webinterface')
 							}
 						}
 						
-						/*if (typeof value === 'string') {
-							value = (value.length >= 25) ? value.substr(0,25):value;
-						};*/
+						value = (value != null)?value.toString():value;
+						if (typeof value === 'string') {
+							value = (value.length >= 120) ? value.substr(0,120)+"...":value;
+						}
 
-						tmp.push(value);
+						tmp[column.name] = value;
 					});
 					$scope.table.push(tmp);
+					tmp = {};
 				});
 			}
-
 
 			$scope.populateHeaders();
 			$scope.updateData(1);
-
-
-
-			/*$scope.updateLinks = function(data){
-				data.forEach(function(doc){
-					for (key in doc.event){
-						if ($scope.headers.indexOf(key) === -1) {
-							$scope.headers.push(key);
-						}
-					}
-				});
-				return $scope.headers;
-			}
-
-			$scope.generateTable = function(data, headerTags){
-				data.forEach(function(doc){
-					var tmp = [];
-					var attr;
-					for (key in headerTags){
-						attr = (doc.event[headerTags[key]]) ? doc.event[headerTags[key]]:"Empty";
-						attr = ((typeof attr).toLowerCase() === 'object') ? JSON.stringify(attr):attr;
-						//attr = (attr.length > 60) ? attr.substr(0,60)+"..."  : attr;
-						tmp.push(attr.toString());
-					}
-					
-					$scope.table.push(tmp);
-				});
-			}*/
-
-
-
 	}]);
