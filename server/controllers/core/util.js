@@ -3,15 +3,15 @@ var Transcom = mongoose.model('Transcom');
 
 
 module.exports.transcomEvents = function (req, res, next) {
-	var Model = mongoose.model(req.params.evt);
-	console.log(req.body.criteria);
+	var Model    = mongoose.model(req.params.evt);
+	var criteria = JSON.parse(req.body.criteria)
 
-	Model.find(JSON.parse(req.body.criteria), {}, { 
+	Model.find(criteria, {}, { 
 		skip:  (req.params.page-1)*(req.params.limit),
 		limit: req.params.limit },
 	 function(err, data){
 	 	if (err) { console.log(err) };	
-	 	Model.count({}, function (err, count) {
+	 	Model.count(criteria, function (err, count) {
 	 		if (err) { console.log(err) };	
 			res.json({events: data, count: count});
 	 	});

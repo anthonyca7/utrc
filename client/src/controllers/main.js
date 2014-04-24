@@ -14,10 +14,11 @@ angular.module('webinterface')
 			$scope.limit      = 10;
 			$scope.filters    = {};
 			$scope.title      = 'Data Interface';
-			$scope.page       = 5;
+			$scope.page       = 1;
 			$scope.count      = 0;
 			$scope.pagTotalItems  = 8;
 			$scope.searchFilter = {};
+			$scope.updateCheck = true;
 			
 			$scope.updateData = function(page){
 				$http.post("/api/event/" + $scope.collection.event + "/" + page + "/" + $scope.limit,
@@ -46,27 +47,49 @@ angular.module('webinterface')
 
 			$scope.CreateSearchObject = function () {
 				for(key in $scope.filters){
-					var tmp, val;
+					var tmp, val, sfun, ifun, secondFun;
 					if ($scope.filters.hasOwnProperty(key)) {
 						if (TRANSCOM_SCHEMA[key] != null) {
+							sfun = TRANSCOM_SCHEMA[key].searchFun;
+							ifun = TRANSCOM_SCHEMA[key].interval;
+							secondFun = TRANSCOM_SCHEMA[key].secfun;
 							tmp = "event." + TRANSCOM_SCHEMA[key].path.join('.');
 							val = $scope.filters[key];
-							var o = { $regex: val.toString(), $options: 'i' };
-							$scope.searchFilter[tmp] = o;
-							console.log($scope.searchFilter[tmp]);
-	
 
-							if ($scope.filters[tmp]==="" || $scope.filters[tmp]==null) {
+							if (val != "" && val != null) {
+								if (angular.isFunction(ifun)) {
+									if (angular.isFunction(sfun)) {
+										$scope.searchFilter[tmp] = ifun(val, sfun, secondFun);
+									}
+									else{
+										$scope.searchFilter[tmp] = ifun(val, function (value) {
+											return value;
+										}, secondFun);
+									}
+								}
+								else if (angular.isFunction(sfun)) {
+									$scope.searchFilter[tmp] = sfun(val);
+								}
+								else{
+									$scope.searchFilter[tmp] = val;
+								}
+								
+							}
+							else {
 								delete $scope.searchFilter[tmp];
 							}
 
 						}
+					}
+					if ($scope.updateCheck) {
+						$scope.updateData($scope.page);
 					}
 				}
 			}
 
 			$scope.generateTable = function(data){
 				var tmp = {};
+				data = data || [{}];
 				data.forEach(function(doc){
 					$scope.headers.forEach(function (column) {
 						var value          = doc['event'],
@@ -109,6 +132,15 @@ angular.module('webinterface')
 					$scope.table.push(tmp);
 					tmp = {};
 				});
+			}
+
+			$scope.resetData = function () {
+				$scope.limit      = 10;
+				$scope.filters    = {};
+				$scope.searchFilter = {};
+				$scope.updateCheck = true;
+				$scope.collection = $scope.collections[0];
+				$scope.updateData(1);
 			}
 
 			$scope.populateHeaders();

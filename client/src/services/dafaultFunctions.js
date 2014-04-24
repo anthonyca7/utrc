@@ -1,5 +1,5 @@
 angular.module('webinterface')
-	.factory('defaultModifiers', [ '$filter', function($filter){
+	.factory('helpers', [ '$filter', function($filter){
 		return {
 			arrays: function(value){
 				if (angular.isArray(value)) {
@@ -10,8 +10,34 @@ angular.module('webinterface')
 			dates: function(value){
 				var date = new Date(value);
 				value = $filter('date')(date, 'EEEE MM-dd-yyyy hh:mm:ss a');
-				value = (value==='Wednesday 12-31-1969 04:00:00 PM') ?null:value
+				value = (date < new Date('1980-12-31T09:00:00-07:00')) ?null:value
 				return value;
+			},
+			stringreg: function (value) {
+				var o = { $regex: value, $options: 'i' };
+				return o;
+			},
+			intSearch: function (value) {
+				return parseInt(value, 10);
+			},
+			intervalMaker: function (value, cb, scb) {
+				var values, o, valueFun;
+				if (value.indexOf('<>') !== -1) {
+					values = value.split('<>');
+					return {$gte: cb(values[0].trim()), $lte: cb(values[1].trim())}
+				}
+				else if(value.indexOf('>') !== -1){
+					values = value.split('>');
+					return { $lt: cb(values[0].trim()) }
+				}
+				else if(value.indexOf('<') !== -1){
+					values = value.split('<');
+					return { $gt: cb(values[0].trim()) }
+				}
+				else{
+					valueFun = scb || cb;
+					return valueFun(value)
+				}
 			}
 		};
 	}]);

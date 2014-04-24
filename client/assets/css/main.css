@@ -41,3 +41,8 @@
     overflow: hidden;        
     text-overflow: ellipsis; 
 }
+
+.items-found{
+	font-size:1.2em;
+	color: #0077cc;
+}

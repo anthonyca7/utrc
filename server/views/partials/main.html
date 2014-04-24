@@ -12,8 +12,13 @@
 				<input class="form-control" id="limit" ng-model="limit" />
 			</div>
 			<div class="form-group">
-				<a class="btn btn-primary" ng-click="updateData()">Update</a>
-				<a class="btn btn-primary" ng-click="search()">Search</a>
+				<a class="btn btn-primary" ng-click="updateData(page)">Update</a>
+				<a class="btn btn-primary" ng-click="resetData(page)">Reset</a>
+				<div class="checkbox">
+				  <label>
+				    <input type="checkbox" ng-model="updateCheck"> Update as filter changes {{updateCheck}}
+				  </label>
+				</div>
 			</div>
 		</form>
 
@@ -21,10 +26,11 @@
 
 		<pagination total-items="count" items-per-page="limit" page="page" on-select-page="setPage(page)" max-size="pagTotalItems" class="pagination-sm pag" boundary-links="true" rotate="false"></pagination>
 		<br>
+		<span class="items-found">{{count}} rows found</span>
 
 		<!-- <span ng-repeat="header in headers"><input ng-model="filters[header.name]" class="inline" placeholder="{{header.name}}" /></span> -->
-		{{filters | json}}
-		{{searchFilter | filter}}
+		<!-- {{filters | json }}
+		{{searchFilter | json }} -->
 		<div class="table-container">
 			<table class="table table-bordered table-striped table-hover">
 				<tr>
