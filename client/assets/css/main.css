@@ -20,11 +20,24 @@
 
 .table{
 	margin-bottom: 10%;
-	margin-top: 3%;
+	margin-top: 0%;
 }
 
 .title{
 	margin-bottom: 2%;
 	text-align: center;
 	font-size: 3em;
+}
+
+.pag{
+	margin-bottom: 0%;
+}
+
+.search-box{
+	margin-top: 1%;
+}
+
+.overflow-ellipsis {
+    overflow: hidden;        
+    text-overflow: ellipsis; 
 }

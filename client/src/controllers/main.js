@@ -9,24 +9,32 @@ angular.module('webinterface')
 				{name: 'Transcom', event: 'Transcom'}
 			];
 			$scope.collection = $scope.collections[0];
-			$scope.data       = null;
 			$scope.headers    = [];
 			$scope.table      = [];
 			$scope.limit      = 10;
+			$scope.filters    = {};
 			$scope.title      = 'Data Interface';
+			$scope.page       = 5;
+			$scope.count      = 0;
+			$scope.pagTotalItems  = 8;
+			$scope.searchFilter = {};
 			
 			$scope.updateData = function(page){
-				$http.get("/api/event/" + $scope.collection.event + "/" + page + "/" + $scope.limit).
+				$http.post("/api/event/" + $scope.collection.event + "/" + page + "/" + $scope.limit,
+					{ criteria: JSON.stringify($scope.searchFilter) }).
 				success(function(data, status, headers, config){
-					$scope.data = data;
+					$scope.count = data.count;
 					$scope.table = [];
-					$scope.generateTable(data);
-					//$scope.generateTable(data, $scope.updateLinks($scope.data));
+					$scope.generateTable(data.events);
 				}).
 				error(function(data, status, headers, config){
 					console.log("There was an error");
 				});
 			}
+			
+			$scope.setPage = function (page) {
+				$scope.updateData(page);
+			};
 
 			$scope.populateHeaders = function () {
 				var headers = Object.keys(TRANSCOM_SCHEMA);
@@ -36,13 +44,26 @@ angular.module('webinterface')
 
 			}
 
-			$scope.snippet =
-		      '<p style="color:blue">an &#40&#40html\n' +
-		      '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
-		      'snippet</p>';
-		    $scope.deliberatelyTrustDangerousSnippet = function() {
-		      return $sce.trustAsHtml($scope.snippet);
-		    };
+			$scope.CreateSearchObject = function () {
+				for(key in $scope.filters){
+					var tmp, val;
+					if ($scope.filters.hasOwnProperty(key)) {
+						if (TRANSCOM_SCHEMA[key] != null) {
+							tmp = "event." + TRANSCOM_SCHEMA[key].path.join('.');
+							val = $scope.filters[key];
+							var o = { $regex: val.toString(), $options: 'i' };
+							$scope.searchFilter[tmp] = o;
+							console.log($scope.searchFilter[tmp]);
+	
+
+							if ($scope.filters[tmp]==="" || $scope.filters[tmp]==null) {
+								delete $scope.searchFilter[tmp];
+							}
+
+						}
+					}
+				}
+			}
 
 			$scope.generateTable = function(data){
 				var tmp = {};
@@ -63,7 +84,6 @@ angular.module('webinterface')
 									}
 								});
 							}
-							
 							else if (newval != null) {
 								value = value[fieldPath[field]];
 							}

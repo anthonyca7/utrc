@@ -13,16 +13,31 @@
 			</div>
 			<div class="form-group">
 				<a class="btn btn-primary" ng-click="updateData()">Update</a>
+				<a class="btn btn-primary" ng-click="search()">Search</a>
 			</div>
 		</form>
+
+
+
+		<pagination total-items="count" items-per-page="limit" page="page" on-select-page="setPage(page)" max-size="pagTotalItems" class="pagination-sm pag" boundary-links="true" rotate="false"></pagination>
+		<br>
+
+		<!-- <span ng-repeat="header in headers"><input ng-model="filters[header.name]" class="inline" placeholder="{{header.name}}" /></span> -->
+		{{filters | json}}
+		{{searchFilter | filter}}
 		<div class="table-container">
 			<table class="table table-bordered table-striped table-hover">
 				<tr>
-					<th ng-repeat="header in headers"><div style="width: {{header.width}}px">{{header.name}}</div></th>
+					<th ng-repeat="header in headers" class="overflow-ellipsis">
+						<div>{{header.name}}</div>
+						<input ng-model="filters[header.name]"  ng-change="CreateSearchObject()"/>
+					</th>
 				</tr>
 				<tr ng-repeat="row in table track by $index">
 
-					<td ng-repeat="header in headers">{{row[header.name]}}</td>
+					<td ng-repeat="header in headers">
+						<div ng-bind-html="row[header.name]"></div>
+					</td>
 					<!-- <td><div ng-bind-html="row['ID']"></div></td>
 					<td><div ng-bind-html="row['Associated ID']"></div></td>
 					<td><div ng-bind-html="row['Class']"></div></td>
@@ -48,6 +63,7 @@
 				</tr>
 			</table>
 		</div>
+		<pagination total-items="count" items-per-page="limit" page="page" on-select-page="setPage(page)" max-size="pagTotalItems" class="pagination-sm pag" boundary-links="true" rotate="false"></pagination>
 	</div>
 </div>
 

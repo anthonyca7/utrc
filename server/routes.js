@@ -13,7 +13,7 @@ module.exports = function(app) {
   app.del('/api/session', session.logout);
 
   //app.get('/api/transcom', util.transcomEvents);
-  app.get('/api/event/:evt/:page/:limit', /*middleware.auth, */util.transcomEvents);
+  app.post('/api/event/:evt/:page/:limit', /*middleware.auth, */util.transcomEvents);
   
   app.get('/partials/*', core.partials);
   app.get('/login', middleware.setUserCookie, core.index); 

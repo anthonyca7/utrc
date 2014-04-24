@@ -2,7 +2,8 @@ angular.module('webinterface', [
 	'ngCookies',
 	'ngResource', 
 	'ngRoute', 
-	'ngSanitize'
+	'ngSanitize',
+	'ui.bootstrap'
 ])
 	.config([
 		'$routeProvider', 
