@@ -1,6 +1,6 @@
 <div ng-controller="mainController">
 	<div class="container">
-		<h2 class="title">{{title}}</h2>
+		<h2 class="title">{{collection.name}} Interface</h2>
 
 		<form class="form-inline" role="form">
   			<div class="form-group">
@@ -21,6 +21,19 @@
 				</div>
 			</div>
 		</form>
+		
+
+		<div ng-show="menu" ng-click="menu = !menu" class="menu-toggle">Show more options &#9660;</div>
+		<div ng-show="!menu" ng-click="menu = !menu" class="menu-toggle">Hide</div>
+
+		<div collapse="menu" class="menu-collapse">
+			<form class="form-inline" role="form">
+				<div class="form-group">
+					<label for="feed">Character Limit: </label>
+					<input class="form-control" ng-model="wordLimit">
+				</div>
+			</form>
+		</div>
 
 
 

@@ -6,7 +6,7 @@ angular.module('webinterface')
 		'TRANSCOM_SCHEMA',
 		function($scope, $http, $sce, TRANSCOM_SCHEMA){
 			$scope.collections = [
-				{name: 'Transcom', event: 'Transcom'}
+				{name: 'Transcom', event: 'Transcom', schema: TRANSCOM_SCHEMA}
 			];
 			$scope.collection = $scope.collections[0];
 			$scope.headers    = [];
@@ -17,8 +17,10 @@ angular.module('webinterface')
 			$scope.page       = 1;
 			$scope.count      = 0;
 			$scope.pagTotalItems  = 8;
-			$scope.searchFilter = {};
-			$scope.updateCheck = true;
+			$scope.searchFilter   = {};
+			$scope.updateCheck    = true;
+			$scope.menu      	  = true;
+			$scope.wordLimit      = 50; 
 			
 			$scope.updateData = function(page){
 				$http.post("/api/event/" + $scope.collection.event + "/" + page + "/" + $scope.limit,
@@ -38,31 +40,31 @@ angular.module('webinterface')
 			};
 
 			$scope.populateHeaders = function () {
-				var headers = Object.keys(TRANSCOM_SCHEMA);
+				var headers = Object.keys($scope.collection.schema);
 				for (var i = 0; i < headers.length; i++) {
-					$scope.headers.push({name: headers[i], width: TRANSCOM_SCHEMA[headers[i]].width || 100});		
+					$scope.headers.push({name: headers[i], width: $scope.collection.schema[headers[i]].width || 100});		
 				};
 
 			}
 
 			$scope.CreateSearchObject = function () {
 				for(key in $scope.filters){
-					var tmp, val, sfun, ifun, secondFun;
+					var tmp, val, sfun, intervalFunction, secondFun;
 					if ($scope.filters.hasOwnProperty(key)) {
-						if (TRANSCOM_SCHEMA[key] != null) {
-							sfun = TRANSCOM_SCHEMA[key].searchFun;
-							ifun = TRANSCOM_SCHEMA[key].interval;
-							secondFun = TRANSCOM_SCHEMA[key].secfun;
-							tmp = "event." + TRANSCOM_SCHEMA[key].path.join('.');
+						if ($scope.collection.schema[key] != null) {
+							sfun = $scope.collection.schema[key].searchFun;
+							intervalFunction = $scope.collection.schema[key].interval;
+							secondFun = $scope.collection.schema[key].secfun;
+							tmp = "event." + $scope.collection.schema[key].path.join('.');
 							val = $scope.filters[key];
 
 							if (val != "" && val != null) {
-								if (angular.isFunction(ifun)) {
+								if (angular.isFunction(intervalFunction)) {
 									if (angular.isFunction(sfun)) {
-										$scope.searchFilter[tmp] = ifun(val, sfun, secondFun);
+										$scope.searchFilter[tmp] = intervalFunction(val, sfun, secondFun);
 									}
 									else{
-										$scope.searchFilter[tmp] = ifun(val, function (value) {
+										$scope.searchFilter[tmp] = intervalFunction(val, function (value) {
 											return value;
 										}, secondFun);
 									}
@@ -78,23 +80,26 @@ angular.module('webinterface')
 							else {
 								delete $scope.searchFilter[tmp];
 							}
-
 						}
 					}
-					if ($scope.updateCheck) {
-						$scope.updateData($scope.page);
-					}
+				}
+				if ($scope.updateCheck) {
+					$scope.updateData($scope.page);
 				}
 			}
 
 			$scope.generateTable = function(data){
 				var tmp = {};
-				data = data || [{}];
+				if (!data) {
+					$scope.table = [];
+					$scope.count = 0;
+					return;
+				}
 				data.forEach(function(doc){
 					$scope.headers.forEach(function (column) {
 						var value          = doc['event'],
-						    fieldPath      = TRANSCOM_SCHEMA[column.name].path,
-						    fieldModifiers = TRANSCOM_SCHEMA[column.name].modifiers;
+						    fieldPath      = $scope.collection.schema[column.name].path,
+						    fieldModifiers = $scope.collection.schema[column.name].modifiers;
 						var newval;
 
 						for(field in fieldPath){
@@ -124,7 +129,7 @@ angular.module('webinterface')
 						
 						value = (value != null)?value.toString():value;
 						if (typeof value === 'string') {
-							value = (value.length >= 120) ? value.substr(0,120)+"...":value;
+							value = (value.length >=  $scope.wordLimit) ? value.substr(0, $scope.wordLimit)+"...":value;
 						}
 
 						tmp[column.name] = value;
@@ -139,6 +144,9 @@ angular.module('webinterface')
 				$scope.filters    = {};
 				$scope.searchFilter = {};
 				$scope.updateCheck = true;
+				$scope.menu      	  = true;
+				$scope.wordLimit      = 50; 
+				
 				$scope.collection = $scope.collections[0];
 				$scope.updateData(1);
 			}

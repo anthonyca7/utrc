@@ -2,7 +2,7 @@
 
 var core       = require('./controllers/core'),
     middleware = require('./controllers/core/middleware'),
-    util       = require('./controllers/core/util'),
+    transcom   = require('./controllers/transcom'),
     users      = require('./controllers/users'),
     session    = require('./controllers/session');
 
@@ -12,8 +12,8 @@ module.exports = function(app) {
   app.post('/api/session', session.login);
   app.del('/api/session', session.logout);
 
-  //app.get('/api/transcom', util.transcomEvents);
-  app.post('/api/event/:evt/:page/:limit', /*middleware.auth, */util.transcomEvents);
+  //app.get('/api/transcom', transcom.transcomEvents);
+  app.post('/api/event/:evt/:page/:limit', /*middleware.auth, */transcom.transcomEvents);
   
   app.get('/partials/*', core.partials);
   app.get('/login', middleware.setUserCookie, core.index); 

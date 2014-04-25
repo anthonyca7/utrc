@@ -44,5 +44,13 @@
 
 .items-found{
 	font-size:1.2em;
+	color: #002222;
+}
+
+.menu-toggle{
 	color: #0077cc;
+}
+
+.menu-collapse{
+	margin-bottom: 2%;
 }
