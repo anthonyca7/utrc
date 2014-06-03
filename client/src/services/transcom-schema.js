@@ -142,21 +142,21 @@ angular.module('webinterface')
 			,'Datum'             : { 
 								    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Datum']
 								   ,searchFun: helpers.stringreg
-								   }
+								   }								
 
 			,'Schedule Start'    : { 
 								    path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleStartDateTime']
-								   ,modifiers: [helpers.dates]
-								   ,searchFun: helpers.stringreg 
+								   ,modifiers: [helpers.dates] 
 								   ,interval: helpers.intervalMaker 
+								   ,secfun: helpers.stringreg
 								   ,width: '140' 
 								   }
 
 			,'Schedule End'      : { 
 								    path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleEndDateTime']
-								   ,modifiers: [helpers.dates]
-								   ,searchFun: helpers.stringreg
+								   ,modifiers: [helpers.dates] 
 								   ,interval: helpers.intervalMaker 
+								   ,secfun: helpers.stringreg
 								   ,width: '140' 
 								   }
 

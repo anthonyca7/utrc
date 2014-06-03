@@ -29,12 +29,12 @@ passport.use(new LocalStrategy(
       
       if (!user) {
         return done(null, false, {
-          message: 'This username is not correct'
+          message: 'The username is not correct'
         });
       }
       if (!user.authenticate(password)) {
         return done(null, false, {
-          message: 'This password is not correct.'
+          message: 'The password is not correct.'
         });
       }
       return done(null, user);

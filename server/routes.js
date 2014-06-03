@@ -1,27 +1,40 @@
 'use strict';
 
-var core       = require('./controllers/core'),
-    middleware = require('./controllers/core/middleware'),
-    transcom   = require('./controllers/transcom'),
-    users      = require('./controllers/users'),
+var express         = require('express'),
+    core            = require('./controllers'),
+    middleware      = require('./controllers/middleware'),
+    transcom        = require('./controllers/transcom'),
+    users           = require('./controllers/users'),
     session    = require('./controllers/session');
 
+var router = express.Router();
+
 module.exports = function(app) {  
-  app.get('/api/users/me', users.me);
+  app.route('/api/users/me')
+     .get(users.me);
 
-  app.post('/api/session', session.login);
-  app.del('/api/session', session.logout);
+  app.route('/api/session')
+     .post(session.login)
+     .delete(session.logout);
 
-  //app.get('/api/transcom', transcom.transcomEvents);
-  app.post('/api/event/:evt/:page/:limit', /*middleware.auth,*/ transcom.transcomEvents);
-  app.get('/api/event/download/:evt/:cond?', /*middleware.auth, */transcom.makeTable);
-  //app.post('/api/event/download/:evt', /*middleware.auth, */transcom.makeTable);
+  //app.route.get('/api/transcom', transcom.transcomEvents);
+  app.route('/api/event/:evt/:page/:limit')
+     .post(middleware.auth, transcom.transcomEvents);
+
+  app.route('/api/event/download/:evt/:cond?')
+     .get(middleware.auth, transcom.makeTable);
   
-  app.get('/partials/*', core.partials);
-  app.get('/login', middleware.setUserCookie, core.index); 
-  app.get('/data-interface', middleware.setUserCookie, core.index); 
+  app.route('/partials/*')
+     .get(core.partials);
 
-  app.get('*', function (req, res) {
-    res.send(400);
-  });
+  app.route('/login')
+     .get(middleware.setUserCookie, core.index); 
+  
+  app.route('/data-interface')
+     .get(middleware.setUserCookie, core.index); 
+
+  app.route('*')
+     .get(function (req, res) {
+        res.send(400);
+      });
 }
