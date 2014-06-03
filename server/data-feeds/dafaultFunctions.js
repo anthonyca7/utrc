@@ -1,15 +1,15 @@
-angular.module('webinterface')
-	.factory('helpers', [ '$filter', function($filter){
-		return {
+var _ = require('lodash');
+
+exports = module.exports = {
 			arrays: function(value){
-				if (angular.isArray(value)) {
+				if (_.isArray(value)) {
 					value = value.toString();
 				}
 				return value;
 			},
 			dates: function(value){
 				var date = new Date(value);
-				value = $filter('date')(date, 'EEEE MM-dd-yyyy hh:mm:ss a');
+				value = date.toString();
 				value = (date < new Date('1980-12-31T09:00:00-07:00')) ?null:value
 				return value;
 			},
@@ -42,7 +42,7 @@ angular.module('webinterface')
 
 			obj2str: function (value) {
 				var result = '';
-				if (angular.isObject(value) && !angular.isArray(value)) {
+				if (_.isObject(value) && !_.isArray(value)) {
 					for(key in value){
 						result += key + ' - ' + value[key] + ' ';
 					}
@@ -55,7 +55,7 @@ angular.module('webinterface')
 
 				function obj2str(val) {
 					var result = '';
-					if (angular.isObject(val) && !angular.isArray(val)) {
+					if (_.isObject(val) && !_.isArray(val)) {
 						for(key in val){
 							result +=  key + ' - ' + val[key] + ' ';
 						}
@@ -63,7 +63,7 @@ angular.module('webinterface')
 					return result;
 				}
 
-				if (angular.isArray(value)) {
+				if (_.isArray(value)) {
 					result = '( ' + obj2str(value.shift()) + ' )<br>';
 					last   = '( ' + obj2str(value.pop()) + ' )<br>';
 
@@ -79,4 +79,3 @@ angular.module('webinterface')
 				}
 			}
 		};
-	}]);

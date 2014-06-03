@@ -1,6 +1,7 @@
-angular.module('webinterface')
-	.factory('TRANSCOM_SCHEMA', function (helpers) {
-		return {
+var helpers = require('./dafaultFunctions');
+
+
+exports = module.exports = {
 			'ID'             :  { 
 								 path: ['EventID']
 								,searchFun: helpers.stringreg
@@ -165,5 +166,4 @@ angular.module('webinterface')
 								   ,modifiers: [helpers.arrobj2str]	
 								   }
 		}
-	});
 

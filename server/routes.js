@@ -13,7 +13,9 @@ module.exports = function(app) {
   app.del('/api/session', session.logout);
 
   //app.get('/api/transcom', transcom.transcomEvents);
-  app.post('/api/event/:evt/:page/:limit', /*middleware.auth, */transcom.transcomEvents);
+  app.post('/api/event/:evt/:page/:limit', /*middleware.auth,*/ transcom.transcomEvents);
+  app.get('/api/event/download/:evt/:cond?', /*middleware.auth, */transcom.makeTable);
+  //app.post('/api/event/download/:evt', /*middleware.auth, */transcom.makeTable);
   
   app.get('/partials/*', core.partials);
   app.get('/login', middleware.setUserCookie, core.index); 
@@ -21,5 +23,5 @@ module.exports = function(app) {
 
   app.get('*', function (req, res) {
     res.send(400);
-  })
+  });
 }

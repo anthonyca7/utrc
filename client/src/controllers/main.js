@@ -3,10 +3,13 @@ angular.module('webinterface')
 		'$scope',
 		'$http',
 		'$sce',
+		'$location',
+		'$modal',
 		'TRANSCOM_SCHEMA',
-		function($scope, $http, $sce, TRANSCOM_SCHEMA){
+		function($scope, $http, $sce, $location, $modal, TRANSCOM_SCHEMA){
 			$scope.collections = [
-				{name: 'Transcom', event: 'Transcom', schema: TRANSCOM_SCHEMA}
+				{name: 'Transcom', event: 'Transcom', schema: TRANSCOM_SCHEMA},
+				{name: 'Another Feed', event: 'Transcom', schema: TRANSCOM_SCHEMA}
 			];
 			$scope.collection = $scope.collections[0];
 			$scope.headers    = [];
@@ -18,9 +21,12 @@ angular.module('webinterface')
 			$scope.count      = 0;
 			$scope.pagTotalItems  = 8;
 			$scope.searchFilter   = {};
+			$scope.searchStringFilter   = {};
 			$scope.updateCheck    = true;
 			$scope.menu      	  = true;
-			$scope.wordLimit      = 50; 
+			$scope.wordLimit      = 50;  
+			$scope.data           = null; 
+
 			
 			$scope.updateData = function(page){
 				$http.post("/api/event/" + $scope.collection.event + "/" + page + "/" + $scope.limit,
@@ -31,8 +37,24 @@ angular.module('webinterface')
 					$scope.generateTable(data.events);
 				}).
 				error(function(data, status, headers, config){
-					console.log("There was an error");
-				});
+					console.log("There was an error trying to update the data");
+				}); 
+			}
+
+			$scope.downloadData = function () {
+				$http.post("/api/event/download/" + $scope.collection.event,
+					{ criteria: JSON.stringify($scope.searchFilter) }).
+				success(function(data, status, headers, config){
+
+					console.log(data);
+
+					// $scope.count = data.count;
+					// $scope.table = [];
+					// $scope.generateTable(data.events);
+				}).
+				error(function(data, status, headers, config){
+					console.log("There was an error downloading the data");
+				}); 
 			}
 			
 			$scope.setPage = function (page) {
@@ -47,7 +69,7 @@ angular.module('webinterface')
 
 			}
 
-			$scope.CreateSearchObject = function () {
+			$scope.createSearchObject = function () {
 				for(key in $scope.filters){
 					var tmp, val, sfun, intervalFunction, secondFun;
 					if ($scope.filters.hasOwnProperty(key)) {
@@ -81,6 +103,7 @@ angular.module('webinterface')
 								delete $scope.searchFilter[tmp];
 							}
 						}
+						$scope.searchStringFilter = JSON.stringify($scope.searchFilter);
 					}
 				}
 				if ($scope.updateCheck) {
@@ -153,4 +176,99 @@ angular.module('webinterface')
 
 			$scope.populateHeaders();
 			$scope.updateData(1);
-	}]);
+
+			$scope.open = function (field, name) {
+			    var modalInstance = $modal.open({
+			      templateUrl: 'partials/search-data',
+			      controller: ModalInstanceCtrl,
+			      resolve: {
+			        field: function () {
+				    	return field;
+				    },
+			        name: function () {
+				    	return name;
+				    }
+			      }
+			    });
+
+			    modalInstance.result.then(function (searchQuery) {
+			    	console.log(searchQuery);
+			      	field[name] = searchQuery;
+			      	$scope.createSearchObject();
+			    }, function () {
+
+			    });
+			};
+
+
+			$scope.today = function() {
+		      $scope.dt = new Date();
+		    };
+		    $scope.today();
+		    $scope.clear = function () {
+		      $scope.dt = null;
+		    };
+		    // Disable weekend selection
+		    $scope.disabled = function(date, mode) {
+		      return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+		    };
+		    $scope.toggleMin = function() {
+		      $scope.minDate = $scope.minDate ? null : new Date();
+		    };
+		    $scope.toggleMin();
+		    $scope.openCalendar = function($event) {
+		      $event.preventDefault();
+		      $event.stopPropagation();
+		      $scope.opened = true;
+		    };
+		    $scope.dateOptions = {
+		      formatYear: 'yy',
+		      startingDay: 1
+		    };
+		    $scope.initDate = new Date('2016-15-20');
+		    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		    $scope.format = $scope.formats[0];
+
+		    $scope.dateHelper = function(value){
+				var date = new Date(value);
+				value = $filter('date')(date, 'EEEE MM-dd-yyyy hh:mm:ss a');
+				value = (date < new Date('1980-12-31T09:00:00-07:00')) ?null:value
+				return value;
+			}
+
+
+			}]);
+
+			
+
+
+var ModalInstanceCtrl = function ($scope, $modalInstance, field, name) {
+	// console.log(field);
+	// console.log(name);
+	$scope.name = name;
+	$scope.field = field;
+	$scope.searchField = field[name];
+
+	$scope.search = {};
+
+
+	$scope.ok = function () {
+	  var search, greater, less;
+	  greater = $scope.search.greater;
+	  less = $scope.search.less;
+
+	  if (greater) {
+	  	search = greater + "<";
+	  	search = (less)?search+=">"+less:search;
+	  }
+	  else if (less) {
+	  	search = less + ">";
+	  }
+
+	  $modalInstance.close(search);
+	};
+
+	$scope.cancel = function () {
+	  $modalInstance.dismiss('cancel');
+	};
+};

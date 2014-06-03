@@ -13,6 +13,10 @@ angular.module('webinterface')
 				value = (date < new Date('1980-12-31T09:00:00-07:00')) ?null:value
 				return value;
 			},
+			datesGeneric: function(value){
+				return new Date(value);
+			},
+
 			stringreg: function (value) {
 				var o = { $regex: value, $options: 'i' };
 				return o;
@@ -24,7 +28,15 @@ angular.module('webinterface')
 				var values, o, valueFun;
 				if (value.indexOf('<>') !== -1) {
 					values = value.split('<>');
-					return {$gte: cb(values[0].trim()), $lte: cb(values[1].trim())}
+					return { $gte: cb(values[0].trim()), $lte: cb(values[1].trim()) }
+				}
+				else if(value.indexOf('>=') !== -1){
+					values = value.split('>=');
+					return { $lte: cb(values[0].trim()) }
+				}
+				else if(value.indexOf('<=') !== -1){
+					values = value.split('<=');
+					return { $gte: cb(values[0].trim()) }
 				}
 				else if(value.indexOf('>') !== -1){
 					values = value.split('>');
@@ -36,7 +48,7 @@ angular.module('webinterface')
 				}
 				else{
 					valueFun = scb || cb;
-					return valueFun(value)
+					return valueFun(value);
 				}
 			},
 
