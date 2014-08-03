@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>Data Feed App</title>
+	<link rel="stylesheet" type="text/css" href="/static/utrc.css"/>
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript" src="/static/angular.js"></script>
+	<script type="text/javascript" src="/static/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/utrc.js"></script>
+</head>
+<body ng-controller="MainController">
+<div ng-include="'header.tpl.html'"></div>
+<div ng-include="'notifications.tpl.html'" class="container-fluid" ng-show="notifications.getCurrent().length"></div>
+<div ng-view class="container-fluid"></div>
+</body>
+</html>

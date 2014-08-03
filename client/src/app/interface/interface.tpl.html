@@ -1,0 +1,69 @@
+<h1 class="title">{{selectedFeed | title}}</h1>
+
+<form class="form-inline text-center" role="form">
+	<div class="form-group">
+		<label class="sr-only" for="feed">Feed: </label>
+		<select class="form-control"
+		        id="feed"
+		        ng-model="selectedFeed"
+		        ng-change="changeFeed(selectedFeed)"
+		        ng-options="feed for feed in feeds"></select>
+	</div>
+	<div class="form-group">
+		<label class="sr-only" for="limit">Limit: </label>
+		<input class="form-control" id="limit" ng-model="limit" ng-change="autoUpdate()"/>
+	</div>
+	<div class="form-group">
+		<a class="btn btn-primary" ng-click="updateData()">Update</a>
+		<a class="btn btn-warning" ng-click="reset()">Reset</a>
+
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" ng-model="automaticUpdate"> Update Automatically
+			</label>
+		</div>
+	</div>
+</form>
+
+<pagination ng-model="currentPage"
+            ng-change="updateData()"
+            total-items="count"
+            items-per-page="limit"
+            max-size="paginationCells"
+            class="pagination-sm pag"
+            boundary-links="true"
+            rotate="false">
+</pagination>
+
+<div ng-show="count!=0">{{count}} events found</div>
+<div class="table-container">
+	<table class="table table-bordered table-striped table-hover">
+
+		<tr>
+			<th ng-repeat="header in headers track by $index" class="overflow-ellipsis">
+				<div>{{header}}</div>
+
+				<div class="field_input">
+					<input ng-model="filters[header]"
+					       ng-change="updateCriteria(header, schema, filters, criteria)"
+					/>
+					<img src="/static/img/search-icon.png"
+					     class="field_img"
+					     ng-click="openModal(filters, header)" />
+				</div>
+			</th>
+		</tr>
+
+		<tr ng-if="events.length==0">
+			<td colspan="{{headers.length}}">
+				<h3>No events were found</h3>
+			</td>
+		</tr>
+
+		<tr ng-repeat="event in events track by $index" ng-controller="rowController">
+			<td ng-repeat="header in headers" ng-click="fullContent()">
+				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>
+			</td>
+		</tr>
+	</table>
+</div>

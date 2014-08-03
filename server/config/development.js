@@ -1,31 +1,22 @@
-var path         = require('path');
-var serverDir    = path.normalize(__dirname + '/..');
-var mainDir      = path.normalize(__dirname + '/../main');
-var rootDir      = path.normalize(__dirname + '/../..');
-var configDir    = path.normalize(__dirname);
-var views        = path.normalize(serverDir + '/views');
-var controllers  = path.normalize(serverDir + '/controllers');
-var models       = path.normalize(serverDir + '/models');
-var main         = path.normalize(serverDir + '/main');
-var client       = path.normalize(rootDir   + '/client');
+var path = require('path');
+rootDir = path.normalize(__dirname + '/../..'),
+    client = path.normalize(rootDir + '/client'),
+    dist = path.normalize(client + '/dist')
 
 module.exports = {
-  views:       views,
-  client:      client,  
-  controllers: controllers,
-  models:      models,
-  mainDir:     mainDir,
-  serverDir:   serverDir,
-  env:         'development',
-  dir:         configDir,
-  root:        rootDir,
-  port:        process.env.PORT || 3000,
-  db:{
-  	url: "mongodb://localhost:27017/data-feed-main",
-  	options:{
-  	  db: {
-        safe: true
-      }
-  	}
-  }
+    env: 'development',
+    port: process.env.PORT || 3000,
+    staticUrl: '/static',
+    client: {
+        dev: client,
+        dist: dist
+    },
+    db: {
+        url: "mongodb://localhost:27017/data-feed",
+        options: {
+            db: {
+                safe: true
+            }
+        }
+    }
 }
