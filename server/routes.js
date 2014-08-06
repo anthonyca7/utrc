@@ -9,22 +9,18 @@ var core = require('./controllers'),
 
 module.exports = function (app) {
     app.route('/api/users/current')
-        .get(users.current);
+      .get(users.current);
 
     app.route('/api/session')
-        .post(session.login)
-        .delete(session.logout);
-
-    //app.route.get('/api/transcom', transcom.transcomEvents);
-    app.route('/api/event/:evt/:page/:limit')
-        .post(middleware.auth, transcom.transcomEvents);
+      .post(session.login)
+      .delete(session.logout);
 
     app.route('/api/feeds/:evt/:page/:limit')
-        .post(transcom.transcomEvents);
+      .post(transcom.transcomEvents);
 
-    /*app.route('/api/event/download/:evt/:cond?')
-        .get(middleware.auth, transcom.makeTable);*/
+		app.route('/api/feeds/download/:evt/:criteria?')
+			.get(transcom.download);
 
     app.route('/api/schema')
-        .get(schemas.all);
+      .get(schemas.all);
 }

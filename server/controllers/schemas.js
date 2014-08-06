@@ -6,7 +6,7 @@ var fs = require('fs'),
 
 exports.all = function (req, res, next) {
   Feed.find({}, function (err, schemas) {
-    if(err) return next(err);
+    if (err) return next(err);
     res.json(schemas);
   });
 };

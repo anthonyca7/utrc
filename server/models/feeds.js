@@ -10,7 +10,11 @@ var FeedSchema = new Schema({
   },
   format: {
     type: Schema.Types.Mixed
-  }
+  },
+	order: {
+		type: Schema.Types.Mixed
+	}
+
 });
 
 module.exports = mongoose.model('Feed', FeedSchema);

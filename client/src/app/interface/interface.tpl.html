@@ -1,8 +1,8 @@
-<h1 class="title">{{selectedFeed | title}}</h1>
+<h1 class="title">{{selectedFeed | title}} Feeds</h1>
 
 <form class="form-inline text-center" role="form">
 	<div class="form-group">
-		<label class="sr-only" for="feed">Feed: </label>
+		<label for="feed" class="text-info mid-font">Feed</label>
 		<select class="form-control"
 		        id="feed"
 		        ng-model="selectedFeed"
@@ -10,18 +10,26 @@
 		        ng-options="feed for feed in feeds"></select>
 	</div>
 	<div class="form-group">
-		<label class="sr-only" for="limit">Limit: </label>
-		<input class="form-control" id="limit" ng-model="limit" ng-change="autoUpdate()"/>
+		<label for="limit" class="text-info mid-font">Rows</label>
+		<input class="form-control" id="limit" ng-model="limit" ng-blur="autoUpdate()"/>
 	</div>
 	<div class="form-group">
-		<a class="btn btn-primary" ng-click="updateData()">Update</a>
-		<a class="btn btn-warning" ng-click="reset()">Reset</a>
+		<!--<a class="btn btn-primary" ng-click="updateData()">Update</a>-->
 
-		<div class="checkbox">
-			<label>
-				<input type="checkbox" ng-model="automaticUpdate"> Update Automatically
-			</label>
-		</div>
+		<a class="btn btn-primary" target="_self"
+		   ng-href="/api/feeds/download/{{selectedFeed | title}}/{{JSON.stringify(criteria)}}">
+			<span class="glyphicon glyphicon-cloud-download"></span> Download
+		</a>
+
+		<a class="btn btn-warning" ng-click="reset()">
+			<span class="glyphicon glyphicon-repeat"></span> Reset
+		</a>
+
+		<!--<div class="checkbox">
+				<label>
+						<input type="checkbox" ng-model="automaticUpdate"> Update Automatically
+				</label>
+		</div>-->
 	</div>
 </form>
 
@@ -46,10 +54,10 @@
 				<div class="field_input">
 					<input ng-model="filters[header]"
 					       ng-change="updateCriteria(header, schema, filters, criteria)"
-					/>
+						/>
 					<img src="/static/img/search-icon.png"
 					     class="field_img"
-					     ng-click="openModal(filters, header)" />
+					     ng-click="openModal(filters, header)"/>
 				</div>
 			</th>
 		</tr>

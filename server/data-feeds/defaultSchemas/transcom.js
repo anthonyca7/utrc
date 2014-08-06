@@ -4,7 +4,7 @@ var fs = require('fs'),
     mongoose = require('mongoose'),
     Feed = mongoose.model('Feed');
 
-module.exports = {
+module.exports.format = {
   'ID': {
     path: ['EventID']
   },
@@ -71,10 +71,38 @@ module.exports = {
   'Comments': {
     path: ['Comments', 'CommentInfo', 'Comment']
   },
-  'Intersections': {
+  'Article - Interception': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'Article']
+  },
+  'Primary Interception': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'PrimaryLoc']
   },
-  'Longitud': {
+  'Secondary Interception': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'SecondaryLoc']
+  },
+  'Article - Associated Cities': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'Article']
+  },
+  'Primary City': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'PrimaryCity']
+  },
+  'Secondary City': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'SecondaryCity']
+  },
+  'Primary Road Marker': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'PrimaryMarker'],
+    type: 'float',
+    modifiers: ['float']
+  },
+  'Secondary Road Marker': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'SecondaryMarker'],
+    type: 'float',
+    modifiers: ['float']
+  },
+  'Road Marker Units': {
+    path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'Units']
+  },
+  'Longitude': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lon'],
     type: 'float',
     modifiers: ['float']
@@ -119,3 +147,43 @@ module.exports = {
   }
 };
 
+module.exports.order = [
+	'ID',
+	'Associated ID',
+	'Class',
+	'Event State',
+	'Date Started',
+	'Time Left (minutes)',
+	'Last Update',
+	'Type',
+	'Lanes Affected',
+	'Lanes Details',
+	'Lanes Status',
+	'Description',
+	'Reporting Organization',
+	'Facility',
+	'City',
+	'State',
+	'County',
+	'Direction',
+	'Comments',
+	'Article - Interception',
+	'Primary Interception',
+	'Secondary Interception',
+	'Article - Associated Cities',
+	'Primary City',
+	'Secondary City',
+	'Primary Road Marker',
+	'Secondary Road Marker',
+	'Road Marker Units',
+	'Longitude',
+	'Latitude',
+	'Datum',
+	'ScheduleID',
+	'Schedule Lane Details',
+	'Active Days',
+	'Continuous',
+	'Schedule Start',
+	'Schedule End',
+	'Additional Data'
+];

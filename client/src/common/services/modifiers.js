@@ -1,17 +1,6 @@
 angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', function (date) {
   var service = {};
 
-  function convertUTCDateToLocalDate(date) {
-    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
-
-    var offset = date.getTimezoneOffset() / 60;
-    var hours = date.getHours();
-
-    newDate.setHours(hours - offset);
-
-    return newDate;
-  }
-
   service.def = function (value) {
     return value;
   };

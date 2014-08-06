@@ -11,7 +11,7 @@ var fs = require('fs'),
 User.find({}).remove(function () {
   User.create({
       username: 'data-feed-admin',
-      password: 'admin'
+      password: 'Admin'
     },
     function () {
       console.log('user added to the database');
@@ -26,7 +26,8 @@ Feed.find({}).remove(function () {
 
     Feed.create({
       name: name,
-      format: schema
+      format: schema.format,
+	    order: schema.order
     });
   });
 });

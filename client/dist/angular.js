@@ -23693,11 +23693,11 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
 
 angular.module("interface/interface.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("interface/interface.tpl.html",
-    "<h1 class=\"title\">{{selectedFeed | title}}</h1>\n" +
+    "<h1 class=\"title\">{{selectedFeed | title}} Feeds</h1>\n" +
     "\n" +
     "<form class=\"form-inline text-center\" role=\"form\">\n" +
     "	<div class=\"form-group\">\n" +
-    "		<label class=\"sr-only\" for=\"feed\">Feed: </label>\n" +
+    "		<label for=\"feed\" class=\"text-info mid-font\">Feed</label>\n" +
     "		<select class=\"form-control\"\n" +
     "		        id=\"feed\"\n" +
     "		        ng-model=\"selectedFeed\"\n" +
@@ -23705,18 +23705,26 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		        ng-options=\"feed for feed in feeds\"></select>\n" +
     "	</div>\n" +
     "	<div class=\"form-group\">\n" +
-    "		<label class=\"sr-only\" for=\"limit\">Limit: </label>\n" +
-    "		<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-change=\"autoUpdate()\"/>\n" +
+    "		<label for=\"limit\" class=\"text-info mid-font\">Rows</label>\n" +
+    "		<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
     "	</div>\n" +
     "	<div class=\"form-group\">\n" +
-    "		<a class=\"btn btn-primary\" ng-click=\"updateData()\">Update</a>\n" +
-    "		<a class=\"btn btn-warning\" ng-click=\"reset()\">Reset</a>\n" +
+    "		<!--<a class=\"btn btn-primary\" ng-click=\"updateData()\">Update</a>-->\n" +
     "\n" +
-    "		<div class=\"checkbox\">\n" +
-    "			<label>\n" +
-    "				<input type=\"checkbox\" ng-model=\"automaticUpdate\"> Update Automatically\n" +
-    "			</label>\n" +
-    "		</div>\n" +
+    "		<a class=\"btn btn-primary\" target=\"_self\"\n" +
+    "		   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{JSON.stringify(criteria)}}\">\n" +
+    "			<span class=\"glyphicon glyphicon-cloud-download\"></span> Download\n" +
+    "		</a>\n" +
+    "\n" +
+    "		<a class=\"btn btn-warning\" ng-click=\"reset()\">\n" +
+    "			<span class=\"glyphicon glyphicon-repeat\"></span> Reset\n" +
+    "		</a>\n" +
+    "\n" +
+    "		<!--<div class=\"checkbox\">\n" +
+    "				<label>\n" +
+    "						<input type=\"checkbox\" ng-model=\"automaticUpdate\"> Update Automatically\n" +
+    "				</label>\n" +
+    "		</div>-->\n" +
     "	</div>\n" +
     "</form>\n" +
     "\n" +
@@ -23741,10 +23749,10 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "				<div class=\"field_input\">\n" +
     "					<input ng-model=\"filters[header]\"\n" +
     "					       ng-change=\"updateCriteria(header, schema, filters, criteria)\"\n" +
-    "					/>\n" +
+    "						/>\n" +
     "					<img src=\"/static/img/search-icon.png\"\n" +
     "					     class=\"field_img\"\n" +
-    "					     ng-click=\"openModal(filters, header)\" />\n" +
+    "					     ng-click=\"openModal(filters, header)\"/>\n" +
     "				</div>\n" +
     "			</th>\n" +
     "		</tr>\n" +

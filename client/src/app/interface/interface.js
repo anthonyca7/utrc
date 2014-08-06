@@ -60,6 +60,7 @@ angular.module('interface').controller('InterfaceController', [
         .then(function (response) {
           $scope.count = response.data.count;
           $scope.events = response.data.events;
+          console.log(response.data.events[0]);
         });
     };
 
@@ -117,6 +118,9 @@ angular.module('interface').controller('InterfaceController', [
               cellValue = object[path[i]];
               break;
             }
+          }
+          if (j === cellValue.length) {
+              return null;
           }
         } else if (cellValue.hasOwnProperty([path[i]])) {
           cellValue = cellValue[path[i]];

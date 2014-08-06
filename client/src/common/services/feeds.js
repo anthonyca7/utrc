@@ -6,6 +6,11 @@ angular.module('services.feeds', []).factory('Feed',['$http', function ($http) {
     return $http.post('/api/feeds/'+name+'/'+page+'/'+limit,
       { criteria: JSON.stringify(criteria || {}) });
   };
+    
+  service.download = function (name, criteria) {
+    return $http.post('/api/feeds/download/'+name,
+      { criteria: JSON.stringify(criteria || {}) });
+  };
 
   return service;
 
