@@ -158,6 +158,10 @@ angular.module('interface').controller('InterfaceController', [
       $scope.updateData();
     };
 
+		$scope.stringify = function (object) {
+			return JSON.stringify(object);
+		};
+
     $scope.openModal = function (filters, field) {
       if (!criteriaModal) {
         criteriaModal = $modal.open({

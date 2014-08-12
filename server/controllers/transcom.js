@@ -84,7 +84,9 @@ module.exports.download = function (req, res, next) {
 				header = schema.order;
 
 		Model.find(criteria, function (err, data) {
-			res.setHeader('Content-disposition', 'attachment; filename=' + name + '.txt');
+			var file = name + "_event_" + getCurrentDate();
+
+			res.setHeader('Content-disposition', 'attachment; filename=' + file + '.txt');
 			res.setHeader('Content-type', 'text/plain');
 			res.charset = 'UTF-8';
 
@@ -94,8 +96,26 @@ module.exports.download = function (req, res, next) {
 	});
 };
 
+function getCurrentDate() {
+	var date = new Date();
+	var month = date.getMonth()+1;
+	var result = "";
+
+	function format(value) {
+		return ( value < 10 ) ? "0"+value:value;
+	}
+
+	result += format(month) + format(date.getDate()) + date.getFullYear() + "_" +
+	          format(date.getHours()) + format(date.getMinutes()) + format(date.getSeconds());
+
+	return result;
+
+}
+
 function modifyData(value, eventFormat) {
 	var modifiers = eventFormat.modifiers;
+
+	if (value == null) return null;
 
 	if (typeof modifiers === "object" && modifiers.constructor == Array) {
 		modifiers.forEach(function (name) {
@@ -112,9 +132,6 @@ function modifyData(value, eventFormat) {
 		}
 	}
 
-	if (value == null) {
-		value = "";
-	}
 	return value;
 }
 
@@ -124,9 +141,14 @@ function sendEvents(res, data, format, header) {
 	res.write(header.join('\t') + '\n');
 
 	for(i=0;i<data.length;i++) {
-		var event = data[i];
+		var event = data[i], cell;
 		for(j=0; j<header.length;j++) {
-			res.write(getEventField(event, format, header[j]) + "\t");
+			cell = getEventField(event, format, header[j]);
+
+			if (cell == null) cell = "";
+
+			//console.log(cell==null, cell=="null", cell);
+			res.write(cell + "\t");
 		}
 		res.write('\n');
 	}

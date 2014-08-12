@@ -6,7 +6,7 @@
 		<select class="form-control"
 		        id="feed"
 		        ng-model="selectedFeed"
-		        ng-change="changeFeed(selectedFeed)"
+		        ng-change="selectFeed(selectedFeed)"
 		        ng-options="feed for feed in feeds"></select>
 	</div>
 	<div class="form-group">
@@ -17,7 +17,7 @@
 		<!--<a class="btn btn-primary" ng-click="updateData()">Update</a>-->
 
 		<a class="btn btn-primary" target="_self"
-		   ng-href="/api/feeds/download/{{selectedFeed | title}}/{{JSON.stringify(criteria)}}">
+		   ng-href="/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}">
 			<span class="glyphicon glyphicon-cloud-download"></span> Download
 		</a>
 
@@ -48,6 +48,7 @@
 	<table class="table table-bordered table-striped table-hover">
 
 		<tr>
+			<th>Serial</th>
 			<th ng-repeat="header in headers track by $index" class="overflow-ellipsis">
 				<div>{{header}}</div>
 
@@ -68,7 +69,9 @@
 			</td>
 		</tr>
 
+
 		<tr ng-repeat="event in events track by $index" ng-controller="rowController">
+			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>
 			<td ng-repeat="header in headers" ng-click="fullContent()">
 				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>
 			</td>

@@ -10,15 +10,19 @@
 		<li>yyyy (No month and day specified)</li>
 	</ul>
 
-	<form class="form-horizontal" role="form" novalidate>
+	<form novalidate class="form-horizontal" role="form">
 		<div class="form-group">
-			<label>Greater than</label>
-			<input type="text" name="greater" class="form-control" ng-model="search.greater">
+			<label class="col-sm-3 control-label">Greater than</label>
+			<div class="col-sm-9">
+				<input type="text" name="greater" class="form-control" ng-model="search.greater">
+			</div>
 		</div>
 
 		<div class="form-group">
-			<label>Less than</label>
-			<input type="text" name="less" class="form-control" ng-model="search.less">
+			<label class="col-sm-3 control-label">Less than</label>
+			<div class="col-sm-9">
+				<input type="text" name="less" class="form-control" ng-model="search.less">
+			</div>
 		</div>
 	</form>
 </div>

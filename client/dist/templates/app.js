@@ -35,15 +35,19 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
     "		<li>yyyy (No month and day specified)</li>\n" +
     "	</ul>\n" +
     "\n" +
-    "	<form class=\"form-horizontal\" role=\"form\" novalidate>\n" +
+    "	<form novalidate class=\"form-horizontal\" role=\"form\">\n" +
     "		<div class=\"form-group\">\n" +
-    "			<label>Greater than</label>\n" +
-    "			<input type=\"text\" name=\"greater\" class=\"form-control\" ng-model=\"search.greater\">\n" +
+    "			<label class=\"col-sm-3 control-label\">Greater than</label>\n" +
+    "			<div class=\"col-sm-9\">\n" +
+    "				<input type=\"text\" name=\"greater\" class=\"form-control\" ng-model=\"search.greater\">\n" +
+    "			</div>\n" +
     "		</div>\n" +
     "\n" +
     "		<div class=\"form-group\">\n" +
-    "			<label>Less than</label>\n" +
-    "			<input type=\"text\" name=\"less\" class=\"form-control\" ng-model=\"search.less\">\n" +
+    "			<label class=\"col-sm-3 control-label\">Less than</label>\n" +
+    "			<div class=\"col-sm-9\">\n" +
+    "				<input type=\"text\" name=\"less\" class=\"form-control\" ng-model=\"search.less\">\n" +
+    "			</div>\n" +
     "		</div>\n" +
     "	</form>\n" +
     "</div>\n" +
@@ -64,7 +68,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		<select class=\"form-control\"\n" +
     "		        id=\"feed\"\n" +
     "		        ng-model=\"selectedFeed\"\n" +
-    "		        ng-change=\"changeFeed(selectedFeed)\"\n" +
+    "		        ng-change=\"selectFeed(selectedFeed)\"\n" +
     "		        ng-options=\"feed for feed in feeds\"></select>\n" +
     "	</div>\n" +
     "	<div class=\"form-group\">\n" +
@@ -75,7 +79,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		<!--<a class=\"btn btn-primary\" ng-click=\"updateData()\">Update</a>-->\n" +
     "\n" +
     "		<a class=\"btn btn-primary\" target=\"_self\"\n" +
-    "		   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{JSON.stringify(criteria)}}\">\n" +
+    "		   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}\">\n" +
     "			<span class=\"glyphicon glyphicon-cloud-download\"></span> Download\n" +
     "		</a>\n" +
     "\n" +
@@ -106,6 +110,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	<table class=\"table table-bordered table-striped table-hover\">\n" +
     "\n" +
     "		<tr>\n" +
+    "			<th>Serial</th>\n" +
     "			<th ng-repeat=\"header in headers track by $index\" class=\"overflow-ellipsis\">\n" +
     "				<div>{{header}}</div>\n" +
     "\n" +
@@ -126,7 +131,9 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "			</td>\n" +
     "		</tr>\n" +
     "\n" +
+    "\n" +
     "		<tr ng-repeat=\"event in events track by $index\" ng-controller=\"rowController\">\n" +
+    "			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>\n" +
     "			<td ng-repeat=\"header in headers\" ng-click=\"fullContent()\">\n" +
     "				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>\n" +
     "			</td>\n" +
