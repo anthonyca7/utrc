@@ -43,7 +43,7 @@ angular.module('interface').controller('InterfaceController', [
 
     // Pagination variables
     $scope.currentPage = 1;
-    $scope.paginationCells = 8;
+    $scope.paginationCells = 6;
 
     // Select field scope variables
     $scope.feeds = ['transcom', 'other'];
@@ -60,9 +60,16 @@ angular.module('interface').controller('InterfaceController', [
         .then(function (response) {
           $scope.count = response.data.count;
           $scope.events = response.data.events;
-          console.log(response.data.events[0]);
         });
     };
+
+		$scope.canSearchByInterval = function (header, schema) {
+			return schema.format[header].searchableByInterval;
+		};
+
+		$scope.cannotBeSearched = function (header, schema) {
+			return schema.format[header].notSearchable;
+		};
 
     $scope.updateCriteria = function (column, schema, filters, criteria) {
       var eventFormat = schema.format[column],
@@ -152,7 +159,7 @@ angular.module('interface').controller('InterfaceController', [
       $scope.criteria = {};
       $scope.filters = {};
       $scope.currentPage = 1;
-      $scope.paginationCells = 8;
+      $scope.paginationCells = 6;
 
       $scope.selectFeed($scope.feeds[0]);
       $scope.updateData();
@@ -162,7 +169,7 @@ angular.module('interface').controller('InterfaceController', [
 			return JSON.stringify(object);
 		};
 
-    $scope.openModal = function (filters, field) {
+    $scope.openModal = function (filters, field, schema) {
       if (!criteriaModal) {
         criteriaModal = $modal.open({
           templateUrl: 'interface/criteria/criteria-modal.tpl.html',
@@ -170,7 +177,10 @@ angular.module('interface').controller('InterfaceController', [
           resolve: {
             field: function () {
               return field;
-            }
+            },
+	          type: function () {
+		          return schema.format[field].type;
+	          }
           }
         });
 

@@ -3,12 +3,15 @@
 	<h3 class="modal-title">Search for {{field}}</h3>
 </div>
 <div class="modal-body">
-	<p>The recommended the way to search for dates is to use one of these three formats.</p>
-	<ul class="text-info">
-		<li>yyyy-mm-dd</li>
-		<li>yyyy-mm (No day specified)</li>
-		<li>yyyy (No month and day specified)</li>
-	</ul>
+
+	<div ng-if="type === 'date'">
+		<p>The recommended the way to search for dates is to use one of these three formats.</p>
+		<ul class="text-info">
+			<li>yyyy-mm-dd</li>
+			<li>yyyy-mm (No day specified)</li>
+			<li>yyyy (No month and day specified)</li>
+		</ul>
+	</div>
 
 	<form novalidate class="form-horizontal" role="form">
 		<div class="form-group">

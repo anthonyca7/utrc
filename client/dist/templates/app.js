@@ -28,12 +28,15 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
     "	<h3 class=\"modal-title\">Search for {{field}}</h3>\n" +
     "</div>\n" +
     "<div class=\"modal-body\">\n" +
-    "	<p>The recommended the way to search for dates is to use one of these three formats.</p>\n" +
-    "	<ul class=\"text-info\">\n" +
-    "		<li>yyyy-mm-dd</li>\n" +
-    "		<li>yyyy-mm (No day specified)</li>\n" +
-    "		<li>yyyy (No month and day specified)</li>\n" +
-    "	</ul>\n" +
+    "\n" +
+    "	<div ng-if=\"type === 'date'\">\n" +
+    "		<p>The recommended the way to search for dates is to use one of these three formats.</p>\n" +
+    "		<ul class=\"text-info\">\n" +
+    "			<li>yyyy-mm-dd</li>\n" +
+    "			<li>yyyy-mm (No day specified)</li>\n" +
+    "			<li>yyyy (No month and day specified)</li>\n" +
+    "		</ul>\n" +
+    "	</div>\n" +
     "\n" +
     "	<form novalidate class=\"form-horizontal\" role=\"form\">\n" +
     "		<div class=\"form-group\">\n" +
@@ -62,11 +65,11 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
   $templateCache.put("interface/interface.tpl.html",
     "<h1 class=\"title\">{{selectedFeed | title}} Feeds</h1>\n" +
     "\n" +
-    "<form class=\"form-horizontal col-sm-7 well\" role=\"form\">\n" +
+    "<form class=\"form-horizontal col-md-7 well\" role=\"form\">\n" +
     "\n" +
     "	<div class=\"form-group\">\n" +
-    "		<label for=\"feed\" class=\"col-sm-3 control-label text-info mid-font\">Select your Feed: </label>\n" +
-    "		<div class=\"col-sm-6\">\n" +
+    "		<label for=\"feed\" class=\"col-md-3 control-label text-info mid-font\">Select your Feed: </label>\n" +
+    "		<div class=\"col-md-6\">\n" +
     "			<select class=\"form-control\"\n" +
     "			        id=\"feed\"\n" +
     "			        ng-model=\"selectedFeed\"\n" +
@@ -76,14 +79,14 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	</div>\n" +
     "\n" +
     "	<div class=\"form-group\">\n" +
-    "		<label for=\"limit\" class=\"col-sm-3 control-label text-info mid-font\">Results per page: </label>\n" +
+    "		<label for=\"limit\" class=\"col-md-3 control-label text-info mid-font\">Results per page: </label>\n" +
     "		<div class=\"col-md-6\">\n" +
     "			<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
     "		</div>\n" +
     "	</div>\n" +
     "\n" +
     "	<div class=\"form-group\">\n" +
-    "		<div class=\"col-lg-offset-3 add-padding\">\n" +
+    "		<div class=\"col-md-offset-3 add-padding\">\n" +
     "			<a class=\"btn btn-primary\" ng-click=\"updateData()\">\n" +
     "				<span class=\"glyphicon glyphicon glyphicon-refresh\"></span> Update\n" +
     "			</a>\n" +
@@ -102,15 +105,15 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	</div>\n" +
     "</form>\n" +
     "\n" +
-    "<div class=\"col-sm-5\">\n" +
+    "<div class=\"col-md-5 \">\n" +
     "	<div class=\"pag-dividor\"></div>\n" +
-    "	<div ng-show=\"count!=0\" class=\"text-primary result-text\">{{count}} events found </div>\n" +
+    "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} events found </div><br><br>\n" +
     "	<pagination ng-model=\"currentPage\"\n" +
     "	            ng-change=\"updateData()\"\n" +
     "	            total-items=\"count\"\n" +
     "	            items-per-page=\"limit\"\n" +
     "	            max-size=\"paginationCells\"\n" +
-    "	            class=\"pagination-sm pag center-block\"\n" +
+    "	            class=\"pagination-sm pag pull-right\"\n" +
     "	            boundary-links=\"true\"\n" +
     "	            rotate=\"false\">\n" +
     "	</pagination>\n" +
@@ -127,10 +130,12 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "				<div class=\"field_input\">\n" +
     "					<input ng-model=\"filters[header]\"\n" +
     "					       ng-change=\"updateCriteria(header, schema, filters, criteria)\"\n" +
+    "					       ng-disabled=\"cannotBeSearched(header, schema)\"\n" +
     "						/>\n" +
     "					<img src=\"/static/img/search-icon.png\"\n" +
     "					     class=\"field_img\"\n" +
-    "					     ng-click=\"openModal(filters, header)\"/>\n" +
+    "					     ng-show=\"canSearchByInterval(header, schema)\"\n" +
+    "					     ng-click=\"openModal(filters, header, schema)\"/>\n" +
     "				</div>\n" +
     "			</th>\n" +
     "		</tr>\n" +

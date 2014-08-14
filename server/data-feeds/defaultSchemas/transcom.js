@@ -13,16 +13,19 @@ module.exports.format = {
   },
   'Class': {
     path: ['EventClass'],
-    type: 'integer'
+    type: 'integer',
+	  searchableByInterval: true
   },
   'Event State': {
     path: ['EventState'],
-    type: 'integer'
+    type: 'integer',
+	  searchableByInterval: true
   },
   'Date Started': {
     path: ['StartDateTime'],
     modifiers: ['date'],
-    type: 'date'
+    type: 'date',
+	  searchableByInterval: true
   },
 	/*'Hour Started': {
 		path: ['StartDateTime'],
@@ -31,19 +34,22 @@ module.exports.format = {
 	},*/
   'Time Left (minutes)': {
     path: ['EstDurationInMinutes'],
-    type: 'integer'
+    type: 'integer',
+	  searchableByInterval: true
   },
   'Last Update': {
     path: ['LastUpdate'],
     modifiers: ['date'],
-    type: 'date'
+    type: 'date',
+	  searchableByInterval: true
   },
   'Type': {
     path: ['EventTypes', 'EventType']
   },
   'Lanes Affected': {
     path: ['LaneDetails', 'LanesAffectedCount'],
-    type: 'integer'
+    type: 'integer',
+	  searchableByInterval: true
   },
   'Lanes Details': {
     path: ['LaneDetails', 'LanesDetail']
@@ -56,7 +62,8 @@ module.exports.format = {
   },
   'Reporting Organization': {
     path: ['ReportingOrg'],
-    type: 'integer'
+    type: 'integer',
+	  searchableByInterval: true
   },
   'Facility': {
     path: ['EventLocationInfo', 'Facility']
@@ -97,12 +104,14 @@ module.exports.format = {
   'Primary Road Marker': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'PrimaryMarker'],
     type: 'float',
-    modifiers: ['float']
+    modifiers: ['float'],
+	  searchableByInterval: true
   },
   'Secondary Road Marker': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'SecondaryMarker'],
     type: 'float',
-    modifiers: ['float']
+    modifiers: ['float'],
+	  searchableByInterval: true
   },
   'Road Marker Units': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'Units']
@@ -110,25 +119,28 @@ module.exports.format = {
   'Longitude': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lon'],
     type: 'float',
-    modifiers: ['float']
+    modifiers: ['float'],
+	  searchableByInterval: true
   },
   'Latitude': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lat'],
     type: 'float',
-    modifiers: ['float']
+    modifiers: ['float'],
+	  searchableByInterval: true
   },
   'Datum': {
     path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Datum']
   },
   'ScheduleID': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleID'],
-    type: 'integer'
+    type: 'integer',
+	  searchableByInterval: true
   },
   'Schedule Lane Details': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleLaneDetails'],
-    type: 'integer'
+    type: 'integer',
+	  notSearchable: true
   },
-
   'Active Days': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ActiveDays', 'DayOfWeek'],
     type: 'string'
@@ -140,15 +152,18 @@ module.exports.format = {
   'Schedule Start': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleStartDateTime'],
     type: 'date',
-    modifiers: ['date']
+    modifiers: ['date'],
+	  searchableByInterval: true
   },
   'Schedule End': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleEndDateTime'],
     type: 'date',
-    modifiers: ['date']
+    modifiers: ['date'],
+	  searchableByInterval: true
   },
   'Additional Data': {
-    path: ['AdditionalData', 'DataItem']
+    path: ['AdditionalData', 'DataItem'],
+	  notSearchable: true
   }
 };
 

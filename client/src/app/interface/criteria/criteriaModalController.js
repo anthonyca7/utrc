@@ -1,5 +1,6 @@
 angular.module('modal.criteria',[]).controller('CriteriaController',
-  ['$scope', '$modalInstance', 'field', function ($scope, $modalInstance, field) {
+  ['$scope', '$modalInstance', 'field', 'type', function ($scope, $modalInstance, field, type) {
+	  $scope.type = type;
     $scope.field = field;
     $scope.search = {};
 

@@ -50,6 +50,7 @@ body {
     padding-top: 25%;
 }
 
+
 .mid-font {
     font-size: 1.1em;
 }
@@ -59,10 +60,12 @@ body {
 }
 
 .pag {
-    margin-top: 1%;
-    padding-top: 1%;
+    margin-top: 0%;
+    padding-top: 0%;
 }
 
 .result-text{
+    margin-top: 1%;
+    padding-top: 1%;
     font-size: 1.2em;
 }
