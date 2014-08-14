@@ -42,5 +42,14 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
     return result.join(", ");
   };
 
+
+	service.integerRepresentation = function (value, extra) {
+		if (typeof extra !== 'object' || !Array.isArray(extra.representations)) {
+			return null;
+		}
+
+		return extra.representations[parseInt(value)];
+	};
+
   return service;
 }]);

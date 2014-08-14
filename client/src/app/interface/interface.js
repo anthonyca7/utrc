@@ -46,17 +46,19 @@ angular.module('interface').controller('InterfaceController', [
     $scope.paginationCells = 6;
 
     // Select field scope variables
-    $scope.feeds = ['transcom', 'other'];
+		$scope.feeds = [
+			{name: 'Transcom Events', organization: 'Transcom', location: 'transcom'}
+		];
 
     $scope.selectFeed = function (feed) {
       $scope.selectedFeed = feed;
-      $scope.headers = schemas.getHeaders(feed);
-      $scope.schema = schemas.getByName(feed);
+      $scope.headers = schemas.getHeaders(feed.location);
+      $scope.schema = schemas.getByName(feed.location);
       $scope.updateData();
     };
 
-    $scope.update = function (feedName, page, limit, criteria) {
-      Feed.get(feedName, page, limit, criteria)
+    $scope.update = function (feedLocation, page, limit, criteria) {
+      Feed.get(feedLocation, page, limit, criteria)
         .then(function (response) {
           $scope.count = response.data.count;
           $scope.events = response.data.events;
@@ -83,7 +85,8 @@ angular.module('interface').controller('InterfaceController', [
 
       criteria[mongoPath] = Formatters.intervalMaker(
                               filters[column],
-                              Formatters[eventFormat.type || 'string'] || angular.noop
+                              Formatters[eventFormat.type || 'string'] || angular.noop,
+															eventFormat.extra
                             );
 
       $scope.autoUpdate();
@@ -95,7 +98,7 @@ angular.module('interface').controller('InterfaceController', [
       if (angular.isArray(modifiers)) {
         modifiers.forEach(function (name) {
           var modifier = Modifiers[name] || Modifiers['def'];
-          value = modifier(value);
+          value = modifier(value, eventFormat.extra);
         });
       }
 
@@ -145,7 +148,7 @@ angular.module('interface').controller('InterfaceController', [
       }
     };
     $scope.updateData = function () {
-      $scope.update(title($scope.selectedFeed), $scope.currentPage, $scope.limit, $scope.criteria);
+      $scope.update(title($scope.selectedFeed.location), $scope.currentPage, $scope.limit, $scope.criteria);
     };
 
     $scope.reset = function () {

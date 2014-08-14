@@ -63,7 +63,7 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
 
 angular.module("interface/interface.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("interface/interface.tpl.html",
-    "<h1 class=\"title\">{{selectedFeed | title}} Feeds</h1>\n" +
+    "<h1 class=\"title\">{{selectedFeed.organization | title}} Feeds</h1>\n" +
     "\n" +
     "<form class=\"form-horizontal col-md-7 well\" role=\"form\">\n" +
     "\n" +
@@ -74,7 +74,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "			        id=\"feed\"\n" +
     "			        ng-model=\"selectedFeed\"\n" +
     "			        ng-change=\"selectFeed(selectedFeed)\"\n" +
-    "			        ng-options=\"feed for feed in feeds\"></select>\n" +
+    "			        ng-options=\"feed.name group by feed.organization for feed in feeds\"></select>\n" +
     "		</div>\n" +
     "	</div>\n" +
     "\n" +
@@ -97,7 +97,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "			<a class=\"btn btn-success\"\n" +
     "			   target=\"_self\"\n" +
-    "			   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}\">\n" +
+    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location | title}}/{{stringify(criteria)}}\">\n" +
     "				<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
     "			</a>\n" +
     "		</div>\n" +
@@ -105,7 +105,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	</div>\n" +
     "</form>\n" +
     "\n" +
-    "<div class=\"col-md-5 \">\n" +
+    "<div class=\"col-md-5\">\n" +
     "	<div class=\"pag-dividor\"></div>\n" +
     "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} events found </div><br><br>\n" +
     "	<pagination ng-model=\"currentPage\"\n" +
@@ -123,7 +123,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	<table class=\"table table-bordered table-striped table-hover\">\n" +
     "\n" +
     "		<tr>\n" +
-    "			<th>Serial</th>\n" +
+    "			<th>Result</th>\n" +
     "			<th ng-repeat=\"header in headers track by $index\" class=\"overflow-ellipsis\">\n" +
     "				<div>{{header}}</div>\n" +
     "\n" +
@@ -147,7 +147,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		</tr>\n" +
     "\n" +
     "\n" +
-    "		<tr ng-repeat=\"event in events track by $index\" ng-controller=\"rowController\">\n" +
+    "		<tr ng-if=\"events.length!=0\" ng-repeat=\"event in events track by $index\" ng-controller=\"rowController\">\n" +
     "			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>\n" +
     "			<td ng-repeat=\"header in headers\" ng-click=\"fullContent()\">\n" +
     "				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>\n" +

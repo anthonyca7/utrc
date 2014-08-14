@@ -1,4 +1,4 @@
-<h1 class="title">{{selectedFeed | title}} Feeds</h1>
+<h1 class="title">{{selectedFeed.organization | title}} Feeds</h1>
 
 <form class="form-horizontal col-md-7 well" role="form">
 
@@ -9,7 +9,7 @@
 			        id="feed"
 			        ng-model="selectedFeed"
 			        ng-change="selectFeed(selectedFeed)"
-			        ng-options="feed for feed in feeds"></select>
+			        ng-options="feed.name group by feed.organization for feed in feeds"></select>
 		</div>
 	</div>
 
@@ -32,7 +32,7 @@
 
 			<a class="btn btn-success"
 			   target="_self"
-			   ng-href="/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}">
+			   ng-href="/api/feeds/download/{{selectedFeed.location | title}}/{{stringify(criteria)}}">
 				<span class="glyphicon glyphicon-cloud-download"></span> Download Results
 			</a>
 		</div>
@@ -40,7 +40,7 @@
 	</div>
 </form>
 
-<div class="col-md-5 ">
+<div class="col-md-5">
 	<div class="pag-dividor"></div>
 	<div ng-show="count!=0" class="text-primary result-text pull-right">{{count}} events found </div><br><br>
 	<pagination ng-model="currentPage"
@@ -58,7 +58,7 @@
 	<table class="table table-bordered table-striped table-hover">
 
 		<tr>
-			<th>Serial</th>
+			<th>Result</th>
 			<th ng-repeat="header in headers track by $index" class="overflow-ellipsis">
 				<div>{{header}}</div>
 
@@ -82,7 +82,7 @@
 		</tr>
 
 
-		<tr ng-repeat="event in events track by $index" ng-controller="rowController">
+		<tr ng-if="events.length!=0" ng-repeat="event in events track by $index" ng-controller="rowController">
 			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>
 			<td ng-repeat="header in headers" ng-click="fullContent()">
 				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>

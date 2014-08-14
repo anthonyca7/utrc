@@ -23,7 +23,7 @@ angular.module('services.formatters', []).factory('Formatters', [
       return parseFloat(value);
     };
 
-    service.intervalMaker = function (value, cb) {
+    service.intervalMaker = function (value, cb, extra) {
       var values;
       if (value.indexOf('<>') !== -1) {
         values = value.split('<>');
@@ -46,7 +46,7 @@ angular.module('services.formatters', []).factory('Formatters', [
         return { $gt: cb(values[0].trim()) };
       }
       else {
-        return cb(value, true);
+        return cb(value, true, extra);
       }
     };
 
@@ -66,6 +66,24 @@ angular.module('services.formatters', []).factory('Formatters', [
       if (value === 'false') {return false;}
       return null;
     };
+
+		service.integerRepresentation = function (value, noRange, extra) {
+			if (typeof extra !== 'object' || !Array.isArray(extra.representations)) {
+				return null;
+			}
+
+			var representations = extra.representations;
+			var matchingIndexes = [];
+			var expression = new RegExp(value, 'i');
+
+			representations.forEach(function (value, index) {
+				if(expression.test(value)){
+					matchingIndexes.push(index);
+				}
+			});
+
+			return {$in: matchingIndexes};
+		};
 
     return service;
 }]);

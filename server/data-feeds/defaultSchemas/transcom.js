@@ -4,6 +4,9 @@ var fs = require('fs'),
     mongoose = require('mongoose'),
     Feed = mongoose.model('Feed');
 
+var eventStates = ['New event', 'Updated Event'];
+eventStates[255] = 'Schedule Event (Planned)';
+
 module.exports.format = {
   'ID': {
     path: ['EventID']
@@ -11,15 +14,21 @@ module.exports.format = {
   'Associated ID': {
     path: ['AssociatedEventID']
   },
-  'Class': {
+  'Event Class': {
     path: ['EventClass'],
-    type: 'integer',
-	  searchableByInterval: true
+    type: 'integerRepresentation',
+	  modifiers : ['integerRepresentation'],
+	  extra: {
+		  representations: ['Incident', 'Construction', 'Special Event']
+	  }
   },
   'Event State': {
     path: ['EventState'],
-    type: 'integer',
-	  searchableByInterval: true
+	  type: 'integerRepresentation',
+	  modifiers : ['integerRepresentation'],
+	  extra: {
+		  representations: eventStates
+	  }
   },
   'Date Started': {
     path: ['StartDateTime'],
@@ -134,7 +143,7 @@ module.exports.format = {
   'ScheduleID': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleID'],
     type: 'integer',
-	  searchableByInterval: true
+	  notSearchable: true
   },
   'Schedule Lane Details': {
     path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleLaneDetails'],
@@ -170,7 +179,7 @@ module.exports.format = {
 module.exports.order = [
 	'ID',
 	'Associated ID',
-	'Class',
+	'Event Class',
 	'Event State',
 	'Date Started',
 	'Time Left (minutes)',

@@ -129,17 +129,19 @@ angular.module('interface').controller('InterfaceController', [
     $scope.paginationCells = 6;
 
     // Select field scope variables
-    $scope.feeds = ['transcom', 'other'];
+		$scope.feeds = [
+			{name: 'Transcom Events', organization: 'Transcom', location: 'transcom'}
+		];
 
     $scope.selectFeed = function (feed) {
       $scope.selectedFeed = feed;
-      $scope.headers = schemas.getHeaders(feed);
-      $scope.schema = schemas.getByName(feed);
+      $scope.headers = schemas.getHeaders(feed.location);
+      $scope.schema = schemas.getByName(feed.location);
       $scope.updateData();
     };
 
-    $scope.update = function (feedName, page, limit, criteria) {
-      Feed.get(feedName, page, limit, criteria)
+    $scope.update = function (feedLocation, page, limit, criteria) {
+      Feed.get(feedLocation, page, limit, criteria)
         .then(function (response) {
           $scope.count = response.data.count;
           $scope.events = response.data.events;
@@ -166,7 +168,8 @@ angular.module('interface').controller('InterfaceController', [
 
       criteria[mongoPath] = Formatters.intervalMaker(
                               filters[column],
-                              Formatters[eventFormat.type || 'string'] || angular.noop
+                              Formatters[eventFormat.type || 'string'] || angular.noop,
+															eventFormat.extra
                             );
 
       $scope.autoUpdate();
@@ -178,7 +181,7 @@ angular.module('interface').controller('InterfaceController', [
       if (angular.isArray(modifiers)) {
         modifiers.forEach(function (name) {
           var modifier = Modifiers[name] || Modifiers['def'];
-          value = modifier(value);
+          value = modifier(value, eventFormat.extra);
         });
       }
 
@@ -228,7 +231,7 @@ angular.module('interface').controller('InterfaceController', [
       }
     };
     $scope.updateData = function () {
-      $scope.update(title($scope.selectedFeed), $scope.currentPage, $scope.limit, $scope.criteria);
+      $scope.update(title($scope.selectedFeed.location), $scope.currentPage, $scope.limit, $scope.criteria);
     };
 
     $scope.reset = function () {
@@ -705,7 +708,7 @@ angular.module('services.formatters', []).factory('Formatters', [
       return parseFloat(value);
     };
 
-    service.intervalMaker = function (value, cb) {
+    service.intervalMaker = function (value, cb, extra) {
       var values;
       if (value.indexOf('<>') !== -1) {
         values = value.split('<>');
@@ -728,7 +731,7 @@ angular.module('services.formatters', []).factory('Formatters', [
         return { $gt: cb(values[0].trim()) };
       }
       else {
-        return cb(value, true);
+        return cb(value, true, extra);
       }
     };
 
@@ -748,6 +751,24 @@ angular.module('services.formatters', []).factory('Formatters', [
       if (value === 'false') {return false;}
       return null;
     };
+
+		service.integerRepresentation = function (value, noRange, extra) {
+			if (typeof extra !== 'object' || !Array.isArray(extra.representations)) {
+				return null;
+			}
+
+			var representations = extra.representations;
+			var matchingIndexes = [];
+			var expression = new RegExp(value, 'i');
+
+			representations.forEach(function (value, index) {
+				if(expression.test(value)){
+					matchingIndexes.push(index);
+				}
+			});
+
+			return {$in: matchingIndexes};
+		};
 
     return service;
 }]);
@@ -806,6 +827,15 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
 
     return result.join(", ");
   };
+
+
+	service.integerRepresentation = function (value, extra) {
+		if (typeof extra !== 'object' || !Array.isArray(extra.representations)) {
+			return null;
+		}
+
+		return extra.representations[parseInt(value)];
+	};
 
   return service;
 }]);
@@ -969,7 +999,7 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
 
 angular.module("interface/interface.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("interface/interface.tpl.html",
-    "<h1 class=\"title\">{{selectedFeed | title}} Feeds</h1>\n" +
+    "<h1 class=\"title\">{{selectedFeed.organization | title}} Feeds</h1>\n" +
     "\n" +
     "<form class=\"form-horizontal col-md-7 well\" role=\"form\">\n" +
     "\n" +
@@ -980,7 +1010,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "			        id=\"feed\"\n" +
     "			        ng-model=\"selectedFeed\"\n" +
     "			        ng-change=\"selectFeed(selectedFeed)\"\n" +
-    "			        ng-options=\"feed for feed in feeds\"></select>\n" +
+    "			        ng-options=\"feed.name group by feed.organization for feed in feeds\"></select>\n" +
     "		</div>\n" +
     "	</div>\n" +
     "\n" +
@@ -1003,7 +1033,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "			<a class=\"btn btn-success\"\n" +
     "			   target=\"_self\"\n" +
-    "			   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}\">\n" +
+    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location | title}}/{{stringify(criteria)}}\">\n" +
     "				<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
     "			</a>\n" +
     "		</div>\n" +
@@ -1011,7 +1041,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	</div>\n" +
     "</form>\n" +
     "\n" +
-    "<div class=\"col-md-5 \">\n" +
+    "<div class=\"col-md-5\">\n" +
     "	<div class=\"pag-dividor\"></div>\n" +
     "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} events found </div><br><br>\n" +
     "	<pagination ng-model=\"currentPage\"\n" +
@@ -1029,7 +1059,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	<table class=\"table table-bordered table-striped table-hover\">\n" +
     "\n" +
     "		<tr>\n" +
-    "			<th>Serial</th>\n" +
+    "			<th>Result</th>\n" +
     "			<th ng-repeat=\"header in headers track by $index\" class=\"overflow-ellipsis\">\n" +
     "				<div>{{header}}</div>\n" +
     "\n" +
@@ -1053,7 +1083,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		</tr>\n" +
     "\n" +
     "\n" +
-    "		<tr ng-repeat=\"event in events track by $index\" ng-controller=\"rowController\">\n" +
+    "		<tr ng-if=\"events.length!=0\" ng-repeat=\"event in events track by $index\" ng-controller=\"rowController\">\n" +
     "			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>\n" +
     "			<td ng-repeat=\"header in headers\" ng-click=\"fullContent()\">\n" +
     "				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>\n" +

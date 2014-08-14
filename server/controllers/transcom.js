@@ -25,6 +25,14 @@ Modifiers.float = function (value) {
 	return value;
 };
 
+Modifiers.integerRepresentation = function (value, extra) {
+	if (typeof extra !== 'object' || !Array.isArray(extra.representations)) {
+		return null;
+	}
+
+	return extra.representations[parseInt(value)];
+};
+
 Modifiers.complexObject = function (value) {
 	var result = [], i;
 	var keys = Object.keys(value);
@@ -120,7 +128,7 @@ function modifyData(value, eventFormat) {
 	if (typeof modifiers === "object" && modifiers.constructor == Array) {
 		modifiers.forEach(function (name) {
 			var modifier = Modifiers[name] || Modifiers['def'];
-			value = modifier(value);
+			value = modifier(value, eventFormat.extra);
 		});
 	}
 
