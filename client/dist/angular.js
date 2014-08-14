@@ -23699,50 +23699,60 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
   $templateCache.put("interface/interface.tpl.html",
     "<h1 class=\"title\">{{selectedFeed | title}} Feeds</h1>\n" +
     "\n" +
-    "<form class=\"form-inline text-center\" role=\"form\">\n" +
+    "<form class=\"form-horizontal col-sm-7 well\" role=\"form\">\n" +
+    "\n" +
     "	<div class=\"form-group\">\n" +
-    "		<label for=\"feed\" class=\"text-info mid-font\">Feed</label>\n" +
-    "		<select class=\"form-control\"\n" +
-    "		        id=\"feed\"\n" +
-    "		        ng-model=\"selectedFeed\"\n" +
-    "		        ng-change=\"selectFeed(selectedFeed)\"\n" +
-    "		        ng-options=\"feed for feed in feeds\"></select>\n" +
+    "		<label for=\"feed\" class=\"col-sm-3 control-label text-info mid-font\">Select your Feed: </label>\n" +
+    "		<div class=\"col-sm-6\">\n" +
+    "			<select class=\"form-control\"\n" +
+    "			        id=\"feed\"\n" +
+    "			        ng-model=\"selectedFeed\"\n" +
+    "			        ng-change=\"selectFeed(selectedFeed)\"\n" +
+    "			        ng-options=\"feed for feed in feeds\"></select>\n" +
+    "		</div>\n" +
     "	</div>\n" +
+    "\n" +
     "	<div class=\"form-group\">\n" +
-    "		<label for=\"limit\" class=\"text-info mid-font\">Rows</label>\n" +
-    "		<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
+    "		<label for=\"limit\" class=\"col-sm-3 control-label text-info mid-font\">Results per page: </label>\n" +
+    "		<div class=\"col-md-6\">\n" +
+    "			<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
+    "		</div>\n" +
     "	</div>\n" +
+    "\n" +
     "	<div class=\"form-group\">\n" +
-    "		<!--<a class=\"btn btn-primary\" ng-click=\"updateData()\">Update</a>-->\n" +
+    "		<div class=\"col-lg-offset-3 add-padding\">\n" +
+    "			<a class=\"btn btn-primary\" ng-click=\"updateData()\">\n" +
+    "				<span class=\"glyphicon glyphicon glyphicon-refresh\"></span> Update\n" +
+    "			</a>\n" +
     "\n" +
-    "		<a class=\"btn btn-primary\" target=\"_self\"\n" +
-    "		   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}\">\n" +
-    "			<span class=\"glyphicon glyphicon-cloud-download\"></span> Download\n" +
-    "		</a>\n" +
+    "			<a class=\"btn btn-warning\" ng-click=\"reset()\">\n" +
+    "				<span class=\"glyphicon glyphicon-repeat\"></span> Reset\n" +
+    "			</a>\n" +
     "\n" +
-    "		<a class=\"btn btn-warning\" ng-click=\"reset()\">\n" +
-    "			<span class=\"glyphicon glyphicon-repeat\"></span> Reset\n" +
-    "		</a>\n" +
-    "\n" +
-    "		<!--<div class=\"checkbox\">\n" +
-    "				<label>\n" +
-    "						<input type=\"checkbox\" ng-model=\"automaticUpdate\"> Update Automatically\n" +
-    "				</label>\n" +
-    "		</div>-->\n" +
+    "			<a class=\"btn btn-success\"\n" +
+    "			   target=\"_self\"\n" +
+    "			   ng-href=\"/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}\">\n" +
+    "				<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
+    "			</a>\n" +
+    "		</div>\n" +
+    "		<!--<div class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"automaticUpdate\"> Update Automatically</label></div>-->\n" +
     "	</div>\n" +
     "</form>\n" +
     "\n" +
-    "<pagination ng-model=\"currentPage\"\n" +
-    "            ng-change=\"updateData()\"\n" +
-    "            total-items=\"count\"\n" +
-    "            items-per-page=\"limit\"\n" +
-    "            max-size=\"paginationCells\"\n" +
-    "            class=\"pagination-sm pag\"\n" +
-    "            boundary-links=\"true\"\n" +
-    "            rotate=\"false\">\n" +
-    "</pagination>\n" +
+    "<div class=\"col-sm-5\">\n" +
+    "	<div class=\"pag-dividor\"></div>\n" +
+    "	<div ng-show=\"count!=0\" class=\"text-primary result-text\">{{count}} events found </div>\n" +
+    "	<pagination ng-model=\"currentPage\"\n" +
+    "	            ng-change=\"updateData()\"\n" +
+    "	            total-items=\"count\"\n" +
+    "	            items-per-page=\"limit\"\n" +
+    "	            max-size=\"paginationCells\"\n" +
+    "	            class=\"pagination-sm pag center-block\"\n" +
+    "	            boundary-links=\"true\"\n" +
+    "	            rotate=\"false\">\n" +
+    "	</pagination>\n" +
+    "</div>\n" +
     "\n" +
-    "<div ng-show=\"count!=0\">{{count}} events found</div>\n" +
     "<div class=\"table-container\">\n" +
     "	<table class=\"table table-bordered table-striped table-hover\">\n" +
     "\n" +

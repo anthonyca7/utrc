@@ -24,6 +24,11 @@ module.exports.format = {
     modifiers: ['date'],
     type: 'date'
   },
+	/*'Hour Started': {
+		path: ['StartDateTime'],
+		modifiers: ['date'],
+		type: 'date'
+	},*/
   'Time Left (minutes)': {
     path: ['EstDurationInMinutes'],
     type: 'integer'

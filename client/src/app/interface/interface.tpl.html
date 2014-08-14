@@ -1,49 +1,59 @@
 <h1 class="title">{{selectedFeed | title}} Feeds</h1>
 
-<form class="form-inline text-center" role="form">
+<form class="form-horizontal col-sm-7 well" role="form">
+
 	<div class="form-group">
-		<label for="feed" class="text-info mid-font">Feed</label>
-		<select class="form-control"
-		        id="feed"
-		        ng-model="selectedFeed"
-		        ng-change="selectFeed(selectedFeed)"
-		        ng-options="feed for feed in feeds"></select>
+		<label for="feed" class="col-sm-3 control-label text-info mid-font">Select your Feed: </label>
+		<div class="col-sm-6">
+			<select class="form-control"
+			        id="feed"
+			        ng-model="selectedFeed"
+			        ng-change="selectFeed(selectedFeed)"
+			        ng-options="feed for feed in feeds"></select>
+		</div>
 	</div>
+
 	<div class="form-group">
-		<label for="limit" class="text-info mid-font">Rows</label>
-		<input class="form-control" id="limit" ng-model="limit" ng-blur="autoUpdate()"/>
+		<label for="limit" class="col-sm-3 control-label text-info mid-font">Results per page: </label>
+		<div class="col-md-6">
+			<input class="form-control" id="limit" ng-model="limit" ng-blur="autoUpdate()"/>
+		</div>
 	</div>
+
 	<div class="form-group">
-		<!--<a class="btn btn-primary" ng-click="updateData()">Update</a>-->
+		<div class="col-lg-offset-3 add-padding">
+			<a class="btn btn-primary" ng-click="updateData()">
+				<span class="glyphicon glyphicon glyphicon-refresh"></span> Update
+			</a>
 
-		<a class="btn btn-primary" target="_self"
-		   ng-href="/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}">
-			<span class="glyphicon glyphicon-cloud-download"></span> Download
-		</a>
+			<a class="btn btn-warning" ng-click="reset()">
+				<span class="glyphicon glyphicon-repeat"></span> Reset
+			</a>
 
-		<a class="btn btn-warning" ng-click="reset()">
-			<span class="glyphicon glyphicon-repeat"></span> Reset
-		</a>
-
-		<!--<div class="checkbox">
-				<label>
-						<input type="checkbox" ng-model="automaticUpdate"> Update Automatically
-				</label>
-		</div>-->
+			<a class="btn btn-success"
+			   target="_self"
+			   ng-href="/api/feeds/download/{{selectedFeed | title}}/{{stringify(criteria)}}">
+				<span class="glyphicon glyphicon-cloud-download"></span> Download Results
+			</a>
+		</div>
+		<!--<div class="checkbox"><label><input type="checkbox" ng-model="automaticUpdate"> Update Automatically</label></div>-->
 	</div>
 </form>
 
-<pagination ng-model="currentPage"
-            ng-change="updateData()"
-            total-items="count"
-            items-per-page="limit"
-            max-size="paginationCells"
-            class="pagination-sm pag"
-            boundary-links="true"
-            rotate="false">
-</pagination>
+<div class="col-sm-5">
+	<div class="pag-dividor"></div>
+	<div ng-show="count!=0" class="text-primary result-text">{{count}} events found </div>
+	<pagination ng-model="currentPage"
+	            ng-change="updateData()"
+	            total-items="count"
+	            items-per-page="limit"
+	            max-size="paginationCells"
+	            class="pagination-sm pag center-block"
+	            boundary-links="true"
+	            rotate="false">
+	</pagination>
+</div>
 
-<div ng-show="count!=0">{{count}} events found</div>
 <div class="table-container">
 	<table class="table table-bordered table-striped table-hover">
 

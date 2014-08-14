@@ -41,6 +41,28 @@ body {
 	height: 10px;
 }
 
+.center-block {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pag-dividor {
+    padding-top: 25%;
+}
+
 .mid-font {
     font-size: 1.1em;
+}
+
+.add-padding {
+    padding-left: 2%;
+}
+
+.pag {
+    margin-top: 1%;
+    padding-top: 1%;
+}
+
+.result-text{
+    font-size: 1.2em;
 }
