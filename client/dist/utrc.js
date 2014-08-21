@@ -130,13 +130,13 @@ angular.module('interface').controller('InterfaceController', [
 
     // Select field scope variables
 		$scope.feeds = [
-			{name: 'Transcom Events', organization: 'Transcom', location: 'transcom'}
+			{name: 'Transcom Events', organization: 'Transcom', location: 'transcoms', schema: 'transcom'}
 		];
 
     $scope.selectFeed = function (feed) {
       $scope.selectedFeed = feed;
-      $scope.headers = schemas.getHeaders(feed.location);
-      $scope.schema = schemas.getByName(feed.location);
+      $scope.headers = schemas.getHeaders(feed.schema);
+      $scope.schema = schemas.getByName(feed.schema);
       $scope.updateData();
     };
 
@@ -145,6 +145,8 @@ angular.module('interface').controller('InterfaceController', [
         .then(function (response) {
           $scope.count = response.data.count;
           $scope.events = response.data.events;
+		      console.log($scope.events);
+		      console.log($scope.headers);
         });
     };
 
@@ -231,7 +233,7 @@ angular.module('interface').controller('InterfaceController', [
       }
     };
     $scope.updateData = function () {
-      $scope.update(title($scope.selectedFeed.location), $scope.currentPage, $scope.limit, $scope.criteria);
+      $scope.update($scope.selectedFeed.location, $scope.currentPage, $scope.limit, $scope.criteria);
     };
 
     $scope.reset = function () {

@@ -13,8 +13,10 @@ var FeedSchema = new Schema({
   },
 	order: {
 		type: Schema.Types.Mixed
+	},
+	database: {
+		type: String
 	}
-
 });
 
 module.exports = mongoose.model('Feed', FeedSchema);

@@ -27,7 +27,8 @@ Feed.find({}).remove(function () {
     Feed.create({
       name: name,
       format: schema.format,
-	    order: schema.order
+	    order: schema.order,
+	    database: schema.db
     });
   });
 });

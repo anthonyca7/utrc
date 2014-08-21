@@ -1,83 +1,43 @@
 var mongoose = require('mongoose'),
     _ = require('lodash'),
     Feed = mongoose.model('Feed'),
+    mongoskin = require('mongoskin'),
+    dataModifiers = require('../data-feeds/modifiers'),
     Transcom = mongoose.model('Transcom');
 
 
-var Modifiers = {};
-
-Modifiers.def = function (value) {
-	return value;
-};
-
-Modifiers.date = function (value) {
-	return value;
-	/*if (/^\d{4}([./-])\d{2}\1\d{2}/.test(value))
-		return new Date(value, 'EEEE, MMM d, y h:mm a');
-	else
-		return null;*/
-};
-
-Modifiers.float = function (value) {
-	if (typeof value === "number") {
-		return value.toFixed(2);
-	}
-	return value;
-};
-
-Modifiers.integerRepresentation = function (value, extra) {
-	if (typeof extra !== 'object' || !Array.isArray(extra.representations)) {
-		return null;
-	}
-
-	return extra.representations[parseInt(value)];
-};
-
-Modifiers.complexObject = function (value) {
-	var result = [], i;
-	var keys = Object.keys(value);
-
-	for(i=0;i<keys.length;i++){
-		result.push("("+keys[i]+":"+value[keys[i]]+")");
-	}
-
-	return "( " + result.join(", ") + " )";
-};
-
-Modifiers.complexArray = function (value) {
-	var result = [];
-
-	value.forEach(function (element) {
-		if (typeof element === 'object') {
-			result.push(Modifiers.complexObject(element));
-		}
-		else{
-			result.push(element);
-		}
-	});
-
-	return result.join(", ");
-};
+var db = mongoskin.db('mongodb://@localhost:27017/data-feed', {safe:true});
+db.bind('transcoms');
+db.bind('feeds');
 
 module.exports.transcomEvents = function (req, res, next) {
-	var Model = mongoose.model(req.params.evt);
 	var criteria = JSON.parse(req.body.criteria || {});
+	var name = req.params.evt.toLowerCase();
 
-	Model.find(criteria, {}, {
-			skip: (req.params.page - 1) * (req.params.limit),
-			limit: req.params.limit
-		},
-		function (err, data) {
+	if (db[name] == null) {
+		res.json({event: null});
+		return
+	}
+
+	db[name].find(criteria, {}, {
+		skip: (req.params.page - 1) * (req.params.limit),
+		limit: req.params.limit
+	}, function (err, data) {
+		data.toArray(function(err, data){
 			if (err) {
-				console.log(err)
+				console.log(err);
+				res.end(err);
 			}
-			Model.count(criteria, function (err, count) {
+			db[name].count(criteria, function(err, count) {
 				if (err) {
-					console.log(err)
+					console.log(err);
+					res.end(err);
 				}
+
 				res.json({events: data, count: count});
 			});
 		});
+	});
 };
 
 module.exports.download = function (req, res, next) {
@@ -127,16 +87,16 @@ function modifyData(value, eventFormat) {
 
 	if (typeof modifiers === "object" && modifiers.constructor == Array) {
 		modifiers.forEach(function (name) {
-			var modifier = Modifiers[name] || Modifiers['def'];
+			var modifier = dataModifiers[name] || dataModifiers['def'];
 			value = modifier(value, eventFormat.extra);
 		});
 	}
 
 	if (value && typeof value==='object') {
 		if (value.constructor.name === 'Array') {
-			value = Modifiers.complexArray(value);
+			value = dataModifiers.complexArray(value);
 		} else {
-			value = Modifiers.complexObject(value);
+			value = dataModifiers.complexObject(value);
 		}
 	}
 

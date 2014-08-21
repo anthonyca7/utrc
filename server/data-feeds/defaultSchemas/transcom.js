@@ -216,3 +216,5 @@ module.exports.order = [
 	'Schedule End',
 	'Additional Data'
 ];
+
+module.exports.db = "mongodb";
