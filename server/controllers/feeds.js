@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
 var db = mongoskin.db('mongodb://@localhost:27017/data-feed', {safe: true});
 db.bind('transcoms');
 db.bind('transcomlinkconfigurations');
+db.bind('transcomlinkconditions');
 db.bind('feeds');
 
 module.exports.loadEvents = function (req, res, next) {

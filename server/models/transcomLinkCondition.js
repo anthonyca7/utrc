@@ -1,7 +1,11 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+/**
+ * Created by anthony on 8/23/14.
+ */
 
-var transcomLinkConfiguration = new Schema({
+var mongoose = require('mongoose'),
+Schema = mongoose.Schema;
+
+var transcomLinkCondition = new Schema({
 	event: {
 		type: Schema.Types.Mixed,
 		unique: true,
@@ -23,4 +27,4 @@ function eventValidation(event, respond) {
 }
 
 
-mongoose.model('TranscomLinkConfiguration', transcomLinkConfiguration);
+mongoose.model('TranscomLinkCondition', transcomLinkCondition);

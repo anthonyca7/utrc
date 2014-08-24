@@ -1,44 +1,42 @@
 body {
-	margin-top: 4%;
+    margin-top: 4%;
 }
 
 .notification {
-	margin-top: 1%
+    margin-top: 1%
 }
 
-.title{
-	text-align: center;
+.title {
+    text-align: center;
 }
 
 .overflow-ellipsis {
-	overflow: hidden;
-	text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 
 .search-box {
-	margin-top: 1%;
+    margin-top: 1%;
 }
 
-
 .field_input {
-	position: relative;
-	padding: 0;
-	margin: 0;
-	background: #DDD;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background: #DDD;
 }
 
 .field_input > input {
-	margin: 0;
-	padding-left: 30px;
+    margin: 0;
+    padding-left: 30px;
 }
 
 .field_img {
-	position: absolute;
-	bottom: 8px;
-	left: 10px;
-	width: 10px;
-	height: 10px;
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    width: 10px;
+    height: 10px;
 }
 
 .center-block {
@@ -49,7 +47,6 @@ body {
 .pag-dividor {
     padding-top: 25%;
 }
-
 
 .mid-font {
     font-size: 1.1em;
@@ -64,7 +61,7 @@ body {
     padding-top: 0%;
 }
 
-.result-text{
+.result-text {
     margin-top: 1%;
     padding-top: 1%;
     font-size: 1.2em;

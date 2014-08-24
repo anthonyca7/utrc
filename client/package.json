@@ -1,27 +1,27 @@
 {
-  "name": "utrc",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.html",
-  "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Anthony Cabrera",
-  "license": "ISC",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.5.0",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-copy": "^0.5.0",
-    "grunt-contrib-cssmin": "^0.10.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-uglify": "^0.5.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-html2js": "^0.2.8",
-    "grunt-karma": "^0.8.3",
-    "grunt-ng-annotate": "^0.3.0",
-    "grunt-recess": "^0.7.0",
-    "karma": "^0.12.17"
-  }
+	"name": "utrc",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.html",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Anthony Cabrera",
+	"license": "ISC",
+	"devDependencies": {
+		"grunt": "^0.4.5",
+		"grunt-contrib-clean": "^0.5.0",
+		"grunt-contrib-concat": "^0.5.0",
+		"grunt-contrib-copy": "^0.5.0",
+		"grunt-contrib-cssmin": "^0.10.0",
+		"grunt-contrib-jshint": "^0.10.0",
+		"grunt-contrib-uglify": "^0.5.0",
+		"grunt-contrib-watch": "^0.6.1",
+		"grunt-html2js": "^0.2.8",
+		"grunt-karma": "^0.8.3",
+		"grunt-ng-annotate": "^0.3.0",
+		"grunt-recess": "^0.7.0",
+		"karma": "^0.12.17"
+	}
 }

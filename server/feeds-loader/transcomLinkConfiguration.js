@@ -27,6 +27,8 @@ function loadEvents() {
 				});
 			})(i);
 		}
+
+		console.log("Inserting data for link configuration");
 	});
 }
 

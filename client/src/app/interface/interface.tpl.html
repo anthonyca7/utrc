@@ -4,6 +4,7 @@
 
 	<div class="form-group">
 		<label for="feed" class="col-md-3 control-label text-info mid-font">Select your Feed: </label>
+
 		<div class="col-md-6">
 			<select class="form-control"
 			        id="feed"
@@ -15,6 +16,7 @@
 
 	<div class="form-group">
 		<label for="limit" class="col-md-3 control-label text-info mid-font">Results per page: </label>
+
 		<div class="col-md-6">
 			<input class="form-control" id="limit" ng-model="limit" ng-blur="autoUpdate()"/>
 		</div>
@@ -42,7 +44,8 @@
 
 <div class="col-md-5">
 	<div class="pag-dividor"></div>
-	<div ng-show="count!=0" class="text-primary result-text pull-right">{{count}} events found </div><br><br>
+	<div ng-show="count!=0" class="text-primary result-text pull-right">{{count}} events found</div>
+	<br><br>
 	<pagination ng-model="currentPage"
 	            ng-change="updateData()"
 	            total-items="count"

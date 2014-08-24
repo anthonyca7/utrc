@@ -1,4 +1,4 @@
 angular.module('filters', [
-  'filters.title',
-  'filters.limitCharacters'
+	'filters.title',
+	'filters.limitCharacters'
 ]);

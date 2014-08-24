@@ -41,6 +41,7 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
     "	<form novalidate class=\"form-horizontal\" role=\"form\">\n" +
     "		<div class=\"form-group\">\n" +
     "			<label class=\"col-sm-3 control-label\">Greater than</label>\n" +
+    "\n" +
     "			<div class=\"col-sm-9\">\n" +
     "				<input type=\"text\" name=\"greater\" class=\"form-control\" ng-model=\"search.greater\">\n" +
     "			</div>\n" +
@@ -48,6 +49,7 @@ angular.module("interface/criteria/criteria-modal.tpl.html", []).run(["$template
     "\n" +
     "		<div class=\"form-group\">\n" +
     "			<label class=\"col-sm-3 control-label\">Less than</label>\n" +
+    "\n" +
     "			<div class=\"col-sm-9\">\n" +
     "				<input type=\"text\" name=\"less\" class=\"form-control\" ng-model=\"search.less\">\n" +
     "			</div>\n" +
@@ -69,6 +71,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "	<div class=\"form-group\">\n" +
     "		<label for=\"feed\" class=\"col-md-3 control-label text-info mid-font\">Select your Feed: </label>\n" +
+    "\n" +
     "		<div class=\"col-md-6\">\n" +
     "			<select class=\"form-control\"\n" +
     "			        id=\"feed\"\n" +
@@ -80,6 +83,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "	<div class=\"form-group\">\n" +
     "		<label for=\"limit\" class=\"col-md-3 control-label text-info mid-font\">Results per page: </label>\n" +
+    "\n" +
     "		<div class=\"col-md-6\">\n" +
     "			<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
     "		</div>\n" +
@@ -107,7 +111,8 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "<div class=\"col-md-5\">\n" +
     "	<div class=\"pag-dividor\"></div>\n" +
-    "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} events found </div><br><br>\n" +
+    "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} events found</div>\n" +
+    "	<br><br>\n" +
     "	<pagination ng-model=\"currentPage\"\n" +
     "	            ng-change=\"updateData()\"\n" +
     "	            total-items=\"count\"\n" +
