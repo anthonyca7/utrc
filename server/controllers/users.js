@@ -6,5 +6,5 @@ var mongoose = require('mongoose'),
 
 //Get current user
 exports.current = function (req, res) {
-    res.json({ user: req.user || null });
+	res.json({ user: req.user || null });
 };

@@ -10,6 +10,7 @@ angular.module('services.schemas', []).factory('Schemas', ['$q', '$http', functi
         result = schema;
       }
     });
+	  console.log('all schemas', schemas);
     return result;
   };
 

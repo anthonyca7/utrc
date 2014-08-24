@@ -5,8 +5,8 @@ var fs = require('fs'),
     Feed = mongoose.model('Feed');
 
 exports.all = function (req, res, next) {
-  Feed.find({}, function (err, schemas) {
-    if (err) return next(err);
-    res.json(schemas);
-  });
+	Feed.find({}, function (err, schemas) {
+		if (err) return next(err);
+		res.json(schemas);
+	});
 };

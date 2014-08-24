@@ -47,13 +47,15 @@ angular.module('interface').controller('InterfaceController', [
 
     // Select field scope variables
 		$scope.feeds = [
-			{name: 'Transcom Events', organization: 'Transcom', location: 'transcoms', schema: 'transcom'}
+			{name: 'Transcom Events', organization: 'Transcom', location: 'transcoms', schema: 'transcom'},
+			{name: 'Transcom Link Configuration', organization: 'Transcom', location: 'transcomlinkconfigurations', schema: 'transcomLinkConfiguration'}
 		];
 
     $scope.selectFeed = function (feed) {
       $scope.selectedFeed = feed;
       $scope.headers = schemas.getHeaders(feed.schema);
       $scope.schema = schemas.getByName(feed.schema);
+	    console.log($scope.schema);
       $scope.updateData();
     };
 
@@ -62,8 +64,7 @@ angular.module('interface').controller('InterfaceController', [
         .then(function (response) {
           $scope.count = response.data.count;
           $scope.events = response.data.events;
-		      console.log($scope.events);
-		      console.log($scope.headers);
+		      console.log(response.data);
         });
     };
 
@@ -77,7 +78,7 @@ angular.module('interface').controller('InterfaceController', [
 
     $scope.updateCriteria = function (column, schema, filters, criteria) {
       var eventFormat = schema.format[column],
-          mongoPath = 'event.' + eventFormat.path.join('.');
+          mongoPath = eventFormat.path.join('.');
 
       if (filters[column] === "") {
         delete criteria[mongoPath];
@@ -117,7 +118,7 @@ angular.module('interface').controller('InterfaceController', [
     $scope.getEventField = function (data, schema, column) {
       var eventFormat = schema.format[column],
           path = eventFormat.path,
-          cellValue = data.event, i, j, object;
+          cellValue = data, i, j, object;
 
       for (i=0;i<path.length;i++) {
         // If the current value is an array then check for each

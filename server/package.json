@@ -1,45 +1,46 @@
 {
-  "name": "utrc",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/anthonyca7/utrc"
-  },
-  "author": "Anthony Cabrera",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/anthonyca7/utrc/issues"
-  },
-  "homepage": "https://github.com/anthonyca7/utrc",
-  "dependencies": {
-    "body-parser": "^1.5.0",
-    "compression": "^1.0.9",
-    "connect-mongo": "^0.4.1",
-    "cookie-parser": "^1.3.2",
-    "errorhandler": "^1.1.1",
-    "express": "^4.6.1",
-    "express-session": "^1.7.0",
-    "lodash": "^2.4.1",
-    "method-override": "^2.1.1",
-    "mongoose": "^3.8.8",
-    "morgan": "^1.2.0",
-    "passport": "^0.2.0",
-    "passport-local": "^1.0.0",
-    "request": "^2.38.0",
-    "xml2json": "^0.4.0"
-  },
-  "devDependencies": {
-    "connect-livereload": "^0.4.0",
-    "grunt": "^0.4.5",
-    "grunt-karma": "^0.8.3",
-    "grunt-protractor-runner": "^1.1.0",
-    "karma": "^0.12.17",
-    "protractor": "^1.0.0"
-  }
+	"name": "utrc",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/anthonyca7/utrc"
+	},
+	"author": "Anthony Cabrera",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/anthonyca7/utrc/issues"
+	},
+	"homepage": "https://github.com/anthonyca7/utrc",
+	"dependencies": {
+		"body-parser": "^1.5.0",
+		"compression": "^1.0.9",
+		"connect-mongo": "^0.4.1",
+		"cookie-parser": "^1.3.2",
+		"errorhandler": "^1.1.1",
+		"express": "^4.6.1",
+		"express-session": "^1.7.0",
+		"lodash": "^2.4.1",
+		"method-override": "^2.1.1",
+		"mongoose": "^3.8.8",
+		"mongoskin": "^1.4.4",
+		"morgan": "^1.2.0",
+		"passport": "^0.2.0",
+		"passport-local": "^1.0.0",
+		"request": "^2.38.0",
+		"xml2json": "^0.4.0"
+	},
+	"devDependencies": {
+		"connect-livereload": "^0.4.0",
+		"grunt": "^0.4.5",
+		"grunt-karma": "^0.8.3",
+		"grunt-protractor-runner": "^1.1.0",
+		"karma": "^0.12.17",
+		"protractor": "^1.0.0"
+	}
 }

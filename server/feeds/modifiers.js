@@ -27,8 +27,8 @@ Modifiers.complexObject = function (value) {
 	var result = [], i;
 	var keys = Object.keys(value);
 
-	for(i=0;i<keys.length;i++){
-		result.push("("+keys[i]+":"+value[keys[i]]+")");
+	for (i = 0; i < keys.length; i++) {
+		result.push("(" + keys[i] + ":" + value[keys[i]] + ")");
 	}
 
 	return "( " + result.join(", ") + " )";
@@ -41,7 +41,7 @@ Modifiers.complexArray = function (value) {
 		if (typeof element === 'object') {
 			result.push(Modifiers.complexObject(element));
 		}
-		else{
+		else {
 			result.push(element);
 		}
 	});

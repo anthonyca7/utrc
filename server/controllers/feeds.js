@@ -2,15 +2,16 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     Feed = mongoose.model('Feed'),
     mongoskin = require('mongoskin'),
-    dataModifiers = require('../data-feeds/modifiers'),
+    dataModifiers = require('../feeds/modifiers'),
     Transcom = mongoose.model('Transcom');
 
 
-var db = mongoskin.db('mongodb://@localhost:27017/data-feed', {safe:true});
+var db = mongoskin.db('mongodb://@localhost:27017/data-feed', {safe: true});
 db.bind('transcoms');
+db.bind('transcomlinkconfigurations');
 db.bind('feeds');
 
-module.exports.transcomEvents = function (req, res, next) {
+module.exports.loadEvents = function (req, res, next) {
 	var criteria = JSON.parse(req.body.criteria || {});
 	var name = req.params.evt.toLowerCase();
 
@@ -23,12 +24,12 @@ module.exports.transcomEvents = function (req, res, next) {
 		skip: (req.params.page - 1) * (req.params.limit),
 		limit: req.params.limit
 	}, function (err, data) {
-		data.toArray(function(err, data){
+		data.toArray(function (err, data) {
 			if (err) {
 				console.log(err);
 				res.end(err);
 			}
-			db[name].count(criteria, function(err, count) {
+			db[name].count(criteria, function (err, count) {
 				if (err) {
 					console.log(err);
 					res.end(err);
@@ -42,14 +43,14 @@ module.exports.transcomEvents = function (req, res, next) {
 
 module.exports.download = function (req, res, next) {
 	var Model = mongoose.model(req.params.evt);
-	var criteria = (req.params.criteria) ? JSON.parse(req.params.criteria):{};
+	var criteria = (req.params.criteria) ? JSON.parse(req.params.criteria) : {};
 	var name = req.params.evt.toLowerCase();
 
 	Feed.findOne({ name: name }, function (err, schema) {
 		if (err) return next(err);
 
 		var format = schema.format,
-				header = schema.order;
+		    header = schema.order;
 
 		Model.find(criteria, function (err, data) {
 			var file = name + "_event_" + getCurrentDate();
@@ -66,15 +67,15 @@ module.exports.download = function (req, res, next) {
 
 function getCurrentDate() {
 	var date = new Date();
-	var month = date.getMonth()+1;
+	var month = date.getMonth() + 1;
 	var result = "";
 
 	function format(value) {
-		return ( value < 10 ) ? "0"+value:value;
+		return ( value < 10 ) ? "0" + value : value;
 	}
 
 	result += format(month) + format(date.getDate()) + date.getFullYear() + "_" +
-	          format(date.getHours()) + format(date.getMinutes()) + format(date.getSeconds());
+		format(date.getHours()) + format(date.getMinutes()) + format(date.getSeconds());
 
 	return result;
 
@@ -92,7 +93,7 @@ function modifyData(value, eventFormat) {
 		});
 	}
 
-	if (value && typeof value==='object') {
+	if (value && typeof value === 'object') {
 		if (value.constructor.name === 'Array') {
 			value = dataModifiers.complexArray(value);
 		} else {
@@ -104,13 +105,13 @@ function modifyData(value, eventFormat) {
 }
 
 function sendEvents(res, data, format, header) {
-	var i,j;
+	var i, j;
 
 	res.write(header.join('\t') + '\n');
 
-	for(i=0;i<data.length;i++) {
+	for (i = 0; i < data.length; i++) {
 		var event = data[i], cell;
-		for(j=0; j<header.length;j++) {
+		for (j = 0; j < header.length; j++) {
 			cell = getEventField(event, format, header[j]);
 
 			if (cell == null) cell = "";
@@ -127,11 +128,11 @@ function sendEvents(res, data, format, header) {
 function getEventField(data, schema, column) {
 	var eventFormat = schema[column],
 	    path = eventFormat.path,
-	    cellValue = data.event, i, j, object;
+	    cellValue = data, i, j, object;
 
-	for (i=0;i<path.length;i++) {
+	for (i = 0; i < path.length; i++) {
 		if (typeof cellValue === "object" && cellValue.constructor === Array) {
-			for (j=0;j<cellValue.length;j++) {
+			for (j = 0; j < cellValue.length; j++) {
 				object = cellValue[j];
 
 				if (object.hasOwnProperty(path[i])) {

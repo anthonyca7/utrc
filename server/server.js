@@ -18,15 +18,18 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var env = process.env.NODE_ENV,
     config = require('./config/' + env),
     db = mongoose.connect(config.db.url, config.db.options),
-    modelsPath = path.join(__dirname, 'models');
+    modelsPath = path.join(__dirname, 'models'),
+    feedsLoaderPath = path.join(__dirname, 'feeds-loader');
 
 fs.readdirSync(modelsPath).forEach(function (model) {
-    require(modelsPath + '/' + model);
+	require(modelsPath + '/' + model);
 });
 
 if (!process.env.NOFEEDS && cluster.isMaster) {
-  console.log("Loading data feeds");
-  require('./data-feeds/transcom');
+	console.log("Loading data feeds");
+	fs.readdirSync(feedsLoaderPath).forEach(function (model) {
+		require(feedsLoaderPath + '/' + model);
+	});
 }
 
 if (cluster.isMaster) {
@@ -38,7 +41,7 @@ require('./express')(app, config);
 require('./routes')(app);
 
 app.all('/*', function (req, res) {
-    res.sendfile('index.html', { root: config.client.dist });
+	res.sendfile('index.html', { root: config.client.dist });
 });
 
 
@@ -47,7 +50,7 @@ if (cluster.isMaster) {
 		cluster.fork();
 	}
 
-	cluster.on('exit', function(worker, code, signal) {
+	cluster.on('exit', function (worker, code, signal) {
 		console.log('worker ' + worker.process.pid + ' died');
 	});
 } else {

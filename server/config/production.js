@@ -10,22 +10,22 @@ var main = path.normalize(serverDir + '/main');
 var client = path.normalize(rootDir + '/client');
 
 module.exports = {
-    views: views,
-    client: client,
-    controllers: controllers,
-    models: models,
-    mainDir: mainDir,
-    serverDir: serverDir,
-    env: 'production',
-    dir: configDir,
-    root: rootDir,
-    port: process.env.PORT || 3000,
-    db: {
-        url: "localhost:27017",
-        options: {
-            db: {
-                safe: true
-            }
-        }
-    }
+	views: views,
+	client: client,
+	controllers: controllers,
+	models: models,
+	mainDir: mainDir,
+	serverDir: serverDir,
+	env: 'production',
+	dir: configDir,
+	root: rootDir,
+	port: process.env.PORT || 3000,
+	db: {
+		url: "localhost:27017",
+		options: {
+			db: {
+				safe: true
+			}
+		}
+	}
 }

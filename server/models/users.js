@@ -5,111 +5,111 @@ var mongoose = require('mongoose'),
     crypto = require('crypto');
 
 var UserSchema = new Schema({
-  name: String,
-  username: {
-    type: String,
-    unique: true
-  },
-  hashedPassword: String,
-  salt: String
+	name: String,
+	username: {
+		type: String,
+		unique: true
+	},
+	hashedPassword: String,
+	salt: String
 });
 
 UserSchema
-  .virtual('password')
-  .set(function (password) {
-    this._password = password;
-    this.salt = this.makeSalt();
-    this.hashedPassword = this.encryptPassword(password);
-  })
-  .get(function () {
-    return this._password;
-  });
+	.virtual('password')
+	.set(function (password) {
+		this._password = password;
+		this.salt = this.makeSalt();
+		this.hashedPassword = this.encryptPassword(password);
+	})
+	.get(function () {
+		return this._password;
+	});
 
 UserSchema
-  .virtual('userInfo')
-  .get(function () {
-    return {
-      'username': this.username,
-      'name': this.name,
-    };
-  });
+	.virtual('userInfo')
+	.get(function () {
+		return {
+			'username': this.username,
+			'name': this.name,
+		};
+	});
 
 // Public profile information
 UserSchema
-  .virtual('profile')
-  .get(function () {
-    return {
-      'name': this.name,
-      'username': this.username,
-    };
-  });
+	.virtual('profile')
+	.get(function () {
+		return {
+			'name': this.name,
+			'username': this.username,
+		};
+	});
 
 // Validate empty username
 UserSchema
-  .path('username')
-  .validate(function (username) {
-    return username.length;
-  }, 'Username cannot be blank');
+	.path('username')
+	.validate(function (username) {
+		return username.length;
+	}, 'Username cannot be blank');
 
 // Validate empty password
 UserSchema
-  .path('hashedPassword')
-  .validate(function (hashedPassword) {
-    return hashedPassword.length;
-  }, 'Password cannot be blank');
+	.path('hashedPassword')
+	.validate(function (hashedPassword) {
+		return hashedPassword.length;
+	}, 'Password cannot be blank');
 
 
 UserSchema
-  .path('username')
-  .validate(function (value, respond) {
-    var self = this;
-    this.constructor.findOne({username: value}, function (err, user) {
-      if (err) throw err;
-      if (user) {
-        if (self.id === user.id) return respond(true);
-        return respond(false);
-      }
-      respond(true);
-    });
-  }, 'The specified username is already in use.');
+	.path('username')
+	.validate(function (value, respond) {
+		var self = this;
+		this.constructor.findOne({username: value}, function (err, user) {
+			if (err) throw err;
+			if (user) {
+				if (self.id === user.id) return respond(true);
+				return respond(false);
+			}
+			respond(true);
+		});
+	}, 'The specified username is already in use.');
 
 var validatePresenceOf = function (value) {
-  return value && value.length;
+	return value && value.length;
 };
 
 /**
  * Pre-save hook
  */
 UserSchema
-  .pre('save', function (next) {
-    if (!this.isNew) return next();
+	.pre('save', function (next) {
+		if (!this.isNew) return next();
 
-    if (!validatePresenceOf(this.hashedPassword))
-      next(new Error('Invalid password'));
-    else
-      next();
-  });
+		if (!validatePresenceOf(this.hashedPassword))
+			next(new Error('Invalid password'));
+		else
+			next();
+	});
 
 /**
  * Methods
  */
 UserSchema.methods = {
 
-  authenticate: function (plainText) {
-    return this.encryptPassword(plainText) === this.hashedPassword;
-  },
+	authenticate: function (plainText) {
+		return this.encryptPassword(plainText) === this.hashedPassword;
+	},
 
-  makeSalt: function () {
-    return ((new Buffer("Anthony's salt Asdfg", 'base64')) +
-      crypto.randomBytes(16).toString('base64') +
-      (new Buffer("Anthony's salt Hjkl1", 'base64')));
-  },
+	makeSalt: function () {
+		return ((new Buffer("Anthony's salt Asdfg", 'base64')) +
+			crypto.randomBytes(16).toString('base64') +
+			(new Buffer("Anthony's salt Hjkl1", 'base64')));
+	},
 
-  encryptPassword: function (password) {
-    if (!password || !this.salt) return '';
-    var salt = new Buffer(this.salt, 'base64');
-    return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
-  }
+	encryptPassword: function (password) {
+		if (!password || !this.salt) return '';
+		var salt = new Buffer(this.salt, 'base64');
+		return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+	}
 };
 
 module.exports = mongoose.model('User', UserSchema);
