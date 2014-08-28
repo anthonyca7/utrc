@@ -23738,7 +23738,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "			<a class=\"btn btn-success\"\n" +
     "			   target=\"_self\"\n" +
-    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location | title}}/{{stringify(criteria)}}\">\n" +
+    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location}}/{{selectedFeed.feed}}/{{getDate()}}/{{stringify(criteria)}}\">\n" +
     "				<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
     "			</a>\n" +
     "		</div>\n" +

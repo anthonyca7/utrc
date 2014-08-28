@@ -34,7 +34,7 @@
 
 			<a class="btn btn-success"
 			   target="_self"
-			   ng-href="/api/feeds/download/{{selectedFeed.location | title}}/{{stringify(criteria)}}">
+			   ng-href="/api/feeds/download/{{selectedFeed.location}}/{{selectedFeed.feed}}/{{getDate()}}/{{stringify(criteria)}}">
 				<span class="glyphicon glyphicon-cloud-download"></span> Download Results
 			</a>
 		</div>

@@ -25,7 +25,7 @@ Feed.find({}).remove(function () {
 		    schema = require(schemasPath + '/' + schemaName);
 
 		Feed.create({
-			name: name,
+			name: name.toLowerCase(),
 			format: schema.format,
 			order: schema.order,
 			database: schema.db

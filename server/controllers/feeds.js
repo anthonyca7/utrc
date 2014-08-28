@@ -12,13 +12,13 @@ db.bind('transcomlinkconfigurations');
 db.bind('transcomlinkconditions');
 db.bind('feeds');
 
-module.exports.loadEvents = function (req, res, next) {
-	var criteria = JSON.parse(req.body.criteria || {});
+module.exports.loadEventData = function (req, res, next) {
+	var query = req.params.criteria || req.body.criteria;
+	var criteria = (query) ? JSON.parse(query):{};
 	var name = req.params.evt.toLowerCase();
 
 	if (db[name] == null) {
-		res.json({event: null});
-		return
+		return res.json({event: null});
 	}
 
 	db[name].find(criteria, {}, {
@@ -36,16 +36,20 @@ module.exports.loadEvents = function (req, res, next) {
 					res.end(err);
 				}
 
-				res.json({events: data, count: count});
+				req.events = data;
+				req.count = count;
+				next();
 			});
 		});
 	});
 };
 
+module.exports.sendEvents = function (req, res, next) {
+	res.json({events: req.events, count: req.count });
+};
+
 module.exports.download = function (req, res, next) {
-	var Model = mongoose.model(req.params.evt);
-	var criteria = (req.params.criteria) ? JSON.parse(req.params.criteria) : {};
-	var name = req.params.evt.toLowerCase();
+	var name = req.params.feed.toLowerCase();
 
 	Feed.findOne({ name: name }, function (err, schema) {
 		if (err) return next(err);
@@ -53,15 +57,13 @@ module.exports.download = function (req, res, next) {
 		var format = schema.format,
 		    header = schema.order;
 
-		Model.find(criteria, function (err, data) {
-			var file = name + "_event_" + getCurrentDate();
+		var file = name + "_event_" + req.params.date || getCurrentDate();
 
-			res.setHeader('Content-disposition', 'attachment; filename=' + file + '.txt');
-			res.setHeader('Content-type', 'text/plain');
-			res.charset = 'UTF-8';
+		res.setHeader('Content-disposition', 'attachment; filename=' + file + '.txt');
+		res.setHeader('Content-type', 'text/plain');
+		res.charset = 'UTF-8';
 
-			sendEvents(res, data, format, header);
-		});
+		sendEvents(res, req.events, format, header);
 
 	});
 };

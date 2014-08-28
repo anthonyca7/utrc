@@ -15,16 +15,14 @@ angular.module('services.schemas', []).factory('Schemas', ['$q', '$http', functi
 
 	helpers.getHeaders = function (name) {
 		var schema = this.getByName(name);
-		if (!!schema) {
-			return Object.keys(schema.format);
-		}
-		return {};
+		return schema && schema.order;
 	};
 
 	var service = {
 		all: function () {
 			return $http.get('/api/schema').then(function (response) {
 				var schemas = response.data;
+				console.log(schemas);
 				angular.extend(schemas, helpers);
 				return schemas;
 			});

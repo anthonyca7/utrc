@@ -8,6 +8,8 @@ var core = require('./controllers'),
     session = require('./controllers/session');
 
 module.exports = function (app) {
+	app.param('evt', feeds.loadEventData);
+
 	app.route('/api/users/current')
 		.get(users.current);
 
@@ -16,9 +18,9 @@ module.exports = function (app) {
 		.delete(session.logout);
 
 	app.route('/api/feeds/:evt/:page/:limit')
-		.post(feeds.loadEvents);
+		.post(feeds.sendEvents);
 
-	app.route('/api/feeds/download/:evt/:criteria?')
+	app.route('/api/feeds/download/:evt/:feed/:date/:criteria?')
 		.get(feeds.download);
 
 	app.route('/api/schema')

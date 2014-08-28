@@ -4,8 +4,8 @@ module.exports.order = [
 	'ID',
 	'DataType',
 	'Speed',
-	'TravelTime',
-	'TravelTimeFloat'
+	'Travel Time',
+	'Travel Time as decimal'
 ];
 
 module.exports.format = {

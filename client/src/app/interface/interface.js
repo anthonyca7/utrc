@@ -26,7 +26,7 @@ angular.module('interface').config([
 ]);
 
 angular.module('interface').controller('InterfaceController', [
-	'$scope', '$modal', 'schemas', 'Feed', 'Formatters', 'Modifiers', 'titleFilter', function ($scope, $modal, schemas, Feed, Formatters, Modifiers, title) {
+	'$scope', '$modal', 'schemas', 'Feed', 'Formatters', 'Modifiers', 'titleFilter', 'dateFilter', function ($scope, $modal, schemas, Feed, Formatters, Modifiers, title, date) {
 
 		var criteriaModal = null;
 
@@ -47,25 +47,41 @@ angular.module('interface').controller('InterfaceController', [
 
 		// Select field scope variables
 		$scope.feeds = [
-			{name: 'Transcom Events', organization: 'Transcom', location: 'transcoms', schema: 'transcom'},
-			{name: 'Transcom Link Configurations', organization: 'Transcom', location: 'transcomlinkconfigurations', schema: 'transcomLinkConfiguration'},
-			{name: 'Transcom Link Conditions', organization: 'Transcom', location: 'transcomlinkconditions', schema: 'transcomLinkCondition'}
+			{
+				name: 'Transcom Events',
+				organization: 'Transcom',
+				location: 'transcoms',
+				schema: 'transcom',
+				feed: "transcom"
+			},
+			{
+				name: 'Transcom Link Configurations',
+				organization: 'Transcom',
+				location: 'transcomlinkconfigurations',
+				schema: 'transcomLinkConfiguration',
+				feed: "transcomlinkconfiguration"
+			},
+			{
+				name: 'Transcom Link Conditions',
+				organization: 'Transcom',
+				location: 'transcomlinkconditions',
+				schema: 'transcomLinkCondition',
+				feed: "transcomlinkcondition"
+			}
 		];
 
 		$scope.selectFeed = function (feed) {
 			$scope.selectedFeed = feed;
-			$scope.headers = schemas.getHeaders(feed.schema);
-			$scope.schema = schemas.getByName(feed.schema);
-			console.log($scope.schema);
+			$scope.headers = schemas.getHeaders(feed.feed);
+			$scope.schema = schemas.getByName(feed.feed);
 			$scope.updateData();
 		};
 
 		$scope.update = function (feedLocation, page, limit, criteria) {
-			Feed.get(feedLocation, page, limit, criteria)
+			Feed.get(feedLocation, page, limit, $scope.stringify(criteria))
 				.then(function (response) {
 					$scope.count = response.data.count;
 					$scope.events = response.data.events;
-					console.log(response.data);
 				});
 		};
 
@@ -174,6 +190,12 @@ angular.module('interface').controller('InterfaceController', [
 
 		$scope.stringify = function (object) {
 			return JSON.stringify(object);
+		};
+
+		$scope.getDate = function(){
+			var currentDate = date(new Date(), "MM-dd-y_hh-mm-a");
+			console.log(currentDate);
+			return currentDate;
 		};
 
 		$scope.openModal = function (filters, field, schema) {

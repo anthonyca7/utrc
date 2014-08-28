@@ -109,7 +109,7 @@ angular.module('interface').config([
 ]);
 
 angular.module('interface').controller('InterfaceController', [
-	'$scope', '$modal', 'schemas', 'Feed', 'Formatters', 'Modifiers', 'titleFilter', function ($scope, $modal, schemas, Feed, Formatters, Modifiers, title) {
+	'$scope', '$modal', 'schemas', 'Feed', 'Formatters', 'Modifiers', 'titleFilter', 'dateFilter', function ($scope, $modal, schemas, Feed, Formatters, Modifiers, title, date) {
 
 		var criteriaModal = null;
 
@@ -130,25 +130,41 @@ angular.module('interface').controller('InterfaceController', [
 
 		// Select field scope variables
 		$scope.feeds = [
-			{name: 'Transcom Events', organization: 'Transcom', location: 'transcoms', schema: 'transcom'},
-			{name: 'Transcom Link Configurations', organization: 'Transcom', location: 'transcomlinkconfigurations', schema: 'transcomLinkConfiguration'},
-			{name: 'Transcom Link Conditions', organization: 'Transcom', location: 'transcomlinkconditions', schema: 'transcomLinkCondition'}
+			{
+				name: 'Transcom Events',
+				organization: 'Transcom',
+				location: 'transcoms',
+				schema: 'transcom',
+				feed: "transcom"
+			},
+			{
+				name: 'Transcom Link Configurations',
+				organization: 'Transcom',
+				location: 'transcomlinkconfigurations',
+				schema: 'transcomLinkConfiguration',
+				feed: "transcomlinkconfiguration"
+			},
+			{
+				name: 'Transcom Link Conditions',
+				organization: 'Transcom',
+				location: 'transcomlinkconditions',
+				schema: 'transcomLinkCondition',
+				feed: "transcomlinkcondition"
+			}
 		];
 
 		$scope.selectFeed = function (feed) {
 			$scope.selectedFeed = feed;
-			$scope.headers = schemas.getHeaders(feed.schema);
-			$scope.schema = schemas.getByName(feed.schema);
-			console.log($scope.schema);
+			$scope.headers = schemas.getHeaders(feed.feed);
+			$scope.schema = schemas.getByName(feed.feed);
 			$scope.updateData();
 		};
 
 		$scope.update = function (feedLocation, page, limit, criteria) {
-			Feed.get(feedLocation, page, limit, criteria)
+			Feed.get(feedLocation, page, limit, $scope.stringify(criteria))
 				.then(function (response) {
 					$scope.count = response.data.count;
 					$scope.events = response.data.events;
-					console.log(response.data);
 				});
 		};
 
@@ -257,6 +273,12 @@ angular.module('interface').controller('InterfaceController', [
 
 		$scope.stringify = function (object) {
 			return JSON.stringify(object);
+		};
+
+		$scope.getDate = function(){
+			var currentDate = date(new Date(), "MM-dd-y_hh-mm-a");
+			console.log(currentDate);
+			return currentDate;
 		};
 
 		$scope.openModal = function (filters, field, schema) {
@@ -676,12 +698,7 @@ angular.module('services.feeds', []).factory('Feed', ['$http', function ($http) 
 
 	service.get = function (name, page, limit, criteria) {
 		return $http.post('/api/feeds/' + name + '/' + page + '/' + limit,
-			{ criteria: JSON.stringify(criteria || {}) });
-	};
-
-	service.download = function (name, criteria) {
-		return $http.post('/api/feeds/download/' + name,
-			{ criteria: JSON.stringify(criteria || {}) });
+			{ criteria: criteria });
 	};
 
 	return service;
@@ -925,16 +942,14 @@ angular.module('services.schemas', []).factory('Schemas', ['$q', '$http', functi
 
 	helpers.getHeaders = function (name) {
 		var schema = this.getByName(name);
-		if (!!schema) {
-			return Object.keys(schema.format);
-		}
-		return {};
+		return schema && schema.order;
 	};
 
 	var service = {
 		all: function () {
 			return $http.get('/api/schema').then(function (response) {
 				var schemas = response.data;
+				console.log(schemas);
 				angular.extend(schemas, helpers);
 				return schemas;
 			});
@@ -1045,7 +1060,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "\n" +
     "			<a class=\"btn btn-success\"\n" +
     "			   target=\"_self\"\n" +
-    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location | title}}/{{stringify(criteria)}}\">\n" +
+    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location}}/{{selectedFeed.feed}}/{{getDate()}}/{{stringify(criteria)}}\">\n" +
     "				<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
     "			</a>\n" +
     "		</div>\n" +
