@@ -133,21 +133,21 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: 'Transcom Events',
 				organization: 'Transcom',
-				location: 'transcoms',
+				location: 'transcomEvents',
 				schema: 'transcom',
 				feed: "transcom"
 			},
 			{
 				name: 'Transcom Link Configurations',
 				organization: 'Transcom',
-				location: 'transcomlinkconfigurations',
+				location: 'transcomConfigurations',
 				schema: 'transcomLinkConfiguration',
 				feed: "transcomlinkconfiguration"
 			},
 			{
 				name: 'Transcom Link Conditions',
 				organization: 'Transcom',
-				location: 'transcomlinkconditions',
+				location: 'transcomConditions',
 				schema: 'transcomLinkCondition',
 				feed: "transcomlinkcondition"
 			}
@@ -220,6 +220,8 @@ angular.module('interface').controller('InterfaceController', [
 			    path = eventFormat.path,
 			    cellValue = data, i, j, object;
 
+			console.log(eventFormat, path);
+
 			for (i = 0; i < path.length; i++) {
 				// If the current value is an array then check for each
 				// object inside until the property is found
@@ -277,7 +279,6 @@ angular.module('interface').controller('InterfaceController', [
 
 		$scope.getDate = function(){
 			var currentDate = date(new Date(), "MM-dd-y_hh-mm-a");
-			console.log(currentDate);
 			return currentDate;
 		};
 

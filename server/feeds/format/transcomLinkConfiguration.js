@@ -2,12 +2,12 @@
 
 module.exports.format = {
 	'ID': {
-		path: ['event', 'ID'],
+		path: ['ID'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Status': {
-		path: ['event', 'Status'],
+		path: ['Status'],
 		type: 'integerRepresentation',
 		modifiers: ['integerRepresentation'],
 		extra: {
@@ -15,47 +15,47 @@ module.exports.format = {
 		}
 	},
 	'Direction': {
-		path: ['event', 'Direction']
+		path: ['Direction']
 	},
 	'RoadName': {
-		path: ['event', 'RoadName']
+		path: ['RoadName']
 	},
 	'FromRoadName': {
-		path: ['event', 'FromRoadName']
+		path: ['FromRoadName']
 	},
 	'ToRoadName': {
-		path: ['event', 'ToRoadName']
+		path: ['ToRoadName']
 	},
 	'SpeedLimit (Km/H)': {
-		path: ['event', 'SpeedLimit'],
+		path: ['SpeedLimit'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Length': {
-		path: ['event', 'Length'],
+		path: ['Length'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Start Latitude Point': {
-		path: ['event', 'StartLoc', 'Lat'],
+		path: ['StartLoc', 'Lat'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'Start Longitude Point': {
-		path: ['event', 'StartLoc', 'Lon'],
+		path: ['StartLoc', 'Lon'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'End Latitude Point': {
-		path: ['event', 'EndLoc', 'Lat'],
+		path: ['EndLoc', 'Lat'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'End Longitude Point': {
-		path: ['event', 'EndLoc', 'Lon'],
+		path: ['EndLoc', 'Lon'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true

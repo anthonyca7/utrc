@@ -6,16 +6,16 @@ var mongoose = require('mongoose'),
     Transcom = mongoose.model('Transcom');
 
 
-var db = mongoskin.db('mongodb://@localhost:27017/data-feed', {safe: true});
-db.bind('transcoms');
-db.bind('transcomlinkconfigurations');
-db.bind('transcomlinkconditions');
+var db = mongoskin.db('mongodb://@localhost:27017/utrc', {safe: true});
+db.bind('transcomEvents');
+db.bind('transcomConfigurations');
+db.bind('transcomConditions');
 db.bind('feeds');
 
 module.exports.loadEventData = function (req, res, next) {
 	var query = req.params.criteria || req.body.criteria;
 	var criteria = (query) ? JSON.parse(query):{};
-	var name = req.params.evt.toLowerCase();
+	var name = req.params.evt;
 
 	if (db[name] == null) {
 		return res.json({event: null});

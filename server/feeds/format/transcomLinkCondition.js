@@ -10,23 +10,23 @@ module.exports.order = [
 
 module.exports.format = {
 	'ID': {
-		path: ['event', 'ID'],
+		path: ['ID'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'DataType': {
-		path: ['event', 'DataType']
+		path: ['DataType']
 	},
 	'Speed': {
-		path: ['event', 'Speed']
+		path: ['Speed']
 	},
 	'Travel Time': {
-		path: ['event', 'TravelTime'],
+		path: ['TravelTime'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Travel Time as decimal': {
-		path: ['event', 'TravelTimeFloat'],
+		path: ['TravelTimeFloat'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true

@@ -5,13 +5,13 @@ eventStates[255] = 'Schedule Event (Planned)';
 
 module.exports.format = {
 	'ID': {
-		path: ['event', 'EventID']
+		path: ['EventID']
 	},
 	'Associated ID': {
-		path: ['event', 'AssociatedEventID']
+		path: ['AssociatedEventID']
 	},
 	'Event Class': {
-		path: ['event', 'EventClass'],
+		path: ['EventClass'],
 		type: 'integerRepresentation',
 		modifiers: ['integerRepresentation'],
 		extra: {
@@ -19,7 +19,7 @@ module.exports.format = {
 		}
 	},
 	'Event State': {
-		path: ['event', 'EventState'],
+		path: ['EventState'],
 		type: 'integerRepresentation',
 		modifiers: ['integerRepresentation'],
 		extra: {
@@ -27,7 +27,7 @@ module.exports.format = {
 		}
 	},
 	'Date Started': {
-		path: ['event', 'StartDateTime'],
+		path: ['StartDateTime'],
 		modifiers: ['date'],
 		type: 'date',
 		searchableByInterval: true
@@ -38,136 +38,136 @@ module.exports.format = {
 	 type: 'date'
 	 },*/
 	'Time Left (minutes)': {
-		path: ['event', 'EstDurationInMinutes'],
+		path: ['EstDurationInMinutes'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Last Update': {
-		path: ['event', 'LastUpdate'],
+		path: ['LastUpdate'],
 		modifiers: ['date'],
 		type: 'date',
 		searchableByInterval: true
 	},
 	'Type': {
-		path: ['event', 'EventTypes', 'EventType']
+		path: ['EventTypes', 'EventType']
 	},
 	'Lanes Affected': {
-		path: ['event', 'LaneDetails', 'LanesAffectedCount'],
+		path: ['LaneDetails', 'LanesAffectedCount'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Lanes Details': {
-		path: ['event', 'LaneDetails', 'LanesDetail']
+		path: ['LaneDetails', 'LanesDetail']
 	},
 	'Lanes Status': {
-		path: ['event', 'LaneDetails', 'LanesStatus']
+		path: ['LaneDetails', 'LanesStatus']
 	},
 	'Description': {
-		path: ['event', 'SummaryDescription']
+		path: ['SummaryDescription']
 	},
 	'Reporting Organization': {
-		path: ['event', 'ReportingOrg'],
+		path: ['ReportingOrg'],
 		type: 'integer',
 		searchableByInterval: true
 	},
 	'Facility': {
-		path: ['event', 'EventLocationInfo', 'Facility']
+		path: ['EventLocationInfo', 'Facility']
 	},
 	'City': {
-		path: ['event', 'EventLocationInfo', 'City']
+		path: ['EventLocationInfo', 'City']
 	},
 	'State': {
-		path: ['event', 'EventLocationInfo', 'State']
+		path: ['EventLocationInfo', 'State']
 	},
 	'County': {
-		path: ['event', 'EventLocationInfo', 'County']
+		path: ['EventLocationInfo', 'County']
 	},
 	'Direction': {
-		path: ['event', 'EventLocationInfo', 'Direction']
+		path: ['EventLocationInfo', 'Direction']
 	},
 	'Comments': {
-		path: ['event', 'Comments', 'CommentInfo', 'Comment']
+		path: ['Comments', 'CommentInfo', 'Comment']
 	},
 	'Article - Interception': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'Article']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'Article']
 	},
 	'Primary Interception': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'PrimaryLoc']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'PrimaryLoc']
 	},
 	'Secondary Interception': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'SecondaryLoc']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'Intersections', 'SecondaryLoc']
 	},
 	'Article - Associated Cities': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'Article']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'Article']
 	},
 	'Primary City': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'PrimaryCity']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'PrimaryCity']
 	},
 	'Secondary City': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'SecondaryCity']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'AssociatedCities', 'SecondaryCity']
 	},
 	'Primary Road Marker': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'PrimaryMarker'],
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'PrimaryMarker'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'Secondary Road Marker': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'SecondaryMarker'],
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'SecondaryMarker'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'Road Marker Units': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'Units']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'RoadMarkers', 'Units']
 	},
 	'Longitude': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lon'],
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lon'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'Latitude': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lat'],
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Lat'],
 		type: 'float',
 		modifiers: ['float'],
 		searchableByInterval: true
 	},
 	'Datum': {
-		path: ['event', 'EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Datum']
+		path: ['EventLocationInfo', 'LocationDetails', 'LocationItem', 'PointCoordinates', 'Datum']
 	},
 	'ScheduleID': {
-		path: ['event', 'ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleID'],
+		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleID'],
 		type: 'integer',
 		notSearchable: true
 	},
 	'Schedule Lane Details': {
-		path: ['event', 'ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleLaneDetails'],
+		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleLaneDetails'],
 		type: 'integer',
 		notSearchable: true
 	},
 	'Active Days': {
-		path: ['event', 'ScheduleInfo', 'Schedules', 'Schedule', 'ActiveDays', 'DayOfWeek'],
+		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ActiveDays', 'DayOfWeek'],
 		type: 'string'
 	},
 	'Continuous': {
-		path: ['event', 'ScheduleInfo', 'Schedules', 'Schedule', 'Continuous'],
+		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'Continuous'],
 		type: 'boolean'
 	},
 	'Schedule Start': {
-		path: ['event', 'ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleStartDateTime'],
+		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleStartDateTime'],
 		type: 'date',
 		modifiers: ['date'],
 		searchableByInterval: true
 	},
 	'Schedule End': {
-		path: ['event', 'ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleEndDateTime'],
+		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleEndDateTime'],
 		type: 'date',
 		modifiers: ['date'],
 		searchableByInterval: true
 	},
 	'Additional Data': {
-		path: ['event', 'AdditionalData', 'DataItem'],
+		path: ['AdditionalData', 'DataItem'],
 		notSearchable: true
 	}
 };
