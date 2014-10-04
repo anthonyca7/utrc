@@ -1,6 +1,6 @@
 package org.feeds;
 
-public class IndividualTask extends Task implements Runnable{
+public class IndividualTask extends Task implements Runnable {
     private final Feed feed;
     private static Integer sleepTime;
 

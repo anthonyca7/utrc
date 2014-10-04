@@ -1,28 +1,18 @@
 package org.feeds;
 
 import com.mongodb.DBCollection;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Set;
 
 
-public class LoginFeed extends Feed {
+public class LoginFeed extends BasicFeed {
     private final HashMap<String, String> postData;
 
     public LoginFeed(String url, DBCollection collection, String[] path, MongoQuery query, int interval,
@@ -33,8 +23,8 @@ public class LoginFeed extends Feed {
     }
 
     @Override
-    protected void getInsertingMessage(int inserted, int total, String url) {
-        super.getInsertingMessage(inserted, total, url + " for " + postData.get("dataType"));
+    protected void getInsertionMessage(int inserted, int total, String url) {
+        super.getInsertionMessage(inserted, total, url + " for " + postData.get("dataType"));
     }
 
     @Override

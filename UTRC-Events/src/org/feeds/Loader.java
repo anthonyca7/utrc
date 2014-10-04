@@ -1,5 +1,6 @@
 package org.feeds;
 
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
@@ -53,15 +54,32 @@ public class Loader
                 String[][] uniqueKey = uniqueKeys[i];
                 MongoQuery query = new MongoQuery(uniqueKey, collection);
 
-                Feed feed = new Feed(link[0], collection, path, query, durations[i]*60);
+                BasicFeed feed = new BasicFeed(link[0], collection, path, query, durations[i]*60);
                 tasks.add(new IndividualTask(feed));
             }
 
-         
+            String MTAlink = "http://web.mta.info/status/serviceStatus.txt";
+            String[][] MTApaths = {
+                    {"service", "subway", "line"},
+                    {"service", "bus", "line"},
+                    {"service", "BT", "line"},
+                    {"service", "LIRR", "line"},
+                    {"service", "MetroNorth", "line"},
+            };
 
+            DB db = mongoClient.getDB("utrc");
 
+            DBCollection[] collections = {
+                    db.getCollection("MTATrainStatus"),
+                    db.getCollection("MTABusStatus"),
+                    db.getCollection("MTABTStatus"),
+                    db.getCollection("MTALIRRStatus"),
+                    db.getCollection("MTAMetroNorthStatus"),
+            };
 
-            
+            Feed MTAStatusFeed = new MultiPathFeed(MTAlink, collections, MTApaths, 60);
+            tasks.add(new IndividualTask(MTAStatusFeed));
+
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("username", "ckamga@utrc2.org");
             map.put("password", "CK@utrc");
@@ -71,7 +89,7 @@ public class Loader
                                 {"WTASegmentConditionData", "WTASegment"}, {"vmss", "vms"}};
 
             int[] NYC511Durations = {60, 70, 80, 90, 100};
-            Feed[] NYC511Feeds = new Feed[dataTypes.length];
+            BasicFeed[] NYC511Feeds = new BasicFeed[dataTypes.length];
             String[][][] NYC511uniqueKeys = {
                     {{}},
                     {{"LINK_ID"}},
@@ -84,7 +102,7 @@ public class Loader
                 map.put("dataType", dataTypes[i]);
                 DBCollection collection = mongoClient.getDB("utrc").getCollection("511NY_"+dataTypes[i]);
 
-                Feed feed = new LoginFeed("https://165.193.215.51/XMLFeeds/createXML.aspx",
+                BasicFeed feed = new LoginFeed("https://165.193.215.51/XMLFeeds/createXML.aspx",
                         collection, NYC511Paths[i], new MongoQuery(NYC511uniqueKeys[i], collection) , 60,
                         (HashMap<String, String>) map.clone());
                 NYC511Feeds[i] = feed;
