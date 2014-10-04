@@ -1,6 +1,7 @@
 package org.feeds;
 
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import org.json.JSONArray;
@@ -14,90 +15,117 @@ import java.net.URL;
 
 public class Feed
 {
-    private final String url;
-    public final DBCollection collection;
-    public final String[] path;
-    public final MongoQuery query;
+    public String getUrl() {
+        return url;
+    }
 
-    public Feed(String url, DBCollection collection, String[] path, MongoQuery query)
+    private final String url;
+    private final DBCollection collection;
+    private final String[] path;
+    private final int interval;
+    private final MongoQuery query;
+    private HttpURLConnection connection;
+    private String response;
+
+    public Feed(String url, DBCollection collection, String[] path, MongoQuery query, int interval)
     {
         this.url = url;
         this.collection = collection;
         this.path = path;
+        this.interval = interval;
         this.query = query;
     }
 
-    public void getData()
+    public int getInterval()
     {
-        int inserted = 0;
-        try
-        {
+        return interval;
+    }
+
+    protected void getInsertingMessage(int inserted, int total, String url) {
+        System.out.printf("%d out of %d data feeds inserted from %s%n", inserted, total, url);
+    }
+
+    public void connect()
+    {
+        try {
             URL uri = new URL(this.url);
-            HttpURLConnection connection =
-                    (HttpURLConnection) uri.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
 
             connection.setRequestMethod("GET");
             String USER_AGENT = "Mozilla/5.0";
             connection.setRequestProperty("User-Agent", USER_AGENT);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
+            if (connection.getResponseCode() == 200) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
 
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+                String inputLine;
+                StringBuilder response = new StringBuilder();
 
-            while ((inputLine = in.readLine()) != null)
-            {
-                response.append(inputLine);
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                this.response = response.toString();
             }
-            in.close();
+            else {
+                throw new RuntimeException("Did not get a 200 response");
+            }
+        }
+        catch (Exception ex) {
+            System.out.println("Error getting feed from " + url + ": " + ex.getMessage());
+        }
+    }
 
-            JSONObject jsonResponse = XML.toJSONObject(response.toString());
-            JSONArray data = null;
+    public void getData()
+    {
+        this.connect();
+        int inserted = 0;
 
-            for (String key : path)
-            {
-                if (jsonResponse.has(key))
-                {
-                    if (jsonResponse.get(key) instanceof JSONArray)
-                    {
-                        data = (JSONArray) jsonResponse.get(key);
-                    }
-                    else
-                    {
-                        jsonResponse = (JSONObject) jsonResponse.get(key);
+        JSONObject jsonResponse = XML.toJSONObject(response);
+        JSONArray data = null;
+
+        for (String key : path) {
+            if (jsonResponse.has(key)) {
+                if (jsonResponse.get(key) instanceof JSONArray) {
+                    data = (JSONArray) jsonResponse.get(key);
+                } else {
+                    jsonResponse = (JSONObject) jsonResponse.get(key);
+                }
+            } else {
+                throw new RuntimeException("INVALID PATH");
+            }
+        }
+
+        if (data != null) {
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject jsonObject = data.getJSONObject(i);
+                DBObject object = (DBObject) JSON.parse(jsonObject.toString());
+
+                if (query.hasPath()) {
+                    if (query.isUnique(jsonObject)) {
+                        collection.insert(object);
+                        inserted++;
                     }
                 }
-                else
-                {
-                    throw new RuntimeException("INVALID PATH");
-                }
-            }
+                else {
+                    DBCursor foundFeeds = collection.find(object);
 
-            if (data != null)
-            {
-                for (int i = 0; i < data.length(); i++)
-                {
-                    JSONObject object = data.getJSONObject(i);
-
-                    if (query.isUnique(object))
-                    {
-                        collection.insert((DBObject) JSON.parse(object.toString()));
+                    if (!foundFeeds.hasNext()) {
+                        collection.insert(object);
                         inserted++;
                     }
                 }
             }
-
-            else
-            {
-                throw new RuntimeException("PATH DOES NOT CONTAIN THE DATA");
-            }
-
-            System.out.printf("%n%d out of %d data feeds inserted from %s", inserted, data.length(), url);
+            getInsertingMessage(inserted, data.length(), url);
         }
-        catch (Exception ex)
-        {
-            System.out.println("Error getting feed from " + url + ": " + ex.getMessage());
+        else {
+            throw new RuntimeException("PATH DOES NOT CONTAIN THE DATA");
         }
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 }

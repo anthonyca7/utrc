@@ -51,4 +51,9 @@ public class MongoQuery
 
         return new BasicDBObject(path[start], createSearchObject(path, start+1, end, (JSONObject) data.get(path[start])));
     }
+
+    public boolean hasPath() {
+        if (paths[0].length != 0) return true;
+        else return false;
+    }
 }

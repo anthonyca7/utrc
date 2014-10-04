@@ -30,7 +30,7 @@ angular.module('interface').controller('InterfaceController', [
 
 		var criteriaModal = null;
 
-		$scope.limit = 10;
+		$scope.limit = 25;
 		$scope.automaticUpdate = true;
 		$scope.count = 0;
 		$scope.events = [];
@@ -43,7 +43,7 @@ angular.module('interface').controller('InterfaceController', [
 
 		// Pagination variables
 		$scope.currentPage = 1;
-		$scope.paginationCells = 6;
+		$scope.paginationCells = 8;
 
 		// Select field scope variables
 		$scope.feeds = [
@@ -117,7 +117,8 @@ angular.module('interface').controller('InterfaceController', [
 			$scope.searchQuery = {};
 			$scope.criteria = {};
 			$scope.filters = {};
-			
+			$scope.currentPage = 1;
+
 			$scope.selectedFeed = feed;
 			$scope.headers = schemas.getHeaders(feed.feed);
 			$scope.schema = schemas.getByName(feed.feed);

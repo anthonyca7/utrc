@@ -113,7 +113,7 @@ angular.module('interface').controller('InterfaceController', [
 
 		var criteriaModal = null;
 
-		$scope.limit = 10;
+		$scope.limit = 25;
 		$scope.automaticUpdate = true;
 		$scope.count = 0;
 		$scope.events = [];
@@ -126,7 +126,7 @@ angular.module('interface').controller('InterfaceController', [
 
 		// Pagination variables
 		$scope.currentPage = 1;
-		$scope.paginationCells = 6;
+		$scope.paginationCells = 8;
 
 		// Select field scope variables
 		$scope.feeds = [
@@ -200,7 +200,8 @@ angular.module('interface').controller('InterfaceController', [
 			$scope.searchQuery = {};
 			$scope.criteria = {};
 			$scope.filters = {};
-			
+			$scope.currentPage = 1;
+
 			$scope.selectedFeed = feed;
 			$scope.headers = schemas.getHeaders(feed.feed);
 			$scope.schema = schemas.getByName(feed.feed);
@@ -1086,49 +1087,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
   $templateCache.put("interface/interface.tpl.html",
     "<h1 class=\"title\">{{selectedFeed.organization | title}} Feeds</h1>\n" +
     "\n" +
-    "<form class=\"form-horizontal col-md-7 well\" role=\"form\">\n" +
-    "\n" +
-    "	<div class=\"form-group\">\n" +
-    "		<label for=\"feed\" class=\"col-md-3 control-label text-info mid-font\">Select your Feed: </label>\n" +
-    "\n" +
-    "		<div class=\"col-md-6\">\n" +
-    "			<select class=\"form-control\"\n" +
-    "			        id=\"feed\"\n" +
-    "			        ng-model=\"selectedFeed\"\n" +
-    "			        ng-change=\"selectFeed(selectedFeed)\"\n" +
-    "			        ng-options=\"feed.name group by feed.organization for feed in feeds\"></select>\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "\n" +
-    "	<div class=\"form-group\">\n" +
-    "		<label for=\"limit\" class=\"col-md-3 control-label text-info mid-font\">Results per page: </label>\n" +
-    "\n" +
-    "		<div class=\"col-md-6\">\n" +
-    "			<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "\n" +
-    "	<div class=\"form-group\">\n" +
-    "		<div class=\"col-md-offset-3 add-padding\">\n" +
-    "			<a class=\"btn btn-primary\" ng-click=\"updateData()\">\n" +
-    "				<span class=\"glyphicon glyphicon glyphicon-refresh\"></span> Update\n" +
-    "			</a>\n" +
-    "\n" +
-    "			<a class=\"btn btn-warning\" ng-click=\"reset()\">\n" +
-    "				<span class=\"glyphicon glyphicon-repeat\"></span> Reset\n" +
-    "			</a>\n" +
-    "\n" +
-    "			<a class=\"btn btn-success\"\n" +
-    "			   target=\"_self\"\n" +
-    "			   ng-href=\"/api/feeds/download/{{selectedFeed.location}}/{{selectedFeed.feed}}/{{getDate()}}/{{stringify(criteria)}}\">\n" +
-    "				<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
-    "			</a>\n" +
-    "		</div>\n" +
-    "		<!--<div class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"automaticUpdate\"> Update Automatically</label></div>-->\n" +
-    "	</div>\n" +
-    "</form>\n" +
-    "\n" +
-    "<div class=\"col-md-5\">\n" +
+    "<!-- <div class=\"col-md-5\">\n" +
     "	<div class=\"pag-dividor\"></div>\n" +
     "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} events found</div>\n" +
     "	<br><br>\n" +
@@ -1141,6 +1100,67 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "	            boundary-links=\"true\"\n" +
     "	            rotate=\"false\">\n" +
     "	</pagination>\n" +
+    "</div> -->\n" +
+    "\n" +
+    "<div class=\"row\">\n" +
+    "	<div class=\"col-md-3\"></div>\n" +
+    "\n" +
+    "	<form class=\"form-horizontal col-md-6 well\" role=\"form\">\n" +
+    "		<div class=\"form-group\">\n" +
+    "			<label for=\"feed\" class=\"col-md-4 control-label text-info mid-font\">Select your Feed: </label>\n" +
+    "\n" +
+    "			<div class=\"col-md-6\">\n" +
+    "				<select class=\"form-control\"\n" +
+    "				        id=\"feed\"\n" +
+    "				        ng-model=\"selectedFeed\"\n" +
+    "				        ng-change=\"selectFeed(selectedFeed)\"\n" +
+    "				        ng-options=\"feed.name group by feed.organization for feed in feeds\"></select>\n" +
+    "			</div>\n" +
+    "		</div>\n" +
+    "\n" +
+    "		<div class=\"form-group\">\n" +
+    "			<label for=\"limit\" class=\"col-md-4 control-label text-info mid-font\">Results per page: </label>\n" +
+    "\n" +
+    "			<div class=\"col-md-6\">\n" +
+    "				<input class=\"form-control\" id=\"limit\" ng-model=\"limit\" ng-blur=\"autoUpdate()\"/>\n" +
+    "			</div>\n" +
+    "		</div>\n" +
+    "\n" +
+    "		<div class=\"form-group\">\n" +
+    "			<div class=\"col-md-offset-3 add-padding\">\n" +
+    "				<a class=\"btn btn-primary\" ng-click=\"updateData()\">\n" +
+    "					<span class=\"glyphicon glyphicon glyphicon-refresh\"></span> Update\n" +
+    "				</a>\n" +
+    "\n" +
+    "				<a class=\"btn btn-warning\" ng-click=\"reset()\">\n" +
+    "					<span class=\"glyphicon glyphicon-repeat\"></span> Reset\n" +
+    "				</a>\n" +
+    "\n" +
+    "				<a class=\"btn btn-success\"\n" +
+    "				   target=\"_self\"\n" +
+    "				   ng-href=\"/api/feeds/download/{{selectedFeed.location}}/{{selectedFeed.feed}}/{{getDate()}}/{{stringify(criteria)}}\">\n" +
+    "					<span class=\"glyphicon glyphicon-cloud-download\"></span> Download Results\n" +
+    "				</a>\n" +
+    "			</div>\n" +
+    "			<!--<div class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"automaticUpdate\"> Update Automatically</label></div>-->\n" +
+    "		</div>\n" +
+    "	</form>\n" +
+    "\n" +
+    "	<div class=\"col-md-3\"></div>\n" +
+    "</div>\n" +
+    "\n" +
+    "<div class=\"row\">\n" +
+    "	<pagination ng-model=\"currentPage\"\n" +
+    "	            ng-change=\"updateData()\"\n" +
+    "	            total-items=\"count\"\n" +
+    "	            items-per-page=\"limit\"\n" +
+    "	            max-size=\"paginationCells\"\n" +
+    "	            class=\"pagination-sm pag col-md-9\"\n" +
+    "	            boundary-links=\"true\"\n" +
+    "	            rotate=\"false\">\n" +
+    "	</pagination>\n" +
+    "	\n" +
+    "	<div ng-show=\"count!=0\" class=\"text-primary result-text pull-right\">{{count}} feeds found</div>\n" +
     "</div>\n" +
     "\n" +
     "<div class=\"table-container\">\n" +

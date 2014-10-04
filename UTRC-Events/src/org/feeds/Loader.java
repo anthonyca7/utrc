@@ -4,57 +4,102 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-/**
- * Created by Anthony on 9/24/2014.
- */
+
 public class Loader
 {
     public static void main(String[] args)
     {
-        try
-        {
+        try {
             MongoClient mongoClient = new MongoClient("localhost", 27017);
-            ArrayList<Feed> feeds = new ArrayList<Feed>();
+            ArrayList<Task> tasks = new ArrayList<Task>();
+
             String[][] links = {
                     {"https://data.xcmdata.org/ISGDE/rest/eventProvider/getAllNativeEvents?System=anthonyca7&Key=transcom",
-                            "transcom", "events"}
+                            "utrc", "transcomEvents"},
+                    {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkConditions?System=anthonyca7&Key=transcom",
+                            "utrc", "transcomConditions"},
+                    {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkMaster?System=anthonyca7&Key=transcom",
+                            "utrc", "transcomConfigurations"}
+
             };
 
             String[][] paths = {
-                    {"eventUpdates", "eventUpdate"}
+                    {"eventUpdates", "eventUpdate"},
+                    {"ns:getDataResponse", "return", "dataResponse", "linkConditions", "linkCondition"},
+                    {"ns:getDataResponse", "return", "dataResponse", "linkInventory", "link"}
             };
 
-            String[][][] uniqueKeys ={
-                    {{"EventID"}, {"LastUpdate"}}
+            int[] durations = {
+                    1,
+                    1,
+                    1440
             };
 
-            int[] duration = {
-                5000\
+            String[][][] uniqueKeys = {
+                    {{}},
+                    { {"ID"} },
+                    {{}}
             };
 
-            for (int i = 0; i < links.length; i++)
-            {
+            for (int i = 0; i < links.length; i++) {
                 String[] link = links[i];
                 String[] path = paths[i];
-                String[][] uniqueKey = uniqueKeys[i];
                 DBCollection collection = mongoClient.getDB(link[1]).getCollection(link[2]);
+                String[][] uniqueKey = uniqueKeys[i];
                 MongoQuery query = new MongoQuery(uniqueKey, collection);
 
-
-                Feed feed = new Feed(link[0], collection, path, query);
-
-                feeds.add(feed);
+                Feed feed = new Feed(link[0], collection, path, query, durations[i]*60);
+                tasks.add(new IndividualTask(feed));
             }
 
-            for (Feed feed : feeds) {
-                feed.getData();
+         
+
+
+
+            
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("username", "ckamga@utrc2.org");
+            map.put("password", "CK@utrc");
+
+            String[] dataTypes = {"events", "links", "wtastatus", "wtasegmentdata", "vms"};
+            String[][] NYC511Paths = {{"events", "event"}, {"links", "link"}, {"WTASegmentConditionData", "WTASegment"},
+                                {"WTASegmentConditionData", "WTASegment"}, {"vmss", "vms"}};
+
+            int[] NYC511Durations = {60, 70, 80, 90, 100};
+            Feed[] NYC511Feeds = new Feed[dataTypes.length];
+            String[][][] NYC511uniqueKeys = {
+                    {{}},
+                    {{"LINK_ID"}},
+                    {{}},
+                    {{}},
+                    {{}},
+            };
+
+            for (int i = 0; i < dataTypes.length; i++) {
+                map.put("dataType", dataTypes[i]);
+                DBCollection collection = mongoClient.getDB("utrc").getCollection("511NY_"+dataTypes[i]);
+
+                Feed feed = new LoginFeed("https://165.193.215.51/XMLFeeds/createXML.aspx",
+                        collection, NYC511Paths[i], new MongoQuery(NYC511uniqueKeys[i], collection) , 60,
+                        (HashMap<String, String>) map.clone());
+                NYC511Feeds[i] = feed;
+            }
+
+            tasks.add(new MultipleTask(NYC511Feeds, 60, 10000));
+
+            ScheduledExecutorService ses = Executors.newScheduledThreadPool(8);
+            for (Task task : tasks) {
+                ses.scheduleAtFixedRate(task, 0, task.getDuration(), TimeUnit.SECONDS);
             }
         }
-
-        catch (Exception ex){
-            System.out.println("Something went wrong: " + ex.getMessage());
+        catch (Exception ex)
+        {
+            System.out.println("Something went wrong: " + ex.toString());
         }
     }
 }
