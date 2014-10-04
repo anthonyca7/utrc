@@ -20,8 +20,17 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
 		var result = [], i;
 		var keys = Object.keys(value);
 
-		for (i = 0; i < keys.length; i++) {
-			result.push("(" + keys[i] + ":" + value[keys[i]] + ")");
+		if (typeof value === 'object' && value.constructor === Array) {
+			return complexArray(value);
+		}
+
+		for (i = 0; i < keys.length; i++) {	
+			if (typeof value[keys[i]] === 'object' && value[keys[i]].constructor === Array) {
+				result.push("(" + keys[i] + ":" + service.complexArray(value[keys[i]]) + ")");
+			}
+			else {
+				result.push("(" + keys[i] + ":" + value[keys[i]] + ")");
+			}
 		}
 
 		return "( " + result.join(", ") + " )";
@@ -49,6 +58,13 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
 		}
 
 		return extra.representations[parseInt(value)];
+	};
+
+	service.toNumber = function (value) {
+		if (typeof value === "object") {
+			return value.toNumber();
+		}
+		return value;
 	};
 
 	return service;

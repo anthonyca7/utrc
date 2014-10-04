@@ -1,7 +1,8 @@
 var Modifiers = {};
+var Long = require('mongodb').Long;
 
 Modifiers.def = function (value) {
-	return value;
+	return inspect(value);
 };
 
 Modifiers.date = function (value) {
@@ -28,7 +29,12 @@ Modifiers.complexObject = function (value) {
 	var keys = Object.keys(value);
 
 	for (i = 0; i < keys.length; i++) {
-		result.push("(" + keys[i] + ":" + value[keys[i]] + ")");
+		if (typeof value[keys[i]] === 'object' && value[keys[i]].constructor === Array) {
+			result.push("(" + keys[i] + ":" + Modifiers.complexArray(value[keys[i]]) + ")");
+		}
+		else {
+			result.push("(" + keys[i] + ":" + value[keys[i]] + ")");
+		}
 	}
 
 	return "( " + result.join(", ") + " )";
@@ -48,5 +54,12 @@ Modifiers.complexArray = function (value) {
 
 	return result.join(", ");
 };
+
+Modifiers.toNumber = function (value) {
+	if (typeof value == "object" && value["toNumber"]) {
+		return value.toNumber();
+	}
+	return value;
+}
 
 module.exports = Modifiers;

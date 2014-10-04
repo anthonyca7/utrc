@@ -48,29 +48,76 @@ angular.module('interface').controller('InterfaceController', [
 		// Select field scope variables
 		$scope.feeds = [
 			{
+				name: 'NYC511 Events',
+				display: 'Events',
+				organization: 'NYC511',
+				location: '511NY_events',
+				schema: 'NYC511Event',
+				feed: 'nyc511event'
+			},
+			{
+				name: 'NYC511 Links',
+				display: 'Links',
+				organization: 'NYC511',
+				location: '511NY_links',
+				schema: 'NYC511Link',
+				feed: 'nyc511link'
+			},
+			{
+				name: 'NYC511 WTA Status',
+				display: 'WTA Status',
+				organization: 'NYC511',
+				location: '511NY_wtastatus',
+				schema: 'NYC511WTAStatus',
+				feed: 'nyc511wtastatus'
+			},
+			{
+				name: 'NYC511 WTA Segment Data',
+				display: 'WTA Segment Data',
+				organization: 'NYC511',
+				location: '511NY_wtasegmentdata',
+				schema: 'NYC511WTASegmentData',
+				feed: 'nyc511wtasegmentdata'
+			},
+			{
+				name: 'NYC511 VMS',
+				display: 'WTA VMS',
+				organization: 'NYC511',
+				location: '511NY_vms',
+				schema: 'NYC511WTAVMS',
+				feed: 'nyc511vms'
+			},
+			{
 				name: 'Transcom Events',
+				display: 'Events',
 				organization: 'Transcom',
 				location: 'transcomEvents',
 				schema: 'transcom',
-				feed: "transcom"
+				feed: 'transcom'
 			},
 			{
 				name: 'Transcom Link Configurations',
+				display: 'Link Configurations',
 				organization: 'Transcom',
 				location: 'transcomConfigurations',
 				schema: 'transcomLinkConfiguration',
-				feed: "transcomlinkconfiguration"
+				feed: 'transcomlinkconfiguration'
 			},
 			{
 				name: 'Transcom Link Conditions',
+				display: 'Link Conditions',
 				organization: 'Transcom',
 				location: 'transcomConditions',
 				schema: 'transcomLinkCondition',
-				feed: "transcomlinkcondition"
+				feed: 'transcomlinkcondition'
 			}
 		];
 
 		$scope.selectFeed = function (feed) {
+			$scope.searchQuery = {};
+			$scope.criteria = {};
+			$scope.filters = {};
+			
 			$scope.selectedFeed = feed;
 			$scope.headers = schemas.getHeaders(feed.feed);
 			$scope.schema = schemas.getByName(feed.feed);
@@ -82,6 +129,7 @@ angular.module('interface').controller('InterfaceController', [
 				.then(function (response) {
 					$scope.count = response.data.count;
 					$scope.events = response.data.events;
+					console.log($scope.events);
 				});
 		};
 
@@ -137,8 +185,6 @@ angular.module('interface').controller('InterfaceController', [
 			    path = eventFormat.path,
 			    cellValue = data, i, j, object;
 
-			console.log(eventFormat, path);
-
 			for (i = 0; i < path.length; i++) {
 				// If the current value is an array then check for each
 				// object inside until the property is found
@@ -179,14 +225,11 @@ angular.module('interface').controller('InterfaceController', [
 			$scope.count = 0;
 			$scope.events.length = 0;
 			$scope.searchQuery = {};
-			$scope.headers = {};
-			$scope.schema = {};
 			$scope.criteria = {};
 			$scope.filters = {};
 			$scope.currentPage = 1;
 			$scope.paginationCells = 6;
 
-			$scope.selectFeed($scope.feeds[0]);
 			$scope.updateData();
 		};
 

@@ -32,11 +32,6 @@ module.exports.format = {
 		type: 'date',
 		searchableByInterval: true
 	},
-	/*'Hour Started': {
-	 path: ['StartDateTime'],
-	 modifiers: ['date'],
-	 type: 'date'
-	 },*/
 	'Time Left (minutes)': {
 		path: ['EstDurationInMinutes'],
 		type: 'integer',

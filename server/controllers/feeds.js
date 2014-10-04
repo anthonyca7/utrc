@@ -10,6 +10,11 @@ var db = mongoskin.db('mongodb://@localhost:27017/utrc', {safe: true});
 db.bind('transcomEvents');
 db.bind('transcomConfigurations');
 db.bind('transcomConditions');
+db.bind('511NY_events');
+db.bind('511NY_links');
+db.bind('511NY_wtastatus');
+db.bind('511NY_wtasegmentdata');
+db.bind('511NY_vms');
 db.bind('feeds');
 
 module.exports.loadEventData = function (req, res, next) {
@@ -119,7 +124,6 @@ function sendEvents(res, data, format, header) {
 
 			if (cell == null) cell = "";
 
-			//console.log(cell==null, cell=="null", cell);
 			res.write(cell + "\t");
 		}
 		res.write('\n');

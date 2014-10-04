@@ -27,6 +27,7 @@
     "express-session": "^1.7.0",
     "lodash": "^2.4.1",
     "method-override": "^2.1.1",
+    "mongodb": "^1.4.18",
     "mongoose": "^3.8.17",
     "mongoskin": "^1.4.4",
     "morgan": "^1.2.0",

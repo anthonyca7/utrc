@@ -146,7 +146,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		</tr>\n" +
     "\n" +
     "		<tr ng-if=\"events.length==0\">\n" +
-    "			<td colspan=\"{{headers.length}}\">\n" +
+    "			<td colspan=\"{{headers.length+1}}\">\n" +
     "				<h3>No events were found</h3>\n" +
     "			</td>\n" +
     "		</tr>\n" +
