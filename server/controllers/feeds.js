@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
 
 
 var db = mongoskin.db('mongodb://@localhost:27017/utrc', {safe: true});
+
 db.bind('transcomEvents');
 db.bind('transcomConfigurations');
 db.bind('transcomConditions');
@@ -15,6 +16,14 @@ db.bind('511NY_links');
 db.bind('511NY_wtastatus');
 db.bind('511NY_wtasegmentdata');
 db.bind('511NY_vms');
+db.bind('MTABTStatus');
+db.bind('MTALIRRStatus');
+db.bind('MTABusStatus');
+db.bind('MTAMetroNorthStatus');
+db.bind('MTASubwayStatus');
+db.bind('MTAOutrages');
+db.bind('MTALostFound');
+db.bind('NYCDOTTrafficSpeed');
 db.bind('feeds');
 
 module.exports.loadEventData = function (req, res, next) {

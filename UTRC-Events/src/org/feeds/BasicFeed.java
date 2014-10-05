@@ -20,9 +20,7 @@ public class BasicFeed extends Feed
     private final MongoQuery query;
     public BasicFeed(String url, DBCollection collection, String[] path, MongoQuery query, int interval)
     {
-        setUrl(url);
-        setInterval(interval);
-
+        super(url, interval);
         this.collection = collection;
         this.path = path;
         this.query = query;

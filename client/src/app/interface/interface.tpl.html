@@ -107,7 +107,7 @@
 		<tr ng-if="events.length!=0" ng-repeat="event in events track by $index" ng-controller="rowController">
 			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>
 			<td ng-repeat="header in headers" ng-click="fullContent()">
-				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>
+				<div ng-bind-html="getEventField(event, schema, header)|limitCharacters:charLimit:tc"></div>
 			</td>
 		</tr>
 	</table>

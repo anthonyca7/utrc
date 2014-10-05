@@ -48,7 +48,7 @@ angular.module('interface').controller('InterfaceController', [
 		// Select field scope variables
 		$scope.feeds = [
 			{
-				name: 'NYC511 Events',
+				name: '511NY Events',
 				display: 'Events',
 				organization: 'NYC511',
 				location: '511NY_events',
@@ -56,7 +56,7 @@ angular.module('interface').controller('InterfaceController', [
 				feed: 'nyc511event'
 			},
 			{
-				name: 'NYC511 Links',
+				name: '511NY Links',
 				display: 'Links',
 				organization: 'NYC511',
 				location: '511NY_links',
@@ -64,7 +64,7 @@ angular.module('interface').controller('InterfaceController', [
 				feed: 'nyc511link'
 			},
 			{
-				name: 'NYC511 WTA Status',
+				name: '511NY WTA Status',
 				display: 'WTA Status',
 				organization: 'NYC511',
 				location: '511NY_wtastatus',
@@ -72,7 +72,7 @@ angular.module('interface').controller('InterfaceController', [
 				feed: 'nyc511wtastatus'
 			},
 			{
-				name: 'NYC511 WTA Segment Data',
+				name: '511NY WTA Segment Data',
 				display: 'WTA Segment Data',
 				organization: 'NYC511',
 				location: '511NY_wtasegmentdata',
@@ -80,12 +80,82 @@ angular.module('interface').controller('InterfaceController', [
 				feed: 'nyc511wtasegmentdata'
 			},
 			{
-				name: 'NYC511 VMS',
+				name: '511NY VMS',
 				display: 'WTA VMS',
 				organization: 'NYC511',
 				location: '511NY_vms',
 				schema: 'NYC511WTAVMS',
 				feed: 'nyc511vms'
+			},
+			{
+				name: "NYCDOT Real time traffic speed Data",
+				display: "Real time traffic speed Data",
+				organization: "NYCDOT",
+				location: "NYCDOTTrafficSpeed",
+				Schema: 'NYCDOTTrafficSpeed',
+				feed: 'nycdottrafficspeed'
+			},
+			{
+				name: "MTA Outrages",
+				display: "Outrages",
+				organization: "MTA",
+				location: "MTAOutrages",
+				Schema: 'MTAOutrage',
+				feed: 'mtaoutrage'
+			},
+			{
+				name: "MTA Bus Status",
+				display: "Bus Status",
+				organization: "MTA",
+				location: "MTABusStatus",
+				Schema: 'MTAStatus',
+				feed: 'mtastatus',
+				limit: 0
+			},
+			{
+				name: "MTA Subway Status",
+				display: "Subway Status",
+				organization: "MTA",
+				location: "MTASubwayStatus",
+				Schema: 'MTAStatus',
+				feed: 'mtastatus',
+				limit: 0
+			},
+			{
+				name: "MTA BT Status",
+				display: "BT Status",
+				organization: "MTA",
+				location: "MTABTStatus",
+				Schema: 'MTAStatus',
+				feed: 'mtastatus',
+				limit: 0
+			},
+			{
+				name: "MTA LIRR Status",
+				display: "LIRR Status",
+				organization: "MTA",
+				location: "MTALIRRStatus",
+				Schema: 'MTAStatus',
+				feed: 'mtastatus',
+				limit: 0
+			},
+			{
+				name: "MTA Metro North Status",
+				display: "Metro North Status",
+				organization: "MTA",
+				location: "MTAMetroNorthStatus",
+				Schema: 'MTAStatus',
+				feed: 'mtastatus',
+				limit: 0
+			},
+			{
+				name: "MTA Lost and Found Data",
+				display: "Lost and Found Data",
+				organization: "MTA",
+				location: "MTALostFound",
+				Schema: 'MTALostFound',
+				feed: 'mtalostfound',
+				limit: 100
 			},
 			{
 				name: 'Transcom Events',
@@ -125,12 +195,19 @@ angular.module('interface').controller('InterfaceController', [
 			$scope.updateData();
 		};
 
-		$scope.update = function (feedLocation, page, limit, criteria) {
-			Feed.get(feedLocation, page, limit, $scope.stringify(criteria))
+		$scope.update = function (feed, page, limit, criteria) {
+			Feed.get(feed.location, page, limit, $scope.stringify(criteria))
 				.then(function (response) {
 					$scope.count = response.data.count;
 					$scope.events = response.data.events;
-					console.log($scope.events);
+
+					if (feed.limit == null) {
+						$scope.charLimit = 50;
+					}
+					else {
+						$scope.charLimit = feed.limit;
+					}
+					console.log("new charLimit: ", $scope.charLimit);
 				});
 		};
 
@@ -217,7 +294,7 @@ angular.module('interface').controller('InterfaceController', [
 			}
 		};
 		$scope.updateData = function () {
-			$scope.update($scope.selectedFeed.location, $scope.currentPage, $scope.limit, $scope.criteria);
+			$scope.update($scope.selectedFeed, $scope.currentPage, $scope.limit, $scope.criteria);
 		};
 
 		$scope.reset = function () {

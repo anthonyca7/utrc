@@ -174,7 +174,7 @@ angular.module("interface/interface.tpl.html", []).run(["$templateCache", functi
     "		<tr ng-if=\"events.length!=0\" ng-repeat=\"event in events track by $index\" ng-controller=\"rowController\">\n" +
     "			<td>{{ (currentPage - 1) * limit + $index + 1 }}</td>\n" +
     "			<td ng-repeat=\"header in headers\" ng-click=\"fullContent()\">\n" +
-    "				<div>{{ getEventField(event, schema, header)|limitCharacters:50:tc }}</div>\n" +
+    "				<div ng-bind-html=\"getEventField(event, schema, header)|limitCharacters:charLimit:tc\"></div>\n" +
     "			</td>\n" +
     "		</tr>\n" +
     "	</table>\n" +

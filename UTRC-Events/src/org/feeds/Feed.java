@@ -5,6 +5,12 @@ public abstract class Feed {
     private int interval;
     private String response;
 
+    protected Feed(String url, int interval) {
+        this.url = url;
+        this.interval = interval;
+    }
+
+
     abstract void connect();
     abstract void getData();
 

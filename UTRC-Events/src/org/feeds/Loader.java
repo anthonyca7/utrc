@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 
 public class Loader
@@ -17,40 +18,49 @@ public class Loader
     {
         try {
             MongoClient mongoClient = new MongoClient("localhost", 27017);
+            DB db = mongoClient.getDB("utrc");
             ArrayList<Task> tasks = new ArrayList<Task>();
 
             String[][] links = {
                     {"https://data.xcmdata.org/ISGDE/rest/eventProvider/getAllNativeEvents?System=anthonyca7&Key=transcom",
-                            "utrc", "transcomEvents"},
+                            "transcomEvents"},
                     {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkConditions?System=anthonyca7&Key=transcom",
-                            "utrc", "transcomConditions"},
+                            "transcomConditions"},
                     {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkMaster?System=anthonyca7&Key=transcom",
-                            "utrc", "transcomConfigurations"}
+                            "transcomConfigurations"},
+                    {"http://web.mta.info/developers/data/nyct/nyct_ene.xml", "MTAOutrages"},
+                    {"http://advisory.mtanyct.info/LPUWebServices/CurrentLostProperty.aspx", "MTALostFound"}
 
             };
 
             String[][] paths = {
                     {"eventUpdates", "eventUpdate"},
                     {"ns:getDataResponse", "return", "dataResponse", "linkConditions", "linkCondition"},
-                    {"ns:getDataResponse", "return", "dataResponse", "linkInventory", "link"}
+                    {"ns:getDataResponse", "return", "dataResponse", "linkInventory", "link"},
+                    {"NYCOutages", "outage"},
+                    {"LostProperty", "Category"}
             };
 
             int[] durations = {
                     1,
                     1,
-                    1440
+                    1440,
+                    5,
+                    60
             };
 
             String[][][] uniqueKeys = {
                     {{}},
                     { {"ID"} },
+                    {{}},
+                    {{}},
                     {{}}
             };
 
             for (int i = 0; i < links.length; i++) {
                 String[] link = links[i];
                 String[] path = paths[i];
-                DBCollection collection = mongoClient.getDB(link[1]).getCollection(link[2]);
+                DBCollection collection = db.getCollection(link[1]);
                 String[][] uniqueKey = uniqueKeys[i];
                 MongoQuery query = new MongoQuery(uniqueKey, collection);
 
@@ -67,10 +77,9 @@ public class Loader
                     {"service", "MetroNorth", "line"},
             };
 
-            DB db = mongoClient.getDB("utrc");
 
             DBCollection[] collections = {
-                    db.getCollection("MTATrainStatus"),
+                    db.getCollection("MTASubwayStatus"),
                     db.getCollection("MTABusStatus"),
                     db.getCollection("MTABTStatus"),
                     db.getCollection("MTALIRRStatus"),
@@ -95,12 +104,12 @@ public class Loader
                     {{"LINK_ID"}},
                     {{}},
                     {{}},
-                    {{}},
+                    {{"id"}},
             };
 
             for (int i = 0; i < dataTypes.length; i++) {
                 map.put("dataType", dataTypes[i]);
-                DBCollection collection = mongoClient.getDB("utrc").getCollection("511NY_"+dataTypes[i]);
+                DBCollection collection = db.getCollection("511NY_"+dataTypes[i]);
 
                 BasicFeed feed = new LoginFeed("https://165.193.215.51/XMLFeeds/createXML.aspx",
                         collection, NYC511Paths[i], new MongoQuery(NYC511uniqueKeys[i], collection) , 60,
@@ -110,10 +119,20 @@ public class Loader
 
             tasks.add(new MultipleTask(NYC511Feeds, 60, 10000));
 
+
+            Pattern pattern = Pattern.compile("(\".*?\")");
+            DBCollection NYCDOTcollection = db.getCollection("NYCDOTTrafficSpeed");
+            String NYCDOTurl = "http://207.251.86.229/nyc-links-cams/LinkSpeedQuery.txt";
+            MongoQuery NYCDOTquery = new MongoQuery(new String[][]{{}}, NYCDOTcollection);
+
+            RegExFeed NYCDOTfeed = new RegExFeed(NYCDOTurl, 1*60, NYCDOTcollection, pattern, 13, NYCDOTquery);
+            tasks.add(new IndividualTask(NYCDOTfeed));
+
             ScheduledExecutorService ses = Executors.newScheduledThreadPool(8);
             for (Task task : tasks) {
                 ses.scheduleAtFixedRate(task, 0, task.getDuration(), TimeUnit.SECONDS);
             }
+
         }
         catch (Exception ex)
         {

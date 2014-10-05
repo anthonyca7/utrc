@@ -25,7 +25,7 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
 		}
 
 		for (i = 0; i < keys.length; i++) {	
-			if (typeof value[keys[i]] === 'object' && value[keys[i]].constructor === Array) {
+			if (value[keys[i]] && typeof value[keys[i]] === 'object' && value[keys[i]].constructor === Array) {
 				result.push("(" + keys[i] + ":" + service.complexArray(value[keys[i]]) + ")");
 			}
 			else {

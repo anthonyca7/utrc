@@ -4,6 +4,7 @@ angular.module('app', [
 	'templates.common',
 	'services.notifications',
 	'security.module',
+	'ngSanitize',
 	'interface'
 ]);
 

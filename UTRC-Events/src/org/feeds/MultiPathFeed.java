@@ -21,8 +21,7 @@ public class MultiPathFeed extends Feed
 
     public MultiPathFeed(String url, DBCollection[] collections, String[][] paths, int interval)
     {
-        setUrl(url);
-        setInterval(interval);
+        super(url, interval);
 
         this.collections = collections;
         this.paths = paths;
