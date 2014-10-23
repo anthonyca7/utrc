@@ -49,63 +49,90 @@ angular.module('interface').controller('InterfaceController', [
 		$scope.feeds = [
 			{
 				name: '511NY Events',
-				display: 'Events',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_events',
 				schema: 'NYC511Event',
 				feed: 'nyc511event'
 			},
 			{
 				name: '511NY Links',
-				display: 'Links',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_links',
 				schema: 'NYC511Link',
 				feed: 'nyc511link'
 			},
 			{
 				name: '511NY WTA Status',
-				display: 'WTA Status',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_wtastatus',
 				schema: 'NYC511WTAStatus',
 				feed: 'nyc511wtastatus'
 			},
 			{
 				name: '511NY WTA Segment Data',
-				display: 'WTA Segment Data',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_wtasegmentdata',
 				schema: 'NYC511WTASegmentData',
 				feed: 'nyc511wtasegmentdata'
 			},
 			{
 				name: '511NY VMS',
-				display: 'WTA VMS',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_vms',
 				schema: 'NYC511WTAVMS',
 				feed: 'nyc511vms'
 			},
 			{
+				name: "Older 511NY Events",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_events',
+				schema: 'Older511NYEvent',
+				feed: 'older511nyevent'
+			},
+			{
+				name: "Older 511NY Link Conditions",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_linkconditions',
+				schema: 'Older511NYLinkCondition',
+				feed: 'older511nylinkcondition'
+			},
+			{
+				name: "Older 511NY Link Inventory",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_linkinventory',
+				schema: 'Older511NYLinkInventory',
+				feed: 'older511nylinkinventory'
+			},
+			{
+				name: "Older 511NY Links",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_links',
+				schema: 'Older511NYLink',
+				feed: 'older511nylink'
+			},
+			{
+				name: "Older 511NY Link WTA Status",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_wtastatus',
+				schema: 'Older511NYWtaStatus',
+				feed: 'older511nywtastatus'
+			},
+			{
 				name: "NYCDOT Real time traffic speed Data",
-				display: "Real time traffic speed Data",
 				organization: "NYCDOT",
 				location: "NYCDOTTrafficSpeed",
 				Schema: 'NYCDOTTrafficSpeed',
 				feed: 'nycdottrafficspeed'
 			},
 			{
-				name: "MTA Outrages",
-				display: "Outrages",
+				name: "MTA Outages",
 				organization: "MTA",
-				location: "MTAOutrages",
-				Schema: 'MTAOutrage',
-				feed: 'mtaoutrage'
+				location: "MTAOutages",
+				Schema: 'MTAOutage',
+				feed: 'mtaoutage'
 			},
 			{
 				name: "MTA Bus Status",
-				display: "Bus Status",
 				organization: "MTA",
 				location: "MTABusStatus",
 				Schema: 'MTAStatus',
@@ -114,7 +141,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: "MTA Subway Status",
-				display: "Subway Status",
 				organization: "MTA",
 				location: "MTASubwayStatus",
 				Schema: 'MTAStatus',
@@ -123,7 +149,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: "MTA BT Status",
-				display: "BT Status",
 				organization: "MTA",
 				location: "MTABTStatus",
 				Schema: 'MTAStatus',
@@ -132,7 +157,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: "MTA LIRR Status",
-				display: "LIRR Status",
 				organization: "MTA",
 				location: "MTALIRRStatus",
 				Schema: 'MTAStatus',
@@ -150,7 +174,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: "MTA Lost and Found Data",
-				display: "Lost and Found Data",
 				organization: "MTA",
 				location: "MTALostFound",
 				Schema: 'MTALostFound',
@@ -159,7 +182,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: 'Transcom Events',
-				display: 'Events',
 				organization: 'Transcom',
 				location: 'transcomEvents',
 				schema: 'transcom',
@@ -167,7 +189,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: 'Transcom Link Configurations',
-				display: 'Link Configurations',
 				organization: 'Transcom',
 				location: 'transcomConfigurations',
 				schema: 'transcomLinkConfiguration',
@@ -175,7 +196,6 @@ angular.module('interface').controller('InterfaceController', [
 			},
 			{
 				name: 'Transcom Link Conditions',
-				display: 'Link Conditions',
 				organization: 'Transcom',
 				location: 'transcomConditions',
 				schema: 'transcomLinkCondition',
@@ -207,7 +227,6 @@ angular.module('interface').controller('InterfaceController', [
 					else {
 						$scope.charLimit = feed.limit;
 					}
-					console.log("new charLimit: ", $scope.charLimit);
 				});
 		};
 

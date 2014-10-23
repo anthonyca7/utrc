@@ -28,7 +28,7 @@ public class Loader
                             "transcomConditions"},
                     {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkMaster?System=anthonyca7&Key=transcom",
                             "transcomConfigurations"},
-                    {"http://web.mta.info/developers/data/nyct/nyct_ene.xml", "MTAOutrages"},
+                    {"http://web.mta.info/developers/data/nyct/nyct_ene.xml", "MTAOutages"},
                     {"http://advisory.mtanyct.info/LPUWebServices/CurrentLostProperty.aspx", "MTALostFound"}
 
             };
@@ -43,7 +43,7 @@ public class Loader
 
             int[] durations = {
                     1,
-                    1,
+                    15,
                     1440,
                     5,
                     60
@@ -51,7 +51,7 @@ public class Loader
 
             String[][][] uniqueKeys = {
                     {{}},
-                    { {"ID"} },
+                    {{}},
                     {{}},
                     {{}},
                     {{}}
@@ -97,42 +97,42 @@ public class Loader
             String[][] NYC511Paths = {{"events", "event"}, {"links", "link"}, {"WTASegmentConditionData", "WTASegment"},
                                 {"WTASegmentConditionData", "WTASegment"}, {"vmss", "vms"}};
 
-            int[] NYC511Durations = {60, 70, 80, 90, 100};
+
+            int[] NYC511Durations = {60, 15*60, 15*60, 15*60, 15*60};
             BasicFeed[] NYC511Feeds = new BasicFeed[dataTypes.length];
             String[][][] NYC511uniqueKeys = {
                     {{}},
-                    {{"LINK_ID"}},
                     {{}},
                     {{}},
-                    {{"id"}},
+                    {{}},
+                    {{}},
             };
 
             for (int i = 0; i < dataTypes.length; i++) {
                 map.put("dataType", dataTypes[i]);
                 DBCollection collection = db.getCollection("511NY_"+dataTypes[i]);
-
                 BasicFeed feed = new LoginFeed("https://165.193.215.51/XMLFeeds/createXML.aspx",
-                        collection, NYC511Paths[i], new MongoQuery(NYC511uniqueKeys[i], collection) , 60,
+                        collection, NYC511Paths[i],
+                        new MongoQuery(NYC511uniqueKeys[i], collection) , NYC511Durations[i],
                         (HashMap<String, String>) map.clone());
+
                 NYC511Feeds[i] = feed;
             }
 
             tasks.add(new MultipleTask(NYC511Feeds, 60, 10000));
 
-
             Pattern pattern = Pattern.compile("(\".*?\")");
-            DBCollection NYCDOTcollection = db.getCollection("NYCDOTTrafficSpeed");
-            String NYCDOTurl = "http://207.251.86.229/nyc-links-cams/LinkSpeedQuery.txt";
-            MongoQuery NYCDOTquery = new MongoQuery(new String[][]{{}}, NYCDOTcollection);
+            DBCollection NYCDOTCollection = db.getCollection("NYCDOTTrafficSpeed");
+            String NYCDOTURL = "http://207.251.86.229/nyc-links-cams/LinkSpeedQuery.txt";
+            MongoQuery NYCDOTQuery = new MongoQuery(new String[][]{{}}, NYCDOTCollection);
 
-            RegExFeed NYCDOTfeed = new RegExFeed(NYCDOTurl, 1*60, NYCDOTcollection, pattern, 13, NYCDOTquery);
-            tasks.add(new IndividualTask(NYCDOTfeed));
+            RegExFeed NYCDOTFeed = new RegExFeed(NYCDOTURL, 15*60, NYCDOTCollection, pattern, 13, NYCDOTQuery);
+            tasks.add(new IndividualTask(NYCDOTFeed));
 
             ScheduledExecutorService ses = Executors.newScheduledThreadPool(8);
             for (Task task : tasks) {
                 ses.scheduleAtFixedRate(task, 0, task.getDuration(), TimeUnit.SECONDS);
             }
-
         }
         catch (Exception ex)
         {

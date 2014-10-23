@@ -21,10 +21,15 @@ db.bind('MTALIRRStatus');
 db.bind('MTABusStatus');
 db.bind('MTAMetroNorthStatus');
 db.bind('MTASubwayStatus');
-db.bind('MTAOutrages');
+db.bind('MTAOutages');
 db.bind('MTALostFound');
 db.bind('NYCDOTTrafficSpeed');
 db.bind('feeds');
+db.bind('older_NY511FEED_events');
+db.bind('older_NY511FEED_linkconditions');
+db.bind('older_NY511FEED_linkinventory');
+db.bind('older_NY511FEED_links');
+db.bind('older_NY511FEED_wtastatus');
 
 module.exports.loadEventData = function (req, res, next) {
 	var query = req.params.criteria || req.body.criteria;

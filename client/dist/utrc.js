@@ -134,7 +134,7 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: '511NY Events',
 				display: 'Events',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_events',
 				schema: 'NYC511Event',
 				feed: 'nyc511event'
@@ -142,7 +142,7 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: '511NY Links',
 				display: 'Links',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_links',
 				schema: 'NYC511Link',
 				feed: 'nyc511link'
@@ -150,7 +150,7 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: '511NY WTA Status',
 				display: 'WTA Status',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_wtastatus',
 				schema: 'NYC511WTAStatus',
 				feed: 'nyc511wtastatus'
@@ -158,7 +158,7 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: '511NY WTA Segment Data',
 				display: 'WTA Segment Data',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_wtasegmentdata',
 				schema: 'NYC511WTASegmentData',
 				feed: 'nyc511wtasegmentdata'
@@ -166,7 +166,7 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: '511NY VMS',
 				display: 'WTA VMS',
-				organization: 'NYC511',
+				organization: '511NY',
 				location: '511NY_vms',
 				schema: 'NYC511WTAVMS',
 				feed: 'nyc511vms'
@@ -180,12 +180,12 @@ angular.module('interface').controller('InterfaceController', [
 				feed: 'nycdottrafficspeed'
 			},
 			{
-				name: "MTA Outrages",
-				display: "Outrages",
+				name: "MTA Outages",
+				display: "Outages",
 				organization: "MTA",
-				location: "MTAOutrages",
-				Schema: 'MTAOutrage',
-				feed: 'mtaoutrage'
+				location: "MTAOutages",
+				Schema: 'MTAOutage',
+				feed: 'mtaoutage'
 			},
 			{
 				name: "MTA Bus Status",

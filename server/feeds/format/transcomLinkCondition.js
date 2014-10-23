@@ -34,3 +34,4 @@ module.exports.format = {
 };
 
 module.exports.db = 'mongodb';
+module.exports.index = 'ID';

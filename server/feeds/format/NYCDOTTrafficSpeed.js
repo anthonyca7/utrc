@@ -30,12 +30,12 @@ module.exports.format = {
 		path: ['linkPoints'],
 		notSearchable: true
 	},
-	"Encoded PolyLine": {
-		path: ['EncodedPolyLine']
-	},
-	"EncodedPoly Line Lvls": {
-		path: ['EncodedPolyLineLvls']
-	},
+	// "Encoded PolyLine": {
+	// 	path: ['EncodedPolyLine']
+	// },
+	// "EncodedPoly Line Lvls": {
+	// 	path: ['EncodedPolyLineLvls']
+	// },
 	"Owner": {
 		path: ['Owner']
 	},
@@ -60,8 +60,8 @@ module.exports.order = [
 	"Data as of",
 	"Link ID",
 	"Link Points",
-	"Encoded PolyLine",
-	"EncodedPoly Line Lvls",
+	// "Encoded PolyLine",
+	// "EncodedPoly Line Lvls",
 	"Owner",
 	"Transcom ID",
 	"Borough",
@@ -69,3 +69,4 @@ module.exports.order = [
 ];
 
 module.exports.db = "mongodb";
+module.exports.index = "Id";

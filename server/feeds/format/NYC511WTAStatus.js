@@ -32,3 +32,4 @@ module.exports.order = [
 ];
 
 module.exports.db = "mongodb";
+module.exports.index = "LINK_ID";

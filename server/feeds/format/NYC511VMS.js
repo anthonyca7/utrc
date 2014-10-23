@@ -12,8 +12,7 @@ module.exports.format = {
 	'Last Update': {
 		path: ['last_update'],
 		modifiers: ['date'],
-		type: 'date',
-		//searchableByInterval: true
+		type: 'date'
 	},
 	'Owner name': {
 		path: ['owner_name']
@@ -55,3 +54,4 @@ module.exports.order = [
 ];
 
 module.exports.db = "mongodb";
+module.exports.index = "id";

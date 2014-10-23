@@ -209,3 +209,4 @@ module.exports.order = [
 ];
 
 module.exports.db = "mongodb";
+module.exports.index = "EventID";
