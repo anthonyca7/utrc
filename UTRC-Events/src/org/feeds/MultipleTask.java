@@ -35,11 +35,11 @@ public class MultipleTask extends Task implements Runnable {
                 try {
                     lastExecuted[i] = System.currentTimeMillis();
                     Thread.sleep(duration);
-                    feed.getData();
                 }
                 catch (Exception ex){
-                    System.out.println("Exception from taskgroups: " + ex.toString());
+                    System.out.println("Exception from taskgroups: " + ex);
                 }
+                feed.getData();
             }
 
         }

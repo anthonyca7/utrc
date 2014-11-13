@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +20,17 @@ public class RegExFeed extends Feed{
     private final Pattern pattern;
     private final MongoQuery query;
     private final int cols;
-    private static final String doublePattern = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
-    private static final String intPattern = "[-+]?[0-9]*";
 
+    public RegExFeed(String url,
+                     int interval,
+                     DBCollection collection,
+                     Pattern pattern,
+                     int cols,
+                     HashMap<String, DateFormat> dateMap,
+                     String[][] datePaths,
+                     MongoQuery query) {
 
-    public RegExFeed(String url, int interval, DBCollection collection, Pattern pattern,int cols, MongoQuery query) {
-        super(url, interval);
+        super(url, interval, dateMap, datePaths);
         this.collection = collection;
         this.pattern = pattern;
         this.query = query;
@@ -31,7 +38,7 @@ public class RegExFeed extends Feed{
     }
 
     protected void getInsertionMessage(int inserted, int total, String url) {
-        System.out.printf("%d out of %d data feeds inserted from %s%n", inserted, total, url);
+        System.out.printf("%d out of %d data feeds inserted to %s from %s%n", inserted, total, collection.getName(), url);
     }
 
     @Override
@@ -90,28 +97,27 @@ public class RegExFeed extends Feed{
             StringBuilder feed = new StringBuilder("{");
             for (int j = 0; j < cols; j++) {
                 String key = data.get(j).replaceAll("\"", "'");
+                String qval = data.get(cols*i + j);
+                String val = qval.replaceAll("\"", "");
 
-                if (data.get(cols*i + j).replaceAll("\"", "").matches(doublePattern)) {
-                    double value = Double.parseDouble(data.get(cols*i + j).replaceAll("\"", ""));
-                    feed.append( key + ":" + value +
-                            ((j+1==cols) ? "": ", "));
-                }
-                else if (data.get(cols*i + j).replaceAll("\"", "").matches(intPattern)) {
-                    int value = Integer.parseInt(data.get(cols*i + j).replaceAll("\"", ""));
-                    feed.append( key + ":" + value +
-                            ((j+1==cols) ? "": ", "));
-                }
-                else {
-                    feed.append( key + ":" + data.get(cols*i + j).replaceAll("\"", "'") +
-                            ((j+1==cols) ? "": ", "));
-                }
+//                if (val.matches(intRegEx) || val.matches(doubleRegEx))
+//                    feed.append( key + ":" + val + ((j+1==cols) ? "": ", ") );
+//                else
+                    feed.append( key + ":" + qval.replaceAll("\"", "'") + ((j+1==cols) ? "": ", ") );
             }
             feed.append("}");
             feeds.add(feed.toString());
         }
 
         for (String feed : feeds) {
-            DBObject feedObject = (DBObject) JSON.parse(feed);
+            DBObject feedObject;
+            try {
+                feedObject = extractDates((DBObject) JSON.parse(feed));
+            } catch (Exception ex) {
+                System.out.println("Error Extracting data: " + ex);
+                continue;
+            }
+
             DBCursor foundFeeds = collection.find(feedObject);
 
             if (!foundFeeds.hasNext()) {

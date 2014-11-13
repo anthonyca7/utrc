@@ -12,16 +12,22 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.HashMap;
 
-public class MultiPathFeed extends Feed
-{
+public class MultiPathFeed extends Feed {
     private final DBCollection[] collections;
     private final String[][] paths;
     private final int elements;
 
-    public MultiPathFeed(String url, DBCollection[] collections, String[][] paths, int interval)
-    {
-        super(url, interval);
+    public MultiPathFeed(String url,
+                         DBCollection[] collections,
+                         String[][] paths,
+                         HashMap<String, DateFormat> dateMap,
+                         String[][] datePaths,
+                         int interval) {
+
+        super(url, interval, dateMap, datePaths);
 
         this.collections = collections;
         this.paths = paths;
@@ -29,13 +35,12 @@ public class MultiPathFeed extends Feed
     }
 
 
-    protected void getInsertingMessage(int inserted, int total, String url) {
-        System.out.printf("%d out of %d data feeds inserted from %s%n", inserted, total, url);
+    protected void getInsertingMessage(int inserted, int total, String collectionName, String url) {
+        System.out.printf("%d out of %d data feeds inserted to %s from %s%n", inserted, total, collectionName, url);
     }
 
     @Override
-    public void connect()
-    {
+    public void connect() {
         try {
             URL uri = new URL(getUrl());
             HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
@@ -86,7 +91,8 @@ public class MultiPathFeed extends Feed
                     } else {
                         jsonResponse = (JSONObject) jsonResponse.get(key);
                     }
-                } else {
+                }
+                else {
                     throw new RuntimeException("INVALID PATH");
                 }
             }
@@ -94,10 +100,10 @@ public class MultiPathFeed extends Feed
             if (data != null) {
                 for (int j = 0; j < data.length(); j++) {
                     JSONObject jsonObject = data.getJSONObject(j);
-                    DBObject object = (DBObject) JSON.parse(jsonObject.toString());
-                    MongoQuery query = new MongoQuery(new String[][]{{}}, collection);
+                    DBObject object = extractDates(jsonObject);
+                    MongoQuery query = null;
 
-                    if (query.hasPath()) {
+                    if (query != null && query.hasPath()) {
                         if (query.isUnique(jsonObject)) {
                             collection.insert(object);
                             inserted[i]++;
@@ -111,7 +117,7 @@ public class MultiPathFeed extends Feed
                         }
                     }
                 }
-                getInsertingMessage(inserted[i], data.length(), getUrl() + " for " + collection.getName());
+                getInsertingMessage(inserted[i], data.length(), collection.getName(), getUrl());
             } else {
                 throw new RuntimeException("PATH DOES NOT CONTAIN THE DATA");
             }

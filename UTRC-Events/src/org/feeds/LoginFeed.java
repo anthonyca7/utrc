@@ -8,23 +8,31 @@ import javax.net.ssl.SSLSession;
 import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 
 public class LoginFeed extends BasicFeed {
     private final HashMap<String, String> postData;
 
-    public LoginFeed(String url, DBCollection collection, String[] path, MongoQuery query, int interval,
+    public LoginFeed(String url,
+                     DBCollection collection,
+                     String[] path,
+                     MongoQuery query,
+                     Map<String, DateFormat> dateMap,
+                     String[][] datePaths,
+                     int interval,
                      HashMap<String, String> postData) {
-        super(url, collection, path, query, interval);
 
+        super(url, collection, path, query, dateMap, datePaths, interval);
         this.postData = postData;
     }
 
     @Override
-    protected void getInsertionMessage(int inserted, int total, String url) {
-        super.getInsertionMessage(inserted, total, url + " for " + postData.get("dataType"));
+    protected void getInsertionMessage(int inserted, int total, String collectionName, String url) {
+        super.getInsertionMessage(inserted, total, getCollection().getName(), url + " for " + postData.get("dataType"));
     }
 
     @Override

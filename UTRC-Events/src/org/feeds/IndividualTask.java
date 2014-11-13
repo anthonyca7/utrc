@@ -26,7 +26,8 @@ public class IndividualTask extends Task implements Runnable {
             feed.getData();
         }
         catch (Exception ex) {
-            System.out.println("Exception: " + ex.getMessage());
+            System.out.println("Exception: " + ex);
+            ex.printStackTrace();
         }
     }
 
