@@ -50,37 +50,41 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: '511NY Events',
 				organization: '511NY',
-				location: '511NY_events',
+				location: 'nysdotevents',
 				schema: 'NYC511Event',
-				feed: 'nyc511event'
+				feed: 'nyc511event',
+				dates: ["CREATE_TIME", "LAST_UPDATE", "START_DATE", "END_DATE"]
 			},
 			{
 				name: '511NY Links',
 				organization: '511NY',
-				location: '511NY_links',
+				location: 'nysdotlinks',
 				schema: 'NYC511Link',
-				feed: 'nyc511link'
+				feed: 'nyc511link',
+				dates: ["LAST_UPDATE"]
 			},
 			{
 				name: '511NY WTA Status',
 				organization: '511NY',
-				location: '511NY_wtastatus',
+				location: 'nysdotwtastatus',
 				schema: 'NYC511WTAStatus',
-				feed: 'nyc511wtastatus'
+				feed: 'nyc511wtastatus',
+				dates: ["LAST_UPDATE"]
 			},
 			{
 				name: '511NY WTA Segment Data',
 				organization: '511NY',
-				location: '511NY_wtasegmentdata',
+				location: 'nysdotwtasegmentdata',
 				schema: 'NYC511WTASegmentData',
 				feed: 'nyc511wtasegmentdata'
 			},
 			{
 				name: '511NY VMS',
 				organization: '511NY',
-				location: '511NY_vms',
+				location: 'nysdotvms',
 				schema: 'NYC511WTAVMS',
-				feed: 'nyc511vms'
+				feed: 'nyc511vms',
+				dates: ["last_update"]
 			},
 			{
 				name: "Older 511NY Events",
@@ -120,62 +124,69 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: "NYCDOT Real time traffic speed Data",
 				organization: "NYCDOT",
-				location: "NYCDOTTrafficSpeed",
+				location: "nycdottrafficspeed",
 				Schema: 'NYCDOTTrafficSpeed',
-				feed: 'nycdottrafficspeed'
+				feed: 'nycdottrafficspeed',
+				dates: ['DataAsOf']
 			},
 			{
 				name: "MTA Outages",
 				organization: "MTA",
-				location: "MTAOutages",
+				location: "mtaoutages",
 				Schema: 'MTAOutage',
-				feed: 'mtaoutage'
+				feed: 'mtaoutage',
+				dates: ["outagedate", "estimatedreturntoservice"]
 			},
 			{
 				name: "MTA Bus Status",
 				organization: "MTA",
-				location: "MTABusStatus",
+				location: "mtabusstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA Subway Status",
 				organization: "MTA",
-				location: "MTASubwayStatus",
+				location: "mtasubwaystatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA BT Status",
 				organization: "MTA",
-				location: "MTABTStatus",
+				location: "mtabtstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA LIRR Status",
 				organization: "MTA",
-				location: "MTALIRRStatus",
+				location: "mtalirrstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA Metro North Status",
 				display: "Metro North Status",
 				organization: "MTA",
-				location: "MTAMetroNorthStatus",
+				location: "mtametronorthstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA Lost and Found Data",
 				organization: "MTA",
-				location: "MTALostFound",
+				location: "mtalostfound",
 				Schema: 'MTALostFound',
 				feed: 'mtalostfound',
 				limit: 100
@@ -183,21 +194,23 @@ angular.module('interface').controller('InterfaceController', [
 			{
 				name: 'Transcom Events',
 				organization: 'Transcom',
-				location: 'transcomEvents',
+				location: 'transcomevent',
 				schema: 'transcom',
-				feed: 'transcom'
+				feed: 'transcom',
+				dates: ["StartDateTime", "LastUpdate", "EndDateTime"]
 			},
 			{
 				name: 'Transcom Link Configurations',
 				organization: 'Transcom',
-				location: 'transcomConfigurations',
+				location: 'transcomconfiguration',
 				schema: 'transcomLinkConfiguration',
-				feed: 'transcomlinkconfiguration'
+				feed: 'transcomlinkconfiguration',
+				dates: ["asOf"]
 			},
 			{
 				name: 'Transcom Link Conditions',
 				organization: 'Transcom',
-				location: 'transcomConditions',
+				location: 'transcomcondition',
 				schema: 'transcomLinkCondition',
 				feed: 'transcomlinkcondition'
 			}
@@ -216,7 +229,7 @@ angular.module('interface').controller('InterfaceController', [
 		};
 
 		$scope.update = function (feed, page, limit, criteria) {
-			Feed.get(feed.location, page, limit, $scope.stringify(criteria))
+			Feed.get(feed.location, page, limit, $scope.stringify(criteria), $scope.stringify(feed.dates))
 				.then(function (response) {
 					$scope.count = response.data.count;
 					$scope.events = response.data.events;

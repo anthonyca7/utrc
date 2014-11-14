@@ -51,9 +51,9 @@ angular.module('services.formatters', []).factory('Formatters', [
 		};
 
 		service.date = function (value, noRange) {
-			if (noRange) {
-				return service.string(value);
-			}
+			// if (noRange) {
+			// 	return service.string(value);
+			// }
 
 			var date = new Date(value);
 			value = (date < new Date('1980-12-31T09:00:00-07:00')) ? null : value;

@@ -103,7 +103,7 @@ public class Loader {
 
         DBCollection[] collections = {
                 db.getCollection("mtasubwaystatus"),
-                db.getCollection("mtaBusstatus"),
+                db.getCollection("mtabusstatus"),
                 db.getCollection("mtabtstatus"),
                 db.getCollection("mtalirrstatus"),
                 db.getCollection("mtametronorthstatus"),
@@ -120,13 +120,8 @@ public class Loader {
                 {"DataAsOf"}
         };
 
-        NYCTrafficSpeedFeed trafficFeed = new NYCTrafficSpeedFeed(1*60, collection, datePaths);
+        NYCTrafficSpeedFeed trafficFeed = new NYCTrafficSpeedFeed(15*60, collection, datePaths);
         tasks.add(new IndividualTask(trafficFeed));
-
-
-//        MongoQuery NYCDOTQuery = new MongoQuery(new String[][]{{}}, NYCDOTCollection);
-//        RegExFeed NYCDOTFeed = new RegExFeed(NYCDOTURL, 15*60, NYCDOTCollection, pattern, 13, NYCDOTQuery);
-//        tasks.add(new IndividualTask(NYCDOTFeed));
     }
 
     private static void getSimpleFeeds() {
@@ -162,7 +157,7 @@ public class Loader {
                 {{"asOf"}},
                 {{}},
                 {{"outagedate"}, {"estimatedreturntoservice"}},
-                {{""}}
+                {{}}
         };
 
         for (int i = 0; i < links.length; i++) {

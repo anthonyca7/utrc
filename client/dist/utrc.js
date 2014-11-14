@@ -133,135 +133,168 @@ angular.module('interface').controller('InterfaceController', [
 		$scope.feeds = [
 			{
 				name: '511NY Events',
-				display: 'Events',
 				organization: '511NY',
-				location: '511NY_events',
+				location: 'nysdotevents',
 				schema: 'NYC511Event',
-				feed: 'nyc511event'
+				feed: 'nyc511event',
+				dates: ["CREATE_TIME", "LAST_UPDATE", "START_DATE", "END_DATE"]
 			},
 			{
 				name: '511NY Links',
-				display: 'Links',
 				organization: '511NY',
-				location: '511NY_links',
+				location: 'nysdotlinks',
 				schema: 'NYC511Link',
-				feed: 'nyc511link'
+				feed: 'nyc511link',
+				dates: ["LAST_UPDATE"]
 			},
 			{
 				name: '511NY WTA Status',
-				display: 'WTA Status',
 				organization: '511NY',
-				location: '511NY_wtastatus',
+				location: 'nysdotwtastatus',
 				schema: 'NYC511WTAStatus',
-				feed: 'nyc511wtastatus'
+				feed: 'nyc511wtastatus',
+				dates: ["LAST_UPDATE"]
 			},
 			{
 				name: '511NY WTA Segment Data',
-				display: 'WTA Segment Data',
 				organization: '511NY',
-				location: '511NY_wtasegmentdata',
+				location: 'nysdotwtasegmentdata',
 				schema: 'NYC511WTASegmentData',
 				feed: 'nyc511wtasegmentdata'
 			},
 			{
 				name: '511NY VMS',
-				display: 'WTA VMS',
 				organization: '511NY',
-				location: '511NY_vms',
+				location: 'nysdotvms',
 				schema: 'NYC511WTAVMS',
-				feed: 'nyc511vms'
+				feed: 'nyc511vms',
+				dates: ["last_update"]
+			},
+			{
+				name: "Older 511NY Events",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_events',
+				schema: 'Older511NYEvent',
+				feed: 'older511nyevent'
+			},
+			{
+				name: "Older 511NY Link Conditions",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_linkconditions',
+				schema: 'Older511NYLinkCondition',
+				feed: 'older511nylinkcondition'
+			},
+			{
+				name: "Older 511NY Link Inventory",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_linkinventory',
+				schema: 'Older511NYLinkInventory',
+				feed: 'older511nylinkinventory'
+			},
+			{
+				name: "Older 511NY Links",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_links',
+				schema: 'Older511NYLink',
+				feed: 'older511nylink'
+			},
+			{
+				name: "Older 511NY Link WTA Status",
+				organization: 'Older 511NY',
+				location: 'older_NY511FEED_wtastatus',
+				schema: 'Older511NYWtaStatus',
+				feed: 'older511nywtastatus'
 			},
 			{
 				name: "NYCDOT Real time traffic speed Data",
-				display: "Real time traffic speed Data",
 				organization: "NYCDOT",
-				location: "NYCDOTTrafficSpeed",
+				location: "nycdottrafficspeed",
 				Schema: 'NYCDOTTrafficSpeed',
-				feed: 'nycdottrafficspeed'
+				feed: 'nycdottrafficspeed',
+				dates: ['DataAsOf']
 			},
 			{
 				name: "MTA Outages",
-				display: "Outages",
 				organization: "MTA",
-				location: "MTAOutages",
+				location: "mtaoutages",
 				Schema: 'MTAOutage',
-				feed: 'mtaoutage'
+				feed: 'mtaoutage',
+				dates: ["outagedate", "estimatedreturntoservice"]
 			},
 			{
 				name: "MTA Bus Status",
-				display: "Bus Status",
 				organization: "MTA",
-				location: "MTABusStatus",
+				location: "mtabusstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA Subway Status",
-				display: "Subway Status",
 				organization: "MTA",
-				location: "MTASubwayStatus",
+				location: "mtasubwaystatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA BT Status",
-				display: "BT Status",
 				organization: "MTA",
-				location: "MTABTStatus",
+				location: "mtabtstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA LIRR Status",
-				display: "LIRR Status",
 				organization: "MTA",
-				location: "MTALIRRStatus",
+				location: "mtalirrstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA Metro North Status",
 				display: "Metro North Status",
 				organization: "MTA",
-				location: "MTAMetroNorthStatus",
+				location: "mtametronorthstatus",
 				Schema: 'MTAStatus',
 				feed: 'mtastatus',
-				limit: 0
+				limit: 0,
+				dates: ["Date", "Time"]
 			},
 			{
 				name: "MTA Lost and Found Data",
-				display: "Lost and Found Data",
 				organization: "MTA",
-				location: "MTALostFound",
+				location: "mtalostfound",
 				Schema: 'MTALostFound',
 				feed: 'mtalostfound',
 				limit: 100
 			},
 			{
 				name: 'Transcom Events',
-				display: 'Events',
 				organization: 'Transcom',
-				location: 'transcomEvents',
+				location: 'transcomevent',
 				schema: 'transcom',
-				feed: 'transcom'
+				feed: 'transcom',
+				dates: ["StartDateTime", "LastUpdate", "EndDateTime"]
 			},
 			{
 				name: 'Transcom Link Configurations',
-				display: 'Link Configurations',
 				organization: 'Transcom',
-				location: 'transcomConfigurations',
+				location: 'transcomconfiguration',
 				schema: 'transcomLinkConfiguration',
-				feed: 'transcomlinkconfiguration'
+				feed: 'transcomlinkconfiguration',
+				dates: ["asOf"]
 			},
 			{
 				name: 'Transcom Link Conditions',
-				display: 'Link Conditions',
 				organization: 'Transcom',
-				location: 'transcomConditions',
+				location: 'transcomcondition',
 				schema: 'transcomLinkCondition',
 				feed: 'transcomlinkcondition'
 			}
@@ -280,7 +313,7 @@ angular.module('interface').controller('InterfaceController', [
 		};
 
 		$scope.update = function (feed, page, limit, criteria) {
-			Feed.get(feed.location, page, limit, $scope.stringify(criteria))
+			Feed.get(feed.location, page, limit, $scope.stringify(criteria), $scope.stringify(feed.dates))
 				.then(function (response) {
 					$scope.count = response.data.count;
 					$scope.events = response.data.events;
@@ -291,7 +324,6 @@ angular.module('interface').controller('InterfaceController', [
 					else {
 						$scope.charLimit = feed.limit;
 					}
-					console.log("new charLimit: ", $scope.charLimit);
 				});
 		};
 
@@ -821,9 +853,9 @@ angular.module('services.feeds', []).factory('Feed', ['$http', function ($http) 
 
 	var service = {};
 
-	service.get = function (name, page, limit, criteria) {
+	service.get = function (name, page, limit, criteria, dates) {
 		return $http.post('/api/feeds/' + name + '/' + page + '/' + limit,
-			{ criteria: criteria });
+			{ criteria: criteria, dates: dates });
 	};
 
 	return service;
@@ -882,13 +914,14 @@ angular.module('services.formatters', []).factory('Formatters', [
 		};
 
 		service.date = function (value, noRange) {
-			if (noRange) {
-				return service.string(value);
-			}
+			// if (noRange) {
+			// 	return service.string(value);
+			// }
 
 			var date = new Date(value);
 			value = (date < new Date('1980-12-31T09:00:00-07:00')) ? null : value;
 
+			console.log(date);
 			return value;
 		};
 

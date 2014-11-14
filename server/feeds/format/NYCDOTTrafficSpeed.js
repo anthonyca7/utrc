@@ -19,7 +19,10 @@ module.exports.format = {
 		path: ['Status']
 	},
 	"Data as of": {
-		path: ['DataAsOf']
+		path: ['DataAsOf'],
+		type: 'date',
+		modifiers: ['date'],
+		searchableByInterval: true
 	},
 	"Link ID": {
 		path: ['linkId'],

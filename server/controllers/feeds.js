@@ -8,22 +8,24 @@ var mongoose = require('mongoose'),
 
 var db = mongoskin.db('mongodb://@localhost:27017/utrc', {safe: true});
 
-db.bind('transcomEvents');
-db.bind('transcomConfigurations');
-db.bind('transcomConditions');
-db.bind('511NY_events');
-db.bind('511NY_links');
-db.bind('511NY_wtastatus');
-db.bind('511NY_wtasegmentdata');
-db.bind('511NY_vms');
-db.bind('MTABTStatus');
-db.bind('MTALIRRStatus');
-db.bind('MTABusStatus');
-db.bind('MTAMetroNorthStatus');
-db.bind('MTASubwayStatus');
-db.bind('MTAOutages');
-db.bind('MTALostFound');
-db.bind('NYCDOTTrafficSpeed');
+
+db.bind('mtaBusstatus');
+db.bind('mtabtstatus');
+db.bind('mtalirrstatus');
+db.bind('mtalostfound');
+db.bind('mtametronorthstatus');
+db.bind('mtaoutages');
+db.bind('mtasubwaystatus');
+db.bind('nycdottrafficspeed');
+db.bind('nysdotevents');
+db.bind('nysdotlinks');
+db.bind('nysdotvms')
+db.bind('nysdotwtasegmentdata');
+db.bind('nysdotwtastatus');
+db.bind('transcomcondition');
+db.bind('transcomconfiguration');
+db.bind('transcomevent');
+
 db.bind('feeds');
 db.bind('older_NY511FEED_events');
 db.bind('older_NY511FEED_linkconditions');
@@ -33,12 +35,42 @@ db.bind('older_NY511FEED_wtastatus');
 
 module.exports.loadEventData = function (req, res, next) {
 	var query = req.params.criteria || req.body.criteria;
+	var dates = req.params.dates || req.body.dates;
 	var criteria = (query) ? JSON.parse(query):{};
+
+	// console.log("Before Criteria", criteria);
+
+	if (dates) {
+		dates = JSON.parse(dates);
+
+		for (var i = 0; i < dates.length; i++) {
+			var date = dates[i];
+			if (criteria[date]) {
+				var field = criteria[date];
+
+				if (typeof field == 'object') {
+					var keys = Object.keys(field);
+					keys.forEach(function (key) {
+						field[key] = new Date(field[key]);
+					});
+				}
+				else
+					criteria[date] = new Date(criteria[date]);
+			} 
+		}
+	}
+
+
+	// console.log("After parsing criteria", criteria);
+
+
+
 	var name = req.params.evt;
 
 	if (db[name] == null) {
 		return res.json({event: null});
 	}
+
 
 	db[name].find(criteria, {}, {
 		skip: (req.params.page - 1) * (req.params.limit),
