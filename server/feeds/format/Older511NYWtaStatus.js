@@ -31,9 +31,9 @@ module.exports.format = {
 	},
 	'Last Update': {
 		path: ['LAST_UPDATE'],
-		modifiers: ['date'],
-		type: 'date',
-		searchableByInterval: true
+		modifiers: ['date']
+		// type: 'date',
+		// searchableByInterval: true
 	},
 	'Overall Status': {
 		path: ['OVERALL_STATUS']

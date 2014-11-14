@@ -8,10 +8,15 @@ module.exports.format = {
 		path: ["status"]
 	},
 	"Date": {
-		path: ["Date"]
+		path: ["Date"],
+		modifiers: ['datent'],
+		type: 'date',
+		searchableByInterval: true
 	},
 	"Time": {
-		path: ["Time"]
+		path: ["Time"], 
+		modifiers: ['time'],
+		notSearchable: true
 	},
 	"Text": {
 		path: ["text"]

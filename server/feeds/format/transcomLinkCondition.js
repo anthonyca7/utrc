@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports.order = [
-	'ID',
+	'Link ID',
+	'Date',
 	'DataType',
 	'Speed',
 	'Travel Time',
@@ -9,9 +10,15 @@ module.exports.order = [
 ];
 
 module.exports.format = {
-	'ID': {
+	'Link ID': {
 		path: ['ID'],
 		type: 'integer',
+		searchableByInterval: true
+	},
+	'Date': {
+		path: ['asOf'],
+		type: 'date',
+		modifiers: ['date'],
 		searchableByInterval: true
 	},
 	'DataType': {

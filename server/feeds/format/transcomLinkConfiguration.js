@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports.format = {
-	'ID': {
+	'Link ID': {
 		path: ['ID'],
 		type: 'integer',
 		searchableByInterval: true
@@ -64,7 +64,7 @@ module.exports.format = {
 
 
 module.exports.order = [
-	'ID',
+	'Link ID',
 	'Status',
 	'Direction',
 	'RoadName',

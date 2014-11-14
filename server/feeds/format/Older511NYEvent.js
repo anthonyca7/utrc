@@ -94,15 +94,15 @@ module.exports.format = {
 	},
 	"Create Time": {
 		path: ["create_time"],
-		modifiers: ['date'],
-		type: 'date',
-		searchableByInterval: true
+		modifiers: ['date']
+		//type: 'date'
+		//searchableByInterval: true
 	},
 	"Last Update": {
 		path: ["last_update"],
-		modifiers: ['date'],
-		type: 'date',
-		searchableByInterval: true
+		modifiers: ['date']
+		//type: 'date'
+		//searchableByInterval: true
 	},
 	"Event Description": {
 		path: ["event_description"]
@@ -180,15 +180,15 @@ module.exports.format = {
 	},
 	"Start Date": {
 		path: ["start_date"],
-		modifiers: ['date'],
-		type: 'date',
-		searchableByInterval: true
+		modifiers: ['date']
+		//type: 'date'
+		//searchableByInterval: true
 	},
 	"End Date": {
 		path: ["end_date"],
-		modifiers: ['date'],
-		type: 'date',
-		searchableByInterval: true
+		modifiers: ['date']
+		//type: 'date'
+		//searchableByInterval: true
 	},
 	"Other Event Description": {
 		path: ["event_other_desc"]

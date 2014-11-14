@@ -140,7 +140,7 @@ angular.module('interface').controller('InterfaceController', [
 				dates: ["CREATE_TIME", "LAST_UPDATE", "START_DATE", "END_DATE"]
 			},
 			{
-				name: '511NY Links',
+				name: '511NY Link Conditions',
 				organization: '511NY',
 				location: 'nysdotlinks',
 				schema: 'NYC511Link',
@@ -214,7 +214,7 @@ angular.module('interface').controller('InterfaceController', [
 				dates: ['DataAsOf']
 			},
 			{
-				name: "MTA Outages",
+				name: "MTA Escalator Outages",
 				organization: "MTA",
 				location: "mtaoutages",
 				Schema: 'MTAOutage',
@@ -240,7 +240,7 @@ angular.module('interface').controller('InterfaceController', [
 				dates: ["Date", "Time"]
 			},
 			{
-				name: "MTA BT Status",
+				name: "MTA Bridges and Tunnels Status",
 				organization: "MTA",
 				location: "mtabtstatus",
 				Schema: 'MTAStatus',
@@ -335,9 +335,15 @@ angular.module('interface').controller('InterfaceController', [
 			return schema.format[header].notSearchable;
 		};
 
+		var completeTime = null;
+
 		$scope.updateCriteria = function (column, schema, filters, criteria) {
 			var eventFormat = schema.format[column],
 			    mongoPath = eventFormat.path.join('.');
+
+			if (completeTime) {
+				clearTimeout(completeTime);
+			}
 
 			if (filters[column] === "") {
 				delete criteria[mongoPath];
@@ -347,11 +353,15 @@ angular.module('interface').controller('InterfaceController', [
 
 			criteria[mongoPath] = Formatters.intervalMaker(
 				filters[column],
-					Formatters[eventFormat.type || 'string'] || angular.noop,
+				Formatters[eventFormat.type || 'string'] || angular.noop,
 				eventFormat.extra
 			);
 
-			$scope.autoUpdate();
+			completeTime = setTimeout(function () {
+				$scope.autoUpdate();
+				completeTime = null;
+			}, 1000);
+
 		};
 
 		function modifyData(value, eventFormat) {
@@ -914,14 +924,27 @@ angular.module('services.formatters', []).factory('Formatters', [
 		};
 
 		service.date = function (value, noRange) {
-			// if (noRange) {
-			// 	return service.string(value);
-			// }
-
 			var date = new Date(value);
-			value = (date < new Date('1980-12-31T09:00:00-07:00')) ? null : value;
+			value = (date < new Date('1980-12-31T09:00:00-07:00')) ? null : date;
 
-			console.log(date);
+			if (noRange && value) {
+
+				var bound = new Date(value.getTime());
+
+				if (bound.getHours() === 0) {
+					bound.setHours(23);
+					if (bound.getMinutes() === 0) {
+						bound.setMinutes(59);
+
+						if (bound.getSeconds() === 0) {
+							bound.setSeconds(59);
+						}
+					}
+				}
+
+				return { $gte: value, $lte: bound };
+			}
+
 			return value;
 		};
 
@@ -974,13 +997,21 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
 		return value;
 	};
 
+	service.datent = function (value) {
+		return date(value, 'EEEE, MMM d, y');
+	};
+
 	service.date = function (value) {
 		return date(value, 'EEEE, MMM d, y h:mm a');
 	};
 
+	service.time = function (value) {
+		return date(value, 'h:mm a');
+	};
+
 	service.float = function (value) {
 		if (typeof value === "number") {
-			return value.toFixed(2);
+			return value.toFixed(8);
 		}
 		return value;
 	};

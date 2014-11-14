@@ -23,7 +23,10 @@ module.exports.format = {
 		path: ['ADA']
 	},
 	"Date": {
-		path: ['outagedate']
+		path: ['outagedate'],
+		modifiers: ['date'],
+		type: 'date',
+		searchableByInterval: true
 	},
 	"Estimated Return Of Service": {
 		path: ['estimatedreturntoservice']

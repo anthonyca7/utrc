@@ -5,13 +5,21 @@ angular.module('services.modifiers', []).factory('Modifiers', ['dateFilter', fun
 		return value;
 	};
 
+	service.datent = function (value) {
+		return date(value, 'EEEE, MMM d, y');
+	};
+
 	service.date = function (value) {
 		return date(value, 'EEEE, MMM d, y h:mm a');
 	};
 
+	service.time = function (value) {
+		return date(value, 'h:mm a');
+	};
+
 	service.float = function (value) {
 		if (typeof value === "number") {
-			return value.toFixed(2);
+			return value.toFixed(8);
 		}
 		return value;
 	};

@@ -151,15 +151,17 @@ module.exports.format = {
 	},
 	'Schedule Start': {
 		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleStartDateTime'],
-		type: 'date',
+		// type: 'date',
 		modifiers: ['date'],
-		searchableByInterval: true
+		notSearchable: true
+		// searchableByInterval: true
 	},
 	'Schedule End': {
 		path: ['ScheduleInfo', 'Schedules', 'Schedule', 'ScheduleEndDateTime'],
-		type: 'date',
+		// type: 'date',
 		modifiers: ['date'],
-		searchableByInterval: true
+		notSearchable: true
+		// searchableByInterval: true
 	},
 	'Additional Data': {
 		path: ['AdditionalData', 'DataItem'],

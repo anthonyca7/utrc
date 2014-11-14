@@ -35,13 +35,13 @@ module.exports.format = {
 		path: ['CREATE_TIME'],
 		modifiers: ['date'],
 		type: 'date',
-		//searchableByInterval: true
+		searchableByInterval: true
 	},
 	'Last Update': {
 		path: ['LAST_UPDATE'],
 		modifiers: ['date'],
 		type: 'date',
-		//searchableByInterval: true
+		searchableByInterval: true
 	},
 	'Description': {
 		path: ['EVENT_DESCRIPTION']
@@ -121,13 +121,13 @@ module.exports.format = {
 		path: ['START_DATE'],
 		modifiers: ['date'],
 		type: 'date',
-		//searchableByInterval: true
+		searchableByInterval: true
 	},
 	'End Date': {
 		path: ['END_DATE'],
 		modifiers: ['date'],
 		type: 'date',
-		//searchableByInterval: true
+		searchableByInterval: true
 	},
 	'Other Information': {
 		path: ['EVENT_OTHER_DESC']

@@ -18,7 +18,7 @@ module.exports.format = {
 	"Status": {
 		path: ['Status']
 	},
-	"Data as of": {
+	"Date": {
 		path: ['DataAsOf'],
 		type: 'date',
 		modifiers: ['date'],
@@ -60,7 +60,7 @@ module.exports.order = [
 	"Speed",
 	"Travel Time",
 	"Status",
-	"Data as of",
+	"Date",
 	"Link ID",
 	"Link Points",
 	// "Encoded PolyLine",

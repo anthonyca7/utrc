@@ -51,12 +51,26 @@ angular.module('services.formatters', []).factory('Formatters', [
 		};
 
 		service.date = function (value, noRange) {
-			// if (noRange) {
-			// 	return service.string(value);
-			// }
-
 			var date = new Date(value);
-			value = (date < new Date('1980-12-31T09:00:00-07:00')) ? null : value;
+			value = (date < new Date('1980-12-31T09:00:00-07:00')) ? null : date;
+
+			if (noRange && value) {
+
+				var bound = new Date(value.getTime());
+
+				if (bound.getHours() === 0) {
+					bound.setHours(23);
+					if (bound.getMinutes() === 0) {
+						bound.setMinutes(59);
+
+						if (bound.getSeconds() === 0) {
+							bound.setSeconds(59);
+						}
+					}
+				}
+
+				return { $gte: value, $lte: bound };
+			}
 
 			return value;
 		};

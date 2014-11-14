@@ -56,7 +56,7 @@ angular.module('interface').controller('InterfaceController', [
 				dates: ["CREATE_TIME", "LAST_UPDATE", "START_DATE", "END_DATE"]
 			},
 			{
-				name: '511NY Links',
+				name: '511NY Link Conditions',
 				organization: '511NY',
 				location: 'nysdotlinks',
 				schema: 'NYC511Link',
@@ -130,7 +130,7 @@ angular.module('interface').controller('InterfaceController', [
 				dates: ['DataAsOf']
 			},
 			{
-				name: "MTA Outages",
+				name: "MTA Escalator Outages",
 				organization: "MTA",
 				location: "mtaoutages",
 				Schema: 'MTAOutage',
@@ -156,7 +156,7 @@ angular.module('interface').controller('InterfaceController', [
 				dates: ["Date", "Time"]
 			},
 			{
-				name: "MTA BT Status",
+				name: "MTA Bridges and Tunnels Status",
 				organization: "MTA",
 				location: "mtabtstatus",
 				Schema: 'MTAStatus',
@@ -251,9 +251,15 @@ angular.module('interface').controller('InterfaceController', [
 			return schema.format[header].notSearchable;
 		};
 
+		var completeTime = null;
+
 		$scope.updateCriteria = function (column, schema, filters, criteria) {
 			var eventFormat = schema.format[column],
 			    mongoPath = eventFormat.path.join('.');
+
+			if (completeTime) {
+				clearTimeout(completeTime);
+			}
 
 			if (filters[column] === "") {
 				delete criteria[mongoPath];
@@ -263,11 +269,15 @@ angular.module('interface').controller('InterfaceController', [
 
 			criteria[mongoPath] = Formatters.intervalMaker(
 				filters[column],
-					Formatters[eventFormat.type || 'string'] || angular.noop,
+				Formatters[eventFormat.type || 'string'] || angular.noop,
 				eventFormat.extra
 			);
 
-			$scope.autoUpdate();
+			completeTime = setTimeout(function () {
+				$scope.autoUpdate();
+				completeTime = null;
+			}, 1000);
+
 		};
 
 		function modifyData(value, eventFormat) {

@@ -12,7 +12,8 @@ module.exports.format = {
 	'Last Update': {
 		path: ['last_update'],
 		modifiers: ['date'],
-		type: 'date'
+		type: 'date',
+		searchableByInterval: true
 	},
 	'Owner name': {
 		path: ['owner_name']

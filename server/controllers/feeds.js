@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 var db = mongoskin.db('mongodb://@localhost:27017/utrc', {safe: true});
 
 
-db.bind('mtaBusstatus');
+db.bind('mtabusstatus');
 db.bind('mtabtstatus');
 db.bind('mtalirrstatus');
 db.bind('mtalostfound');

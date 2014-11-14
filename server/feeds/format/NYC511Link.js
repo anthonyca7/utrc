@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports.format = {
-	'ID': {
+	'Link ID': {
 		path: ['LINK_ID'],
 		type: 'integer',
 		searchableByInterval: true
@@ -20,12 +20,12 @@ module.exports.format = {
 		path: ['LAST_UPDATE'],
 		modifiers: ['date'],
 		type: 'date',
-		//searchableByInterval: true
+		searchableByInterval: true
 	}
 };
 
 module.exports.order = [
-	'ID',
+	'Link ID',
 	'Current Speed (MPH)',
 	'Travel Time(Seconds)',
 	'Last Update'

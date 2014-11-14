@@ -40,9 +40,9 @@ module.exports.format = {
 		searchableByInterval: true
 	},
 	"Last Update": {
-		modifiers: ['date'],
-		type: 'date',
-		searchableByInterval: true
+		modifiers: ['date']
+		//type: 'date'
+		//searchableByInterval: true
 	}
 }
 

@@ -10,7 +10,7 @@ module.exports.format = {
 		path: ['LAST_UPDATE'],
 		modifiers: ['date'],
 		type: 'date',
-		//searchableByInterval: true
+		searchableByInterval: true
 	},
 	'Overall Status': {
 		path: ['OVERALL_STATUS']
