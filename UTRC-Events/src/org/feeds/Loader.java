@@ -6,8 +6,6 @@ import com.mongodb.MongoClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,8 +22,7 @@ public class Loader {
         try {
             init();
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             System.out.println("Something went wrong: " + ex.getStackTrace());
         }
     }
@@ -35,8 +32,10 @@ public class Loader {
             mongoClient = new MongoClient("localhost", 27017);
             db = mongoClient.getDB(dbName);
 
-//            get511NYFeeds();
+            get511NYFeeds();
             getMTAServiceStatusFeeds();
+            getTrafficSpeedFeeds();
+            getSimpleFeeds();
 
             ScheduledExecutorService ses = Executors.newScheduledThreadPool(8);
             for (Task task : tasks) {
@@ -103,14 +102,77 @@ public class Loader {
 
 
         DBCollection[] collections = {
-                db.getCollection("MTASubwayStatus"),
-                db.getCollection("MTABusStatus"),
-                db.getCollection("MTABTStatus"),
-                db.getCollection("MTALIRRStatus"),
-                db.getCollection("MTAMetroNorthStatus"),
+                db.getCollection("mtasubwaystatus"),
+                db.getCollection("mtaBusstatus"),
+                db.getCollection("mtabtstatus"),
+                db.getCollection("mtalirrstatus"),
+                db.getCollection("mtametronorthstatus"),
         };
 
         Feed MTAStatusFeed = new MTAServiceStatusFeed(collections, paths, datePaths, 60);
         tasks.add(new IndividualTask(MTAStatusFeed));
     }
+
+    private static void getTrafficSpeedFeeds() {
+        Pattern pattern = Pattern.compile("(\".*?\")");
+        DBCollection collection = db.getCollection("nycdottrafficspeed");
+        String [][] datePaths = {
+                {"DataAsOf"}
+        };
+
+        NYCTrafficSpeedFeed trafficFeed = new NYCTrafficSpeedFeed(1*60, collection, datePaths);
+        tasks.add(new IndividualTask(trafficFeed));
+
+
+//        MongoQuery NYCDOTQuery = new MongoQuery(new String[][]{{}}, NYCDOTCollection);
+//        RegExFeed NYCDOTFeed = new RegExFeed(NYCDOTURL, 15*60, NYCDOTCollection, pattern, 13, NYCDOTQuery);
+//        tasks.add(new IndividualTask(NYCDOTFeed));
+    }
+
+    private static void getSimpleFeeds() {
+        String[][] links = {
+                {"https://data.xcmdata.org/ISGDE/rest/eventProvider/getAllNativeEvents?System=anthonyca7&Key=transcom",
+                        "transcomevent"},
+                {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkConditions?System=anthonyca7&Key=transcom",
+                        "transcomcondition"},
+                {"https://data.xcmdata.org/ISGDE/rest/linkProvider/getXmitLinkMaster?System=anthonyca7&Key=transcom",
+                        "transcomconfiguration"},
+                {"http://web.mta.info/developers/data/nyct/nyct_ene.xml", "mtaoutages"},
+                {"http://advisory.mtanyct.info/LPUWebServices/CurrentLostProperty.aspx", "mtalostfound"}
+        };
+
+        String[][] paths = {
+                {"eventUpdates", "eventUpdate"},
+                {"ns:getDataResponse", "return", "dataResponse", "linkConditions", "linkCondition"},
+                {"ns:getDataResponse", "return", "dataResponse", "linkInventory", "link"},
+                {"NYCOutages", "outage"},
+                {"LostProperty", "Category"}
+        };
+
+        int[] durations = {
+                1,
+                15,
+                1440,
+                5,
+                60
+        };
+
+        String[][][] datePaths = {
+                {{"StartDateTime"}, {"LastUpdate"}, {"EndDateTime"} },
+                {{"asOf"}},
+                {{}},
+                {{"outagedate"}, {"estimatedreturntoservice"}},
+                {{""}}
+        };
+
+        for (int i = 0; i < links.length; i++) {
+            String[] link = links[i];
+            String[] path = paths[i];
+            DBCollection collection = db.getCollection(link[1]);
+
+            Feed feed = new SimpleFeed(link[0], collection, path, datePaths[i], durations[i] * 60);
+            tasks.add(new IndividualTask(feed));
+        }
+    }
+
 }

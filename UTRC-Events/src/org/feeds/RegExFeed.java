@@ -20,6 +20,8 @@ public class RegExFeed extends Feed{
     private final Pattern pattern;
     private final MongoQuery query;
     private final int cols;
+    private static final String doublePattern = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
+    private static final String intPattern = "[-+]?[0-9]*";
 
     public RegExFeed(String url,
                      int interval,
@@ -97,13 +99,21 @@ public class RegExFeed extends Feed{
             StringBuilder feed = new StringBuilder("{");
             for (int j = 0; j < cols; j++) {
                 String key = data.get(j).replaceAll("\"", "'");
-                String qval = data.get(cols*i + j);
-                String val = qval.replaceAll("\"", "");
 
-//                if (val.matches(intRegEx) || val.matches(doubleRegEx))
-//                    feed.append( key + ":" + val + ((j+1==cols) ? "": ", ") );
-//                else
-                    feed.append( key + ":" + qval.replaceAll("\"", "'") + ((j+1==cols) ? "": ", ") );
+                if (data.get(cols*i + j).replaceAll("\"", "").matches(doublePattern)) {
+                    double value = Double.parseDouble(data.get(cols*i + j).replaceAll("\"", ""));
+                    feed.append( key + ":" + value +
+                            ((j+1==cols) ? "": ", "));
+                }
+                else if (data.get(cols*i + j).replaceAll("\"", "").matches(intPattern)) {
+                    int value = Integer.parseInt(data.get(cols*i + j).replaceAll("\"", ""));
+                    feed.append( key + ":" + value +
+                            ((j+1==cols) ? "": ", "));
+                }
+                else {
+                    feed.append( key + ":" + data.get(cols*i + j).replaceAll("\"", "'") +
+                            ((j+1==cols) ? "": ", "));
+                }
             }
             feed.append("}");
             feeds.add(feed.toString());

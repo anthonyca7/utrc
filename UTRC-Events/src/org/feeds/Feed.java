@@ -18,7 +18,6 @@ public abstract class Feed {
     private final String[][] datePaths;
     private final Map<String, DateFormat> dateMap;
 
-
     protected Feed(String url, int interval, Map<String, DateFormat> dateMap, String[][] datePaths) {
         this.url = url;
         this.interval = interval;
@@ -65,14 +64,13 @@ public abstract class Feed {
 
                                         currentObject.removeField(key);
                                         currentObject.put(key, date);
-                                        // System.out.println("key was " + value + " now " + date);
+//                                        System.out.println("key was " + value + " now " + date);
 
                                         found = true;
                                         break;
                                     }
                                 }
-
-                                if (found == false) {
+                                if (!found) {
                                     System.out.println("No regex matches: " + dateString);
                                     System.exit(0);
                                 }
@@ -82,10 +80,6 @@ public abstract class Feed {
                                 System.exit(0);
                             }
                         }
-                    }
-                    else {
-                        System.out.println("PATH NOT FOUND");
-                        System.exit(0);
                     }
                 }
             }

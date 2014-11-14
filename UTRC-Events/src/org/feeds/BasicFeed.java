@@ -68,6 +68,8 @@ public class BasicFeed extends Feed
         JSONObject res = XML.toJSONObject(response);
         JSONArray data;
 
+        if (res == null) return null;
+
         for (String key : path) {
             if (res.has(key)) {
                 if (res.get(key) instanceof JSONArray) {
@@ -92,6 +94,7 @@ public class BasicFeed extends Feed
 
         if (data != null) {
             for (int i = 0; i < data.length(); i++) {
+                // System.out.println(i + " " + data.length());
                 JSONObject jsonObject = data.getJSONObject(i);
                 DBObject object = extractDates(jsonObject);
 
