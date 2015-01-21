@@ -6,12 +6,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
-/**
- * Created by anthony on 11/12/14.
- */
 public class MTAServiceStatusFeed extends MultiPathFeed {
     private static final String url = "http://web.mta.info/status/serviceStatus.txt";
-    public static final String dateTimeRegEx = "^(\\d{1,2})[/](\\d{1,2})[/](\\d{2,4})\\s(\\d{1,2}):(\\d{2}):(\\d{2})?\\s(AM|PM)$";
+    public static final String dateTimeRegEx = "^(\\d{1,2})[/](\\d{1,2})[/](\\d{2,4})\\s(\\d{1,2}):(\\d{2}):(\\d{2})\\s(AM|PM)$";
     public static final String dateRegEx = "^(\\d{1,2})[/](\\d{1,2})[/](\\d{2,4})$";
     public static final String timeRegEx = "^(\\d{1,2}):(\\d{2})(AM|PM)$";
 

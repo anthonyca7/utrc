@@ -1,8 +1,8 @@
 package org.feeds;
 
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.mongodb.DBCollection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ public class Loader {
     private static final String dbName = "utrc";
     private static MongoClient mongoClient;
     private static DB db;
+    final static TweetsProvider tweetsProvider = new TweetsProvider();
 
     public static void main(String[] args) {
         try {
@@ -32,12 +33,15 @@ public class Loader {
             mongoClient = new MongoClient("localhost", 27017);
             db = mongoClient.getDB(dbName);
 
-            get511NYFeeds();
+//            get511NYFeeds();
+//            getNew511NYFeeds();
             getMTAServiceStatusFeeds();
-            getTrafficSpeedFeeds();
-            getSimpleFeeds();
+//            getTrafficSpeedFeeds();
+//            getSimpleFeeds();
+//            tweetsProvider.start();
 
-            ScheduledExecutorService ses = Executors.newScheduledThreadPool(8);
+            ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+            System.out.println("Tasks: " + tasks.size());
             for (Task task : tasks) {
                 ses.scheduleAtFixedRate(task, 0, task.getDuration(), TimeUnit.SECONDS);
             }
@@ -85,6 +89,35 @@ public class Loader {
         }
 
         tasks.add(new MultipleTask(NYC511Feeds, 60, 10000));
+    }
+
+    private static void getNew511NYFeeds() {
+        String [] urls = {
+                "https://api.511ny.org/api/GetMainlineLinkDefinitions?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json"
+//                "https://api.511ny.org/api/GetMainlineLinkStatuses?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json",
+//                "https://api.511ny.org/api/GetEvents?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json",
+//                "https://api.511ny.org/api/GetRoadways?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json",
+//                "https://api.511ny.org/api/GetCameras?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json",
+//                "https://api.511ny.org/api/GetMessageSigns?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json",
+//                "https://api.511ny.org/api/GetAlerts?key=a8a608d6c7cd490bb453e10d99c6abd4&format=json",
+        };
+
+        int[] durations = {
+            1
+        };
+
+        String[][][] datePaths = {
+                {{}}
+        };
+
+        for (int i = 0; i < urls.length; i++) {
+            String link = urls[i];
+            String[] path = {};
+            DBCollection collection = db.getCollection("EXPERIMENT");
+
+            Feed feed = new SimpleJSONFeed(link, collection, path, datePaths[i], durations[i] * 60);
+            tasks.add(new IndividualTask(feed));
+        }
     }
 
     private static void getMTAServiceStatusFeeds() {
@@ -169,5 +202,4 @@ public class Loader {
             tasks.add(new IndividualTask(feed));
         }
     }
-
 }

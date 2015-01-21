@@ -132,6 +132,16 @@ angular.module('interface').controller('InterfaceController', [
 		// Select field scope variables
 		$scope.feeds = [
 			{
+				name: 'Tweets',
+				organization: 'Twitter',
+				location: 'tweets',
+				schema: 'tweets',
+				limit: 200,
+				feed: 'tweets',
+				dates: ['created_at']
+			},
+			
+			{
 				name: '511NY Events',
 				organization: '511NY',
 				location: 'nysdotevents',

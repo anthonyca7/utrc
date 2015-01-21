@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
     Transcom = mongoose.model('Transcom');
 
 
-var db = mongoskin.db('mongodb://@localhost:27017/utrc', {safe: true});
+var db = mongoskin.db('mongodb://@localhost:27017/utrc2', {safe: true});
 
 
 db.bind('mtabusstatus');
@@ -25,6 +25,7 @@ db.bind('nysdotwtastatus');
 db.bind('transcomcondition');
 db.bind('transcomconfiguration');
 db.bind('transcomevent');
+db.bind('tweets');
 
 db.bind('feeds');
 db.bind('older_NY511FEED_events');

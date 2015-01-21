@@ -64,7 +64,6 @@ public abstract class Feed {
 
                                         currentObject.removeField(key);
                                         currentObject.put(key, date);
-//                                        System.out.println("key was " + value + " now " + date);
 
                                         found = true;
                                         break;
@@ -72,12 +71,14 @@ public abstract class Feed {
                                 }
                                 if (!found) {
                                     System.out.println("No regex matches: " + dateString);
-                                    System.exit(0);
+                                    return null;
+//                                    System.exit(0);
                                 }
                             }
                             catch (Exception ex) {
                                 ex.printStackTrace();
-                                System.exit(0);
+                                System.out.println("NULL RETURNED");
+                                return null;
                             }
                         }
                     }

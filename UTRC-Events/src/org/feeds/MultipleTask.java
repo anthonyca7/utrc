@@ -18,7 +18,7 @@ public class MultipleTask extends Task implements Runnable {
         lastExecuted = new long[feeds.length];
 
         for (int i = 0; i < feeds.length; i++) {
-            lastExecuted[i] = System.currentTimeMillis() - feeds[i].getInterval()*1000;
+            lastExecuted[i] = System.currentTimeMillis() - feeds[i].getInterval() * 1000;
         }
 
         if (duration < 10) {
@@ -31,12 +31,11 @@ public class MultipleTask extends Task implements Runnable {
         for (int i = 0; i < feeds.length; i++) {
             Feed feed = feeds[i];
 
-            if ( (long) feed.getInterval()*1000 <= System.currentTimeMillis() - lastExecuted[i]) {
+            if ((long) feed.getInterval() * 1000 <= System.currentTimeMillis() - lastExecuted[i]) {
                 try {
                     lastExecuted[i] = System.currentTimeMillis();
                     Thread.sleep(duration);
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     System.out.println("Exception from taskgroups: " + ex);
                 }
                 feed.getData();
@@ -52,6 +51,10 @@ public class MultipleTask extends Task implements Runnable {
 
     @Override
     public void run() {
-        this.getData();
+        try {
+            this.getData();
+        } catch (Exception ex) {
+
+        }
     }
 }

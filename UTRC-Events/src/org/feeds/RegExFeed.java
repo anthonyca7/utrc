@@ -79,63 +79,66 @@ public class RegExFeed extends Feed{
 
     @Override
     void getData() {
-        connect();
-        int inserted = 0;
-        String response = getResponse();
+        try {
+            connect();
+            int inserted = 0;
+            String response = getResponse();
 
-        Matcher matcher = pattern.matcher(response);
-        ArrayList<String> data = new ArrayList<String>();
+            Matcher matcher = pattern.matcher(response);
+            ArrayList<String> data = new ArrayList<String>();
 
-        while (matcher.find()) {
-            data.add(matcher.group());
-        }
-
-        int size = data.size();
-        int feedCount = size / cols;
-        ArrayList<String> feeds = new ArrayList<String>(Math.abs(size-cols));
-
-
-        for (int i = 1; i < feedCount; i++) {
-            StringBuilder feed = new StringBuilder("{");
-            for (int j = 0; j < cols; j++) {
-                String key = data.get(j).replaceAll("\"", "'");
-
-                if (data.get(cols*i + j).replaceAll("\"", "").matches(doublePattern)) {
-                    double value = Double.parseDouble(data.get(cols*i + j).replaceAll("\"", ""));
-                    feed.append( key + ":" + value +
-                            ((j+1==cols) ? "": ", "));
-                }
-                else if (data.get(cols*i + j).replaceAll("\"", "").matches(intPattern)) {
-                    int value = Integer.parseInt(data.get(cols*i + j).replaceAll("\"", ""));
-                    feed.append( key + ":" + value +
-                            ((j+1==cols) ? "": ", "));
-                }
-                else {
-                    feed.append( key + ":" + data.get(cols*i + j).replaceAll("\"", "'") +
-                            ((j+1==cols) ? "": ", "));
-                }
-            }
-            feed.append("}");
-            feeds.add(feed.toString());
-        }
-
-        for (String feed : feeds) {
-            DBObject feedObject;
-            try {
-                feedObject = extractDates((DBObject) JSON.parse(feed));
-            } catch (Exception ex) {
-                System.out.println("Error Extracting data: " + ex);
-                continue;
+            while (matcher.find()) {
+                data.add(matcher.group());
             }
 
-            DBCursor foundFeeds = collection.find(feedObject);
+            int size = data.size();
+            int feedCount = size / cols;
+            ArrayList<String> feeds = new ArrayList<String>(Math.abs(size - cols));
 
-            if (!foundFeeds.hasNext()) {
-                collection.insert(feedObject);
-                inserted++;
+
+            for (int i = 1; i < feedCount; i++) {
+                StringBuilder feed = new StringBuilder("{");
+                for (int j = 0; j < cols; j++) {
+                    String key = data.get(j).replaceAll("\"", "'");
+
+                    if (data.get(cols * i + j).replaceAll("\"", "").matches(doublePattern)) {
+                        double value = Double.parseDouble(data.get(cols * i + j).replaceAll("\"", ""));
+                        feed.append(key + ":" + value +
+                                ((j + 1 == cols) ? "" : ", "));
+                    } else if (data.get(cols * i + j).replaceAll("\"", "").matches(intPattern)) {
+                        int value = Integer.parseInt(data.get(cols * i + j).replaceAll("\"", ""));
+                        feed.append(key + ":" + value +
+                                ((j + 1 == cols) ? "" : ", "));
+                    } else {
+                        feed.append(key + ":" + data.get(cols * i + j).replaceAll("\"", "'") +
+                                ((j + 1 == cols) ? "" : ", "));
+                    }
+                }
+                feed.append("}");
+                feeds.add(feed.toString());
             }
-        }
 
-        getInsertionMessage(inserted, feedCount-1, getUrl());
+            for (String feed : feeds) {
+                DBObject feedObject;
+                try {
+                    feedObject = extractDates((DBObject) JSON.parse(feed));
+                    if (feedObject == null) continue;
+                } catch (Exception ex) {
+                    System.out.println("Error Extracting data: " + ex);
+                    continue;
+                }
+
+                DBCursor foundFeeds = collection.find(feedObject);
+
+                if (!foundFeeds.hasNext()) {
+                    collection.insert(feedObject);
+                    inserted++;
+                }
+            }
+
+            getInsertionMessage(inserted, feedCount - 1, getUrl());
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 }

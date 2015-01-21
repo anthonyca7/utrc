@@ -103,6 +103,8 @@ public class MultiPathFeed extends Feed {
                     DBObject object = extractDates(jsonObject);
                     MongoQuery query = null;
 
+                    if (object == null) continue;
+
                     if (query != null && query.hasPath()) {
                         if (query.isUnique(jsonObject)) {
                             collection.insert(object);

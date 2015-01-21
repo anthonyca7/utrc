@@ -62,7 +62,7 @@ public class BasicFeed extends Feed
         }
     }
 
-    private JSONArray jsonData() {
+    protected JSONArray jsonData() {
         connect();
         String response = getResponse();
         JSONObject res = XML.toJSONObject(response);
@@ -70,7 +70,7 @@ public class BasicFeed extends Feed
 
         if (res == null) return null;
 
-        for (String key : path) {
+       for (String key : getPath()) {
             if (res.has(key)) {
                 if (res.get(key) instanceof JSONArray) {
                     data = (JSONArray) res.get(key);
@@ -92,11 +92,15 @@ public class BasicFeed extends Feed
         int inserted = 0;
         JSONArray data = jsonData();
 
+        System.out.println(data.length() + " found!!!!!!!!!!!!!1");
+
         if (data != null) {
             for (int i = 0; i < data.length(); i++) {
                 // System.out.println(i + " " + data.length());
                 JSONObject jsonObject = data.getJSONObject(i);
                 DBObject object = extractDates(jsonObject);
+
+                if (object == null) continue;
 
                 if (query != null && query.hasPath()) {
                     if (query.isUnique(jsonObject)) {
@@ -127,5 +131,13 @@ public class BasicFeed extends Feed
 
     public DBCollection getCollection() {
         return collection;
+    }
+
+    public String[] getPath() {
+        return path;
+    }
+
+    public MongoQuery getQuery() {
+        return query;
     }
 }
